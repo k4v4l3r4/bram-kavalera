@@ -32,6 +32,7 @@ export function HeroSection() {
     fetchData()
   }, [])
 
+  // Logika Auto-Slide Gambar
   useEffect(() => {
     if (!data?.images?.length) return
     const timer = setInterval(() => {
@@ -54,7 +55,7 @@ export function HeroSection() {
       <div className="container mx-auto px-4 md:px-6">
         <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 items-center">
           
-          {/* BAGIAN KIRI: TEXT */}
+          {/* BAGIAN KIRI: TEXT & LOGO INSTANSI */}
           <div className="flex flex-col justify-center space-y-8 z-10">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -68,7 +69,7 @@ export function HeroSection() {
                 Selamat Datang di Official Website
               </div>
               
-              {/* Judul Besar */}
+              {/* Judul Besar (Hardcoded untuk style custom) */}
               <h1 className="text-5xl font-bold tracking-tight text-slate-900 sm:text-6xl xl:text-7xl leading-[1.1]">
                 Pioner Penghuni<br />
                 <span className="text-[#009B7C]">Rumah Negara</span><br />
@@ -81,7 +82,7 @@ export function HeroSection() {
               </p>
             </motion.div>
 
-            {/* -- TOMBOL DIHAPUS DI SINI -- */}
+            {/* -- TOMBOL (DIHAPUS SESUAI PERMINTAAN) -- */}
 
             {/* Logo Instansi */}
             <motion.div 
