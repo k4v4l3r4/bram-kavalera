@@ -1,0 +1,20 @@
+# Dependency directories
+/node_modules
+/.pnpm-store
+
+# Next.js Build Output
+/.next/
+/out/
+
+# Development/Local Files
+/.env*.local
+/.env.development
+/.DS_Store
+/npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.vercel/
+
+# Sanity Studio Cache (Jika ada)
+/sanity/.env
