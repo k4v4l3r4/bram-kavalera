@@ -72,14 +72,14 @@ export function AboutSection() {
       <div className="container mx-auto px-4 md:px-6 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-start mb-16">
           
-          {/* KOLOM KIRI: Judul & Tujuan (DIBUNGKUS KOTAK PUTIH / CARD) */}
+          {/* KOLOM KIRI: Judul & Tujuan (KARTU KIRI) */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            // 👇 TAMBAHAN STYLING KOTAK PUTIH 👇
-            className="space-y-6 bg-background/80 backdrop-blur-sm rounded-2xl p-8 shadow-lg border"
+            // Penambahan h-full untuk menyeimbangkan tinggi kotak
+            className="space-y-6 bg-background/80 backdrop-blur-sm rounded-2xl p-8 shadow-lg border h-full"
           >
             <h2 className="text-3xl font-bold tracking-tighter md:text-4xl">
               {data.title || "Judul Tentang Kami"}
@@ -89,9 +89,12 @@ export function AboutSection() {
               {data.description || "Deskripsi belum diisi."}
             </p>
 
-            {/* BAGIAN: TUJUAN PPRNP yang RAPIH */}
-            <div className="space-y-6 pt-4 border-t border-border/50">
-                <h3 className="text-xl font-bold tracking-tight text-foreground">Tujuan PPRNP</h3>
+            {/* Pemisah Garis */}
+            <div className="h-px bg-border" />
+
+            {/* BAGIAN TUJUAN PPRNP (Sudah Rapi dengan Ceklis) */}
+            <div className="space-y-4 pt-4">
+                <h3 className="text-xl font-bold tracking-tight text-foreground mb-4">Tujuan PPRNP</h3>
                 
                 <ul className="space-y-4">
                     {objectives.map((item: any, i: number) => (
@@ -117,13 +120,13 @@ export function AboutSection() {
             </div>
           </motion.div>
 
-          {/* KOLOM KANAN: Visi Misi (Sudah Berbentuk Kartu) */}
+          {/* KOLOM KANAN: Visi Misi (KARTU KANAN) */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="bg-background/80 backdrop-blur-sm rounded-2xl p-8 shadow-lg border"
+            className="bg-background/80 backdrop-blur-sm rounded-2xl p-8 shadow-lg border h-full" // Added h-full
           >
             <h3 className="text-xl font-bold mb-6 flex items-center gap-2">
               <History className="h-5 w-5 text-primary" />
