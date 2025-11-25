@@ -72,13 +72,14 @@ export function AboutSection() {
       <div className="container mx-auto px-4 md:px-6 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-start mb-16">
           
-          {/* KOLOM KIRI: Judul, Deskripsi, dan TUJUAN PPRNP (Sudah Dirapikan) */}
+          {/* KOLOM KIRI: Judul & Tujuan (DIBUNGKUS KOTAK PUTIH / CARD) */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="space-y-6"
+            // 👇 TAMBAHAN STYLING KOTAK PUTIH 👇
+            className="space-y-6 bg-background/80 backdrop-blur-sm rounded-2xl p-8 shadow-lg border"
           >
             <h2 className="text-3xl font-bold tracking-tighter md:text-4xl">
               {data.title || "Judul Tentang Kami"}
@@ -88,36 +89,35 @@ export function AboutSection() {
               {data.description || "Deskripsi belum diisi."}
             </p>
 
-            {/* BAGIAN BARU: TUJUAN PPRNP yang RAPIH */}
-            <div className="space-y-6 pt-8">
+            {/* BAGIAN: TUJUAN PPRNP yang RAPIH */}
+            <div className="space-y-6 pt-4 border-t border-border/50">
                 <h3 className="text-xl font-bold tracking-tight text-foreground">Tujuan PPRNP</h3>
                 
-                <div className="space-y-5">
+                <ul className="space-y-4">
                     {objectives.map((item: any, i: number) => (
-                        <motion.div 
+                        <motion.li 
                             key={i} 
                             initial={{ opacity: 0, y: 10 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ duration: 0.4, delay: i * 0.05 }}
-                            className="flex items-start gap-4"
+                            className="flex items-start gap-4 text-muted-foreground"
                         >
                             <CheckCircle2 className="h-5 w-5 text-secondary shrink-0 mt-1" />
-                            <p className="text-muted-foreground leading-relaxed text-base">
+                            <p className="leading-relaxed text-base">
                                 {item.goal}
                             </p>
-                        </motion.div>
+                        </motion.li>
                     ))}
-                </div>
+                </ul>
             </div>
-            {/* BAGIAN BARU SELESAI */}
 
-            <div className="inline-block rounded-full bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary">
+            <div className="inline-block rounded-full bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary mt-6">
               Tentang Kami
             </div>
           </motion.div>
 
-          {/* KOLOM KANAN: Visi Misi */}
+          {/* KOLOM KANAN: Visi Misi (Sudah Berbentuk Kartu) */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
