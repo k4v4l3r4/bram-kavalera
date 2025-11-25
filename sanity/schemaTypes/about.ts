@@ -16,6 +16,24 @@ export const aboutType = defineType({
       title: 'Deskripsi Panjang',
       type: 'text',
     }),
+    
+    // 👇 FIELD BARU YANG DITAMBAHKAN (OBJECTIVES/TUJUAN PPRNP) 👇
+    defineField({
+      name: 'objectives',
+      title: 'Objectives (Tujuan PPRNP)',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            { name: 'goal', type: 'text', title: 'Poin Tujuan' },
+          ],
+        },
+      ],
+      description: 'Gunakan untuk poin-poin panjang Tujuan PPRNP. Masukkan satu poin per item.',
+    }),
+    // 👆 END FIELD BARU 👆
+    
     defineField({
       name: 'vision',
       title: 'Visi',

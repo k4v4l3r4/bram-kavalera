@@ -78,23 +78,30 @@ export function AboutSection() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            // Penambahan h-full untuk menyeimbangkan tinggi kotak
             className="space-y-6 bg-background/80 backdrop-blur-sm rounded-2xl p-8 shadow-lg border h-full"
           >
             <h2 className="text-3xl font-bold tracking-tighter md:text-4xl">
               {data.title || "Judul Tentang Kami"}
             </h2>
             
-            <p className="text-muted-foreground text-lg leading-relaxed">
-              {data.description || "Deskripsi belum diisi."}
-            </p>
-
-            {/* Pemisah Garis */}
-            <div className="h-px bg-border" />
+            {/* 👇 PERUBAHAN: Paragraf hanya tampil jika description ada isinya 👇 */}
+            {data.description && (
+                <p className="text-muted-foreground text-lg leading-relaxed">
+                  {data.description}
+                </p>
+            )}
+            
+            {/* Pemisah Garis (Hanya tampil jika ada Tujuan yang harus dipisah) */}
+            {objectives.length > 0 && (
+                <div className="h-px bg-border" />
+            )}
 
             {/* BAGIAN TUJUAN PPRNP (Sudah Rapi dengan Ceklis) */}
             <div className="space-y-4 pt-4">
-                <h3 className="text-xl font-bold tracking-tight text-foreground mb-4">Tujuan PPRNP</h3>
+                {/* Judul Tujuan PPRNP hanya tampil jika listnya ada isinya */}
+                {objectives.length > 0 && (
+                    <h3 className="text-xl font-bold tracking-tight text-foreground mb-4">Tujuan PPRNP</h3>
+                )}
                 
                 <ul className="space-y-4">
                     {objectives.map((item: any, i: number) => (
@@ -120,13 +127,13 @@ export function AboutSection() {
             </div>
           </motion.div>
 
-          {/* KOLOM KANAN: Visi Misi (KARTU KANAN) */}
+          {/* KOLOM KANAN: Visi Misi */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="bg-background/80 backdrop-blur-sm rounded-2xl p-8 shadow-lg border h-full" // Added h-full
+            className="bg-background/80 backdrop-blur-sm rounded-2xl p-8 shadow-lg border h-full"
           >
             <h3 className="text-xl font-bold mb-6 flex items-center gap-2">
               <History className="h-5 w-5 text-primary" />
