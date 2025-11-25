@@ -8,7 +8,7 @@ import {
 } from "lucide-react"
 import { client } from "@/sanity/lib/client"
 
-// 1. Mapping Ikon: Menghubungkan nama teks dari CMS ke Komponen Ikon Asli
+// 1. Mapping Ikon
 const iconMap: any = {
   HeartPulse: HeartPulse,
   ShieldCheck: ShieldCheck,
@@ -21,12 +21,19 @@ const iconMap: any = {
 export function AboutSection() {
   const [data, setData] = useState<any>(null)
 
-  // 2. Ambil data dari Sanity
+  // 2. Ambil data dari Sanity (Update query untuk ambil objectives)
   useEffect(() => {
     const fetchData = async () => {
       try {
         const result = await client.fetch(`
-          *[_type == "about"][0]
+          *[_type == "about"][0]{
+            title,
+            description,
+            vision,
+            missions,
+            focusAreas,
+            objectives
+          }
         `)
         setData(result)
       } catch (error) {
@@ -36,12 +43,12 @@ export function AboutSection() {
     fetchData()
   }, [])
 
-  // Jika data belum ada, pakai Loading Skeleton atau null
   if (!data) return null
 
-  // Data default untuk jaga-jaga jika array kosong
+  // Data default
   const missions = data.missions || []
   const focusAreas = data.focusAreas || []
+  const objectives = data.objectives || [] // <-- Data Tujuan PPRNP
 
   // Variabel animasi
   const containerVariants = {
@@ -65,7 +72,7 @@ export function AboutSection() {
       <div className="container mx-auto px-4 md:px-6 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-start mb-16">
           
-          {/* KOLOM KIRI: Judul & Deskripsi */}
+          {/* KOLOM KIRI: Judul, Deskripsi, dan TUJUAN PPRNP (Sudah Dirapikan) */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -73,7 +80,6 @@ export function AboutSection() {
             transition={{ duration: 0.6 }}
             className="space-y-6"
           >
-            {/* 👇 JUDUL ADA DI ATAS SEKARANG 👇 */}
             <h2 className="text-3xl font-bold tracking-tighter md:text-4xl">
               {data.title || "Judul Tentang Kami"}
             </h2>
@@ -82,7 +88,30 @@ export function AboutSection() {
               {data.description || "Deskripsi belum diisi."}
             </p>
 
-            {/* 👇 "TENTANG KAMI" PINDAH KE SINI (BAWAH) 👇 */}
+            {/* BAGIAN BARU: TUJUAN PPRNP yang RAPIH */}
+            <div className="space-y-6 pt-8">
+                <h3 className="text-xl font-bold tracking-tight text-foreground">Tujuan PPRNP</h3>
+                
+                <div className="space-y-5">
+                    {objectives.map((item: any, i: number) => (
+                        <motion.div 
+                            key={i} 
+                            initial={{ opacity: 0, y: 10 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.4, delay: i * 0.05 }}
+                            className="flex items-start gap-4"
+                        >
+                            <CheckCircle2 className="h-5 w-5 text-secondary shrink-0 mt-1" />
+                            <p className="text-muted-foreground leading-relaxed text-base">
+                                {item.goal}
+                            </p>
+                        </motion.div>
+                    ))}
+                </div>
+            </div>
+            {/* BAGIAN BARU SELESAI */}
+
             <div className="inline-block rounded-full bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary">
               Tentang Kami
             </div>
@@ -143,7 +172,6 @@ export function AboutSection() {
             className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
           >
             {focusAreas.map((item: any, i: number) => {
-              // Cari ikon yang cocok dari Map, kalau tidak ada pakai Lightbulb default
               const IconComponent = iconMap[item.icon] || Lightbulb
 
               return (
