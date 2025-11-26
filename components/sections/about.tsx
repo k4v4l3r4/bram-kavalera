@@ -7,6 +7,7 @@ import {
   HeartPulse, ShieldCheck, Lightbulb, HandHeart, Sprout, Microscope 
 } from "lucide-react"
 import { client } from "@/sanity/lib/client"
+import { PortableTextRenderer } from "@/components/portable-text-renderer"
 
 // 1. Mapping Ikon
 const iconMap: any = {
@@ -21,7 +22,7 @@ const iconMap: any = {
 export function AboutSection() {
   const [data, setData] = useState<any>(null)
 
-  // 2. Ambil data dari Sanity (Update query untuk ambil objectives)
+  // 2. Ambil data dari Sanity
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -29,8 +30,7 @@ export function AboutSection() {
           *[_type == "about"][0]{
             title,
             description,
-            vision,
-            missions,
+            visiMisiGroup,
             focusAreas,
             objectives
           }
@@ -46,9 +46,10 @@ export function AboutSection() {
   if (!data) return null
 
   // Data default
-  const missions = data.missions || []
+  const missions = data.visiMisiGroup?.missions || []
+  const visionBlocks = data.visiMisiGroup?.vision || [] 
   const focusAreas = data.focusAreas || []
-  const objectives = data.objectives || [] // <-- Data Tujuan PPRNP
+  const objectives = data.objectives || []
 
   // Variabel animasi
   const containerVariants = {
@@ -72,7 +73,7 @@ export function AboutSection() {
       <div className="container mx-auto px-4 md:px-6 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-start mb-16">
           
-          {/* KOLOM KIRI: Judul & Tujuan (KARTU KIRI) */}
+          {/* KOLOM KIRI: Judul & Tujuan */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -84,25 +85,18 @@ export function AboutSection() {
               {data.title || "Judul Tentang Kami"}
             </h2>
             
-            {/* 👇 PERUBAHAN: Paragraf hanya tampil jika description ada isinya 👇 */}
             {data.description && (
                 <p className="text-muted-foreground text-lg leading-relaxed">
                   {data.description}
                 </p>
             )}
-            
-            {/* Pemisah Garis (Hanya tampil jika ada Tujuan yang harus dipisah) */}
+
             {objectives.length > 0 && (
                 <div className="h-px bg-border" />
             )}
 
-            {/* BAGIAN TUJUAN PPRNP (Sudah Rapi dengan Ceklis) */}
+            {/* BAGIAN TUJUAN PPRNP */}
             <div className="space-y-4 pt-4">
-                {/* Judul Tujuan PPRNP hanya tampil jika listnya ada isinya */}
-                {objectives.length > 0 && (
-                    <h3 className="text-xl font-bold tracking-tight text-foreground mb-4">Tujuan PPRNP</h3>
-                )}
-                
                 <ul className="space-y-4">
                     {objectives.map((item: any, i: number) => (
                         <motion.li 
@@ -121,13 +115,10 @@ export function AboutSection() {
                     ))}
                 </ul>
             </div>
-
-            <div className="inline-block rounded-full bg-primary/10 px-4 py-1.5 text-sm font-medium text-primary mt-6">
-              Tentang Kami
-            </div>
+            
           </motion.div>
 
-          {/* KOLOM KANAN: Visi Misi */}
+          {/* KOLOM KANAN: Visi & Misi */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -139,17 +130,21 @@ export function AboutSection() {
               <History className="h-5 w-5 text-primary" />
               Visi & Misi
             </h3>
+
             <div className="space-y-6">
               <div>
-                <h4 className="font-semibold text-primary mb-2">Visi</h4>
-                <p className="text-muted-foreground">
-                  {data.vision || "Visi belum diisi."}
-                </p>
+                {/* Isi Visi (Tanpa Label) */}
+                <div className="text-muted-foreground">
+                  <PortableTextRenderer blocks={visionBlocks} />
+                </div>
               </div>
+              
+              {/* Garis pemisah tipis antara Visi dan Misi */}
               <div className="h-px bg-border" />
+              
               <div>
-                <h4 className="font-semibold text-primary mb-3">Misi</h4>
-                <ul className="space-y-3">
+                {/* Isi Misi (Tanpa Label) */}
+                <ul className="space-y-3 mt-2">
                   {missions.map((misi: string, i: number) => (
                     <li key={i} className="flex items-start gap-3 text-muted-foreground">
                       <CheckCircle2 className="h-5 w-5 text-secondary shrink-0" />

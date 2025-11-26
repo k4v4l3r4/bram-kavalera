@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { Facebook, Instagram, Youtube, Mail, MapPin, Phone, ArrowRight } from "lucide-react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
@@ -14,7 +15,6 @@ export function SiteFooter() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // FETCH GABUNGAN: Mengambil data Footer DAN Contact sekaligus
         const result = await client.fetch(`
           {
             "footer": *[_type == "footer"][0],
@@ -30,9 +30,6 @@ export function SiteFooter() {
     fetchData()
   }, [])
 
-  // Jika data belum load, tampilkan footer statis atau null (opsional)
-  // Di sini kita biarkan render kerangka agar tidak layout shift
-  
   return (
     <footer className="bg-slate-900 text-slate-200">
       {/* Top Section with Newsletter */}
@@ -68,17 +65,23 @@ export function SiteFooter() {
           
           {/* 1. Brand Column */}
           <div className="space-y-4">
-            <div className="flex items-center gap-2">
-              <div className="h-8 w-8 rounded-full bg-gradient-to-br from-primary to-secondary flex items-center justify-center">
-                <span className="text-white font-bold text-xs">P</span>
-              </div>
-              <span className="text-xl font-bold text-white tracking-tight">PPRNP</span>
+            {/* LOGO FOOTER (DIPERBESAR) */}
+            <div className="relative">
+              <Image 
+                src="/logo-pprnp.png"
+                alt="Logo PPRNP"
+                width={0}
+                height={0}
+                sizes="100vw"
+                // 👇 UKURAN DIPERBESAR JADI h-16 (64px) AGAR SAMA DENGAN HEADER 👇
+                className="h-16 w-auto object-contain" 
+              />
             </div>
+
             <p className="text-sm text-slate-400 leading-relaxed">
               {data?.brandDescription || "Wadah silaturahmi dan kolaborasi warga Puspiptek."}
             </p>
             
-            {/* Social Icons Dynamic */}
             <div className="flex gap-4 pt-2">
               {data?.socialInstagram && (
                 <Link
@@ -133,7 +136,6 @@ export function SiteFooter() {
                 </Link>
               </li>
               <li>
-                {/* ID disesuaikan dengan section Housing Info (#info) */}
                 <Link href="#info" className="hover:text-primary transition-colors flex items-center gap-2">
                   <span className="h-1 w-1 rounded-full bg-slate-600"></span>
                   Info Hunian
@@ -173,7 +175,7 @@ export function SiteFooter() {
             </ul>
           </div>
 
-          {/* 4. Contact Column (Data diambil dari Schema Contact) */}
+          {/* 4. Contact Column */}
           <div>
             <h3 className="text-lg font-semibold text-white mb-6">Kontak</h3>
             <ul className="space-y-4 text-sm">

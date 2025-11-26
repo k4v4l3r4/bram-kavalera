@@ -2,12 +2,12 @@
 
 import * as React from "react"
 import Link from "next/link"
+import Image from "next/image" 
 import { usePathname } from "next/navigation"
-import { Menu, X, Mail, ChevronRight } from "lucide-react" // Icon User dihapus sementara
+import { Menu, X, Mail, ChevronRight } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 
 import { cn } from "@/lib/utils"
-// import { Button } from "@/components/ui/button" // Button tidak dipakai sementara
 
 const navigation = [
   { name: "Beranda", href: "/" },
@@ -42,42 +42,45 @@ export function SiteHeader() {
     >
       <div className="container mx-auto px-4 md:px-6">
         <div className="flex items-center justify-between">
-          {/* Logo Section */}
-          <Link href="/" className="flex items-center gap-2 group z-50">
-            <div className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-blue-600 text-white shadow-lg transition-transform duration-300 group-hover:scale-105">
-              <span className="font-bold text-lg">P</span>
-            </div>
-            <div className="flex flex-col justify-center">
-              <span
-                className={cn(
-                  "text-xl font-bold leading-none tracking-tight transition-colors",
-                  isScrolled ? "text-foreground" : "text-foreground/90",
-                )}
-              >
-                PPRNP
-              </span>
-            </div>
+          
+          {/* LOGO SECTION (DIPERBESAR) */}
+          <Link href="/" className="flex items-center gap-3 group z-50">
+            <Image 
+              src="/logo-pprnp.png" 
+              alt="Logo PPRNP"
+              width={0}
+              height={0}
+              sizes="100vw"
+              // 👇 UKURAN DIPERBESAR JADI h-16 (64px) 👇
+              className="h-16 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+              priority
+            />
           </Link>
 
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center gap-1 bg-white/50 backdrop-blur-sm px-2 py-1 rounded-full border border-white/20 shadow-sm">
-            {navigation.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                className={cn(
-                  "relative px-4 py-2 text-sm font-medium transition-colors rounded-full hover:bg-muted/50",
-                  pathname === item.href ? "text-primary" : "text-foreground/80 hover:text-primary",
-                )}
-              >
-                {item.name}
-              </Link>
-            ))}
+            {navigation.map((item) => {
+              const isActive = pathname === item.href || (item.href !== '/' && pathname.includes(item.href.split('/')[1]))
+              
+              return (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className={cn(
+                    "relative px-4 py-2 text-sm font-medium transition-colors rounded-full text-foreground/80 hover:text-primary",
+                    "nav-neon-link", 
+                    isActive ? "text-primary active" : "", 
+                  )}
+                >
+                  {item.name}
+                </Link>
+              )
+            })}
           </nav>
 
-          {/* Right Actions (TOMBOL MEMBER DIHILANGKAN SEMENTARA) */}
+          {/* Right Actions */}
           <div className="hidden lg:flex items-center gap-4">
-             {/* Nanti tombol Member ditaruh sini lagi kalau sistem login sudah siap */}
+             {/* Placeholder tombol member */}
           </div>
 
           {/* Mobile Menu Toggle */}
@@ -121,7 +124,6 @@ export function SiteHeader() {
               </nav>
 
               <div className="mt-8 space-y-4">
-                {/* Tombol Member Mobile juga disembunyikan */}
                 <div className="flex justify-center gap-6 py-6 text-muted-foreground">
                   <a href="#" className="hover:text-primary">
                     <Mail className="h-5 w-5" />

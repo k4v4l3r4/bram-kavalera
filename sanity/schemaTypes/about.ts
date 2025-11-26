@@ -17,7 +17,7 @@ export const aboutType = defineType({
       type: 'text',
     }),
     
-    // 👇 FIELD BARU YANG DITAMBAHKAN (OBJECTIVES/TUJUAN PPRNP) 👇
+    // FIELD OBJECTIVES
     defineField({
       name: 'objectives',
       title: 'Objectives (Tujuan PPRNP)',
@@ -32,19 +32,30 @@ export const aboutType = defineType({
       ],
       description: 'Gunakan untuk poin-poin panjang Tujuan PPRNP. Masukkan satu poin per item.',
     }),
-    // 👆 END FIELD BARU 👆
     
+    // 👇 GROUP VISI & MISI (LABEL DIHILANGKAN) 👇
     defineField({
-      name: 'vision',
-      title: 'Visi',
-      type: 'text',
+        name: 'visiMisiGroup',
+        title: 'Objectif Visi & Misi', // <-- JUDUL UTAMA (Yang akan tetap muncul)
+        type: 'object',
+        fields: [
+            defineField({
+                name: 'vision',
+                // 👇 PERBAIKAN: Label dihilangkan (title: '')
+                title: '', 
+                type: 'blockContent', 
+            }),
+            defineField({
+                name: 'missions',
+                // 👇 PERBAIKAN: Label dihilangkan (title: '')
+                title: '', 
+                type: 'array',
+                of: [{ type: 'string' }],
+            }),
+        ]
     }),
-    defineField({
-      name: 'missions',
-      title: 'Daftar Misi',
-      type: 'array',
-      of: [{ type: 'string' }],
-    }),
+    // 👆 END GROUP VISI & MISI 👆
+
     defineField({
       name: 'focusAreas',
       title: 'Kartu Fokus Utama',

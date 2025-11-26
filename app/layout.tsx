@@ -4,7 +4,7 @@ import { Inter } from "next/font/google"
 import "./globals.css"
 import { cn } from "@/lib/utils"
 
-// 👇 IMPORT KOMPONEN BARU (Pastikan file-nya sudah dibuat)
+// Import komponen untuk efek visual
 import { ScrollProgress } from "@/components/ui/scroll-progress"
 import { BackToTop } from "@/components/ui/back-to-top"
 
@@ -22,8 +22,10 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
+    // Tag HTML sudah memiliki suppressHydrationWarning
     <html lang="id" className="scroll-smooth" suppressHydrationWarning>
-      <body className={cn(inter.variable, "font-sans min-h-screen flex flex-col relative")}>
+      {/* 👇 PERBAIKAN: Menambahkan suppressHydrationWarning ke tag BODY untuk mengatasi error ekstensi browser 👇 */}
+      <body className={cn(inter.variable, "font-sans min-h-screen flex flex-col relative")} suppressHydrationWarning>
         
         {/* 1. Garis Progress di Atas */}
         <ScrollProgress />

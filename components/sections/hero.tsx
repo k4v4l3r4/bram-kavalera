@@ -69,7 +69,7 @@ export function HeroSection() {
                 Selamat Datang di Official Website
               </div>
               
-              {/* Judul Besar (Hardcoded untuk style custom) */}
+              {/* Judul Besar (TETAP HARDCODED SESUAI PERMINTAAN) */}
               <h1 className="text-5xl font-bold tracking-tight text-slate-900 sm:text-6xl xl:text-7xl leading-[1.1]">
                 Pioner Penghuni<br />
                 <span className="text-[#009B7C]">Rumah Negara</span><br />
@@ -82,30 +82,30 @@ export function HeroSection() {
               </p>
             </motion.div>
 
-            {/* -- TOMBOL (DIHAPUS SESUAI PERMINTAAN) -- */}
+            {/* --- TOMBOL DIHILANGKAN DI SINI --- */}
 
-            {/* Logo Instansi */}
+            {/* Logo Instansi (TETAP DIPERBESAR SESUAI PERMINTAAN SEBELUMNYA) */}
             <motion.div 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.4 }}
-              className="grid grid-cols-4 gap-4 mt-4 items-center opacity-70 grayscale hover:grayscale-0 transition-all duration-500"
+              className="grid grid-cols-4 gap-6 mt-6 items-center opacity-80 grayscale hover:grayscale-0 transition-all duration-500"
             >
-              <div className="flex flex-col items-center gap-2">
-                <Atom className="text-[#0056b3] h-8 w-8" />
-                <span className="text-xs font-bold text-slate-600">BATAN</span>
+              <div className="flex flex-col items-center gap-3">
+                <Atom className="text-[#0056b3] h-12 w-12" />
+                <span className="text-sm font-bold text-slate-700">BATAN</span>
               </div>
-              <div className="flex flex-col items-center gap-2">
-                <Microscope className="text-[#0056b3] h-8 w-8" />
-                <span className="text-xs font-bold text-slate-600">LIPI</span>
+              <div className="flex flex-col items-center gap-3">
+                <Microscope className="text-[#0056b3] h-12 w-12" />
+                <span className="text-sm font-bold text-slate-700">LIPI</span>
               </div>
-              <div className="flex flex-col items-center gap-2">
-                <Cpu className="text-[#0056b3] h-8 w-8" />
-                <span className="text-xs font-bold text-slate-600">BPPT</span>
+              <div className="flex flex-col items-center gap-3">
+                <Cpu className="text-[#0056b3] h-12 w-12" />
+                <span className="text-sm font-bold text-slate-700">BPPT</span>
               </div>
-              <div className="flex flex-col items-center gap-2">
-                <Landmark className="text-[#0056b3] h-8 w-8" />
-                <span className="text-xs font-bold text-slate-600">PUSPIPTEK</span>
+              <div className="flex flex-col items-center gap-3">
+                <Landmark className="text-[#0056b3] h-12 w-12" />
+                <span className="text-sm font-bold text-slate-700">PUSPIPTEK</span>
               </div>
             </motion.div>
           </div>

@@ -7,7 +7,8 @@ import { podcastType } from './podcast'
 import { announcementsType } from './announcements'
 import { housingInfoType } from './housingInfo'
 import { contactType } from './contact'
-import { footerType } from './footer' // Import baru
+import { footerType } from './footer'
+import { blockContentType } from './blockContent' // <-- IMPORT WAJIB UNTUK TEXT EDITOR
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -19,6 +20,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     announcementsType, 
     housingInfoType,
     contactType,
-    footerType // Tambahkan di sini
+    footerType,
+    blockContentType // <-- TAMBAHKAN BLOCK CONTENT DI SINI
   ],
 }
