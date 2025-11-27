@@ -14,7 +14,7 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-sans" })
 export const metadata: Metadata = {
   title: "PPRNP - Pioner Penghuni Rumah Negara Puspiptek",
   description: "Pusat informasi dan komunitas warga Puspiptek.",
-  // ❌ generator: 'v0.app' sudah dihapus di sini
+  // Generator v0 sudah dihapus
 }
 
 export default function RootLayout({
@@ -23,9 +23,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    // Tag HTML sudah suppress
     <html lang="id" className="scroll-smooth" suppressHydrationWarning>
-      {/* 👇 FINAL FIX: suppressHydrationWarning di BODY 👇 */}
       <body className={cn(inter.variable, "font-sans min-h-screen flex flex-col relative")} suppressHydrationWarning>
         
         {/* 1. Garis Progress di Atas */}
