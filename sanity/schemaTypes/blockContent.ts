@@ -8,23 +8,33 @@ export const blockContentType = defineType({
     defineArrayMember({
       title: 'Block',
       type: 'block',
-      // 👇 Definisikan Gaya Teks di sini 👇
+      // 👇 1. DAFTAR GAYA TEKS & ALIGNMENT 👇
       styles: [
         { title: 'Normal', value: 'normal' },
-        { title: 'Normal (Justify)', value: 'normal_justify' }, // <-- OPSI BARU DITAMBAHKAN
+        { title: 'H1', value: 'h1' }, 
         { title: 'H2', value: 'h2' },
         { title: 'H3', value: 'h3' },
         { title: 'H4', value: 'h4' },
+        { title: 'H5', value: 'h5' },
+        { title: 'H6', value: 'h6' },
         { title: 'Quote', value: 'blockquote' },
+        // Opsi Alignment
+        { title: 'Rata Kiri', value: 'normal_left' },
+        { title: 'Rata Tengah', value: 'normal_center' },
+        { title: 'Rata Kanan', value: 'normal_right' },
+        { title: 'Rata Kanan-Kiri (Justify)', value: 'normal_justify' },
       ],
       lists: [
         { title: 'Bullet', value: 'bullet' },
         { title: 'Numbered', value: 'number' },
       ],
+      // 👇 2. DEKORASI TEKS (BOLD, ITALIC, UNDERLINE, DLL) 👇
       marks: {
         decorators: [
           { title: 'Strong', value: 'strong' },
           { title: 'Emphasis', value: 'em' },
+          { title: 'Underline', value: 'underline' }, // Garis Bawah
+          { title: 'Strike', value: 'strike-through' }, // Coret
           { title: 'Code', value: 'code' },
         ],
         annotations: [
@@ -38,12 +48,16 @@ export const blockContentType = defineType({
                 name: 'href',
                 type: 'url',
               },
+              {
+                title: 'Open in new tab',
+                name: 'blank',
+                type: 'boolean'
+              }
             ],
           },
         ],
       },
     }),
-    // Memungkinkan gambar disisipkan dalam teks
     defineArrayMember({
       type: 'image',
       options: { hotspot: true },

@@ -53,7 +53,10 @@ export function AnnouncementsSection() {
   const news = data.items || []
 
   return (
-    <section id="news" className="py-20 md:py-28 bg-muted/30">
+    <section
+      id="news"
+      className="py-16 md:py-20 bg-muted/30"
+    >
       <div className="container mx-auto px-4 md:px-6">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

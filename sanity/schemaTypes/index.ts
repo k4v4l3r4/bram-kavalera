@@ -1,4 +1,6 @@
 import { type SchemaTypeDefinition } from 'sanity'
+
+// Import semua schema yang sudah dibuat
 import { heroType } from './hero'
 import { aboutType } from './about'
 import { programsType } from './programs'
@@ -8,7 +10,8 @@ import { announcementsType } from './announcements'
 import { housingInfoType } from './housingInfo'
 import { contactType } from './contact'
 import { footerType } from './footer'
-import { blockContentType } from './blockContent' // <-- IMPORT WAJIB UNTUK TEXT EDITOR
+import { blockContentType } from './blockContent' // Editor Teks Canggih
+import { expertClustersType } from './expertClusters' // Klaster Kepakaran (Menu Baru)
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -21,6 +24,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     housingInfoType,
     contactType,
     footerType,
-    blockContentType // <-- TAMBAHKAN BLOCK CONTENT DI SINI
+    blockContentType, // <-- Wajib untuk Visi (Rich Text)
+    expertClustersType, // <-- Wajib untuk Klaster Kepakaran
   ],
 }

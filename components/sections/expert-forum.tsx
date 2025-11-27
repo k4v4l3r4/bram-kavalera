@@ -1,19 +1,11 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { MessageSquare, Users, Calendar, Lightbulb, ArrowRight } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import Image from "next/image"
 import { motion } from "framer-motion"
+import Image from "next/image"
+import { Button } from "@/components/ui/button"
+import { Calendar, ArrowRight } from "lucide-react"
 import { client } from "@/sanity/lib/client"
-
-// Mapping Ikon dari CMS ke React Component
-const iconMap: any = {
-  Users: Users,
-  MessageSquare: MessageSquare,
-  Calendar: Calendar,
-  Lightbulb: Lightbulb,
-}
 
 export function ExpertForumSection() {
   const [data, setData] = useState<any>(null)
@@ -28,7 +20,6 @@ export function ExpertForumSection() {
             overlayTitle,
             schedule,
             buttonText,
-            topics,
             "imageUrl": image.asset->url
           }
         `)
@@ -40,29 +31,28 @@ export function ExpertForumSection() {
     fetchData()
   }, [])
 
-  if (!data) return null // Atau loading skeleton jika mau
-
-  const topics = data.topics || []
+  if (!data) return null
 
   return (
-    // 👇 PERBAIKAN DI SINI: Menambahkan id="expert-forum" agar link navigasi berfungsi 👇
-    <section id="expert-forum" className="py-20 md:py-28 bg-muted/50 overflow-hidden">
+    <section
+      id="expert-forum"
+      className="pt-0 md:pt-0 pb-16 md:pb-24 bg-muted/50 overflow-hidden"
+    >
       <div className="container mx-auto px-4 md:px-6">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
-          
-          {/* BAGIAN KIRI: FOTO DENGAN OVERLAY */}
+
+          {/* IMAGE */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-            className="relative rounded-3xl overflow-hidden shadow-2xl aspect-video lg:aspect-square group"
+            transition={{ duration: 0.8 }}
+            className="relative rounded-3xl overflow-hidden shadow-2xl aspect-video lg:aspect-[4/3] group w-full h-full min-h-[380px]"
           >
-            {/* Cek apakah ada gambar dari CMS, jika tidak pakai placeholder warna abu */}
             {data.imageUrl ? (
               <Image
                 src={data.imageUrl}
-                alt="Diskusi Para Ahli Puspiptek"
+                alt="Expert Forum Banner"
                 fill
                 className="object-cover transition-transform duration-700 group-hover:scale-105"
               />
@@ -71,78 +61,52 @@ export function ExpertForumSection() {
                 Belum ada foto
               </div>
             )}
-            
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end p-8">
-              <div className="text-white transform transition-transform duration-500 translate-y-2 group-hover:translate-y-0">
+
+            {/* Overlay Text */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent flex items-end p-8">
+              <div className="text-white transform transition-all duration-500 translate-y-2 group-hover:translate-y-0">
                 <div className="bg-primary/90 text-white text-xs font-bold px-3 py-1 rounded-full inline-block mb-3 backdrop-blur-md">
                   LIVE SESSION
                 </div>
-                <p className="font-bold text-xl mb-1">{data.overlayTitle || "Judul Overlay"}</p>
+                <p className="font-bold text-2xl mb-1 drop-shadow-md leading-tight">
+                  {data.overlayTitle || "Sesi Berbagi Pengetahuan"}
+                </p>
                 <p className="text-sm opacity-90 flex items-center gap-2">
-                  <Calendar className="h-4 w-4" /> {data.schedule || "Jadwal belum diatur"}
+                  <Calendar className="h-4 w-4" />
+                  {data.schedule || "Jumat, 19:00 WIB"}
                 </p>
               </div>
             </div>
           </motion.div>
 
-          {/* BAGIAN KANAN: KONTEN TEKS & LIST */}
-          <div className="space-y-8">
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="space-y-4"
-            >
-              <h2 className="text-3xl font-bold tracking-tighter md:text-4xl">
-                {data.heading || "Judul Expert Forum"}
-              </h2>
-              <p className="text-muted-foreground text-lg">
-                {data.description || "Deskripsi belum diisi di Admin CMS."}
+          {/* TEXT & CTA */}
+          <motion.div
+            initial={{ opacity: 0, x: 30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="space-y-8"
+          >
+            <h2 className="text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl text-slate-900 leading-tight">
+              {data.heading || "Diskusi & Kolaborasi Para Expert"}
+            </h2>
+
+            <blockquote className="border-l-4 border-primary pl-6 py-2">
+              <p className="text-muted-foreground text-lg leading-relaxed italic">
+                {data.description ||
+                  "Solusi cerdas dari para pakar senior — cepat, tepat, dan berbasis pengalaman nyata."}
               </p>
-            </motion.div>
+            </blockquote>
 
-            <div className="space-y-6">
-              {topics.map((item: any, index: number) => {
-                const IconComponent = iconMap[item.icon] || Lightbulb
-
-                return (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, y: 10 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
-                    className="flex gap-4 p-4 rounded-xl bg-background border shadow-sm hover:shadow-lg hover:border-primary/30 transition-all group cursor-default"
-                  >
-                    <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform duration-300">
-                      <IconComponent className="h-6 w-6 text-primary" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-lg group-hover:text-primary transition-colors">
-                        {item.title}
-                      </h3>
-                      <p className="text-muted-foreground text-sm">{item.desc}</p>
-                    </div>
-                  </motion.div>
-                )
-              })}
-            </div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.6 }}
+            <Button
+              size="lg"
+              className="rounded-full shadow-xl bg-primary hover:bg-primary/90 px-8 py-6 text-lg group"
             >
-              <Button
-                size="lg"
-                className="w-full sm:w-auto rounded-full px-8 shadow-lg hover:shadow-primary/25 transition-all hover:-translate-y-1"
-              >
-                {data.buttonText || "Lihat Info"}
-              </Button>
-            </motion.div>
-          </div>
+              {data.buttonText || "Lihat Jadwal"}
+              <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+            </Button>
+          </motion.div>
+
         </div>
       </div>
     </section>

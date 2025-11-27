@@ -1,7 +1,6 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Button } from "@/components/ui/button"
 import Image from "next/image"
 import { motion, AnimatePresence } from "framer-motion"
 import { Atom, Microscope, Cpu, Landmark } from "lucide-react"
@@ -44,7 +43,7 @@ export function HeroSection() {
   const heroImages = data?.images || []
 
   return (
-    <section className="relative overflow-hidden bg-background pt-24 pb-20 md:pt-32 md:pb-24 lg:pt-32 lg:pb-32">
+    <section className="relative overflow-hidden bg-background pt-24 pb-16 md:pt-32 md:pb-20 lg:pt-32 lg:pb-24">
       {/* Background Decoration */}
       <motion.div
         animate={{ scale: [1, 1.2, 1], rotate: [0, 90, 0] }}
@@ -69,7 +68,7 @@ export function HeroSection() {
                 Selamat Datang di Official Website
               </div>
               
-              {/* Judul Besar (TETAP HARDCODED SESUAI PERMINTAAN) */}
+              {/* Judul Besar (tidak diubah) */}
               <h1 className="text-5xl font-bold tracking-tight text-slate-900 sm:text-6xl xl:text-7xl leading-[1.1]">
                 Pioner Penghuni<br />
                 <span className="text-[#009B7C]">Rumah Negara</span><br />
@@ -82,31 +81,37 @@ export function HeroSection() {
               </p>
             </motion.div>
 
-            {/* --- TOMBOL DIHILANGKAN DI SINI --- */}
-
-            {/* Logo Instansi (TETAP DIPERBESAR SESUAI PERMINTAAN SEBELUMNYA) */}
+            {/* Logo Instansi dengan Rotasi Horizontal */}
             <motion.div 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.4 }}
-              className="grid grid-cols-4 gap-6 mt-6 items-center opacity-80 grayscale hover:grayscale-0 transition-all duration-500"
+              className="grid grid-cols-4 gap-6 mt-6 items-center"
             >
-              <div className="flex flex-col items-center gap-3">
-                <Atom className="text-[#0056b3] h-12 w-12" />
-                <span className="text-sm font-bold text-slate-700">BATAN</span>
-              </div>
-              <div className="flex flex-col items-center gap-3">
-                <Microscope className="text-[#0056b3] h-12 w-12" />
-                <span className="text-sm font-bold text-slate-700">LIPI</span>
-              </div>
-              <div className="flex flex-col items-center gap-3">
-                <Cpu className="text-[#0056b3] h-12 w-12" />
-                <span className="text-sm font-bold text-slate-700">BPPT</span>
-              </div>
-              <div className="flex flex-col items-center gap-3">
-                <Landmark className="text-[#0056b3] h-12 w-12" />
-                <span className="text-sm font-bold text-slate-700">PUSPIPTEK</span>
-              </div>
+              {[
+                { icon: Atom, label: "BATAN" },
+                { icon: Microscope, label: "LIPI" },
+                { icon: Cpu, label: "BPPT" },
+                { icon: Landmark, label: "PUSPIPTEK" },
+              ].map((item, idx) => {
+                const Icon = item.icon
+                return (
+                  <motion.div
+                    key={idx}
+                    className="flex flex-col items-center gap-3"
+                    animate={{ rotateY: [0, 180, 0] }} // putar horizontal
+                    transition={{
+                      duration: 4,
+                      repeat: Infinity,
+                      ease: "linear",
+                      delay: idx * 0.5, // stagger tiap logo
+                    }}
+                  >
+                    <Icon className="text-[#0056b3] h-12 w-12" />
+                    <span className="text-sm font-bold text-slate-700">{item.label}</span>
+                  </motion.div>
+                )
+              })}
             </motion.div>
           </div>
 

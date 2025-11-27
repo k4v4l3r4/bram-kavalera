@@ -27,7 +27,7 @@ export function ContactSection() {
   if (!data) return null
 
   return (
-    <section id="contact" className="py-20 bg-muted/30">
+    <section id="contact" className="py-16 md:py-20 bg-muted/30">
       <div className="container mx-auto px-4 md:px-6">
         <div className="grid lg:grid-cols-2 gap-12">
           
@@ -47,9 +47,7 @@ export function ContactSection() {
               <div className="flex items-start gap-4">
                 <MapPin className="h-6 w-6 text-primary mt-1" />
                 <div>
-                  {/* 👇 PERBAIKAN TYPO DI SINI 👇 */}
                   <h3 className="font-semibold">Sekretariat PPRNP</h3>
-                  {/* 👆 SUDAH DIGANTI JADI PPRNP 👆 */}
                   <p className="text-muted-foreground leading-relaxed">
                     {data.address || "Alamat belum diisi di Admin."}
                   </p>

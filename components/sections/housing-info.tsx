@@ -67,14 +67,13 @@ export function HousingInfoSection() {
     return () => clearInterval(timer)
   }, [maps.length])
 
-  // Fungsi Manual Slide
   const nextMap = () => setCurrentMap((prev) => (prev + 1) % maps.length)
   const prevMap = () => setCurrentMap((prev) => (prev - 1 + maps.length) % maps.length)
 
   if (!data) return null
 
   return (
-    <section id="info" className="py-20 md:py-28 bg-primary/5">
+    <section id="info" className="py-16 md:py-20 bg-primary/5">
       <div className="container mx-auto px-4 md:px-6">
         <div className="grid lg:grid-cols-2 gap-12">
           
@@ -114,7 +113,6 @@ export function HousingInfoSection() {
             
             {maps.length > 0 ? (
               <>
-                {/* Gambar Peta */}
                 <Image
                   src={maps[currentMap].url}
                   alt="Peta Kawasan"
@@ -123,14 +121,12 @@ export function HousingInfoSection() {
                   className="absolute inset-0 w-full h-full object-cover transition-opacity duration-700"
                 />
 
-                {/* Overlay Judul Peta */}
                 <div className="absolute bottom-0 left-0 right-0 bg-black/60 p-4 backdrop-blur-sm z-10">
                   <p className="text-white font-medium text-center transition-all duration-500">
                     {maps[currentMap].caption || `Peta ${currentMap + 1}`}
                   </p>
                 </div>
 
-                {/* Tombol Navigasi Manual */}
                 {maps.length > 1 && (
                   <>
                     <button 
@@ -146,7 +142,6 @@ export function HousingInfoSection() {
                       <ChevronRight className="h-6 w-6" />
                     </button>
                     
-                    {/* Indikator Titik */}
                     <div className="absolute top-4 right-4 flex gap-1 z-20">
                       {maps.map((_: any, idx: number) => (
                         <div 

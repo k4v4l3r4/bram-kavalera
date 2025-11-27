@@ -7,31 +7,45 @@ import Image from "next/image"
 import { motion } from "framer-motion"
 import { client } from "@/sanity/lib/client"
 
-// 1. Mapping Ikon (CMS String -> React Component)
-const iconMap: any = {
+// Mapping Ikon (CMS String -> React Component)
+const iconMap = {
   Users2: Users2,
   Calendar: Calendar,
   BookOpen: BookOpen,
   Camera: Camera,
-}
+} as const
 
-// 2. Mapping Warna (CMS String -> Tailwind Classes)
-const colorMap: any = {
+// Mapping Warna (CMS String -> Tailwind Classes)
+const colorMap = {
   blue: "bg-blue-500",
   green: "bg-green-500",
   purple: "bg-purple-500",
   orange: "bg-orange-500",
   red: "bg-red-500",
+} as const
+
+type ProgramItem = {
+  title: string
+  description: string
+  tag: string
+  color: keyof typeof colorMap
+  icon: keyof typeof iconMap
+  image?: string
+}
+
+type ProgramsData = {
+  sectionTitle: string
+  sectionDescription: string
+  items: ProgramItem[]
 }
 
 export function ProgramsSection() {
-  const [data, setData] = useState<any>(null)
+  const [data, setData] = useState<ProgramsData | null>(null)
 
-  // Ambil data dari Sanity
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const result = await client.fetch(`
+        const result: ProgramsData = await client.fetch(`
           *[_type == "programs"][0]{
             sectionTitle,
             sectionDescription,
@@ -53,14 +67,15 @@ export function ProgramsSection() {
     fetchData()
   }, [])
 
-  // Loading state (biar rapi)
   if (!data) return null
 
-  // Data fallback
   const programs = data.items || []
 
   return (
-    <section id="programs" className="py-20 md:py-28 bg-background relative">
+    <section
+      id="programs"
+      className="pt-16 pb-20 md:pt-20 md:pb-24 bg-background relative"
+    >
       <div className="absolute inset-0 bg-grid-pattern opacity-[0.03] pointer-events-none" />
 
       <div className="container mx-auto px-4 md:px-6 relative z-10">
@@ -87,9 +102,8 @@ export function ProgramsSection() {
           </Link>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8">
-          {programs.map((program: any, i: number) => {
-            // Tentukan Ikon & Warna berdasarkan data CMS
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+          {programs.map((program, i) => {
             const IconComponent = iconMap[program.icon] || HelpCircle
             const colorClass = colorMap[program.color] || "bg-gray-500"
 
@@ -100,7 +114,7 @@ export function ProgramsSection() {
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: i * 0.1 }}
-                className="group relative overflow-hidden rounded-3xl bg-background border border-border shadow-sm hover:shadow-2xl transition-all duration-500 ease-out h-[300px] md:h-[350px]"
+                className="group relative overflow-hidden rounded-3xl bg-background border border-border shadow-sm hover:shadow-2xl transition-all duration-500 ease-out h-[320px] md:h-[350px]"
               >
                 {/* Image Background */}
                 <div className="absolute inset-0 z-0">
@@ -112,7 +126,7 @@ export function ProgramsSection() {
                       className="object-cover transition-transform duration-700 group-hover:scale-110"
                     />
                   ) : (
-                    <div className="w-full h-full bg-muted" /> // Fallback jika tidak ada gambar
+                    <div className="w-full h-full bg-muted" />
                   )}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
                 </div>

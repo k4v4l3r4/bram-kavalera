@@ -15,6 +15,7 @@ export function SiteFooter() {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        // FETCH GABUNGAN: Mengambil data Footer DAN Contact sekaligus
         const result = await client.fetch(`
           {
             "footer": *[_type == "footer"][0],
@@ -65,7 +66,7 @@ export function SiteFooter() {
           
           {/* 1. Brand Column */}
           <div className="space-y-4">
-            {/* LOGO FOOTER (DIPERBESAR) */}
+            {/* LOGO FOOTER (PROPORSIONAL) */}
             <div className="relative">
               <Image 
                 src="/logo-pprnp.png"
@@ -73,15 +74,15 @@ export function SiteFooter() {
                 width={0}
                 height={0}
                 sizes="100vw"
-                // 👇 UKURAN DIPERBESAR JADI h-16 (64px) AGAR SAMA DENGAN HEADER 👇
-                className="h-16 w-auto object-contain" 
+                className="h-16 w-auto object-contain animate-[spin_12s_linear_infinite]"
               />
             </div>
 
             <p className="text-sm text-slate-400 leading-relaxed">
-              {data?.brandDescription || "Wadah silaturahmi dan kolaborasi warga Puspiptek."}
+              {data?.brandDescription || "Wadah silaturahmi, informasi, dan kolaborasi untuk mewujudkan komunitas Puspiptek yang sehat, aman, dan produktif.."}
             </p>
             
+            {/* Social Icons */}
             <div className="flex gap-4 pt-2">
               {data?.socialInstagram && (
                 <Link
@@ -113,7 +114,7 @@ export function SiteFooter() {
             </div>
           </div>
 
-          {/* 2. Links Column */}
+          {/* 2. Links Column: TAUTAN CEPAT (UPDATED) */}
           <div>
             <h3 className="text-lg font-semibold text-white mb-6">Tautan Cepat</h3>
             <ul className="space-y-3 text-sm">
@@ -124,21 +125,51 @@ export function SiteFooter() {
                 </Link>
               </li>
               <li>
-                <Link href="#about" className="hover:text-primary transition-colors flex items-center gap-2">
+                <Link href="/#about" className="hover:text-primary transition-colors flex items-center gap-2">
                   <span className="h-1 w-1 rounded-full bg-slate-600"></span>
                   Tentang Kami
                 </Link>
               </li>
               <li>
-                <Link href="#programs" className="hover:text-primary transition-colors flex items-center gap-2">
+                <Link href="/#expert-clusters" className="hover:text-primary transition-colors flex items-center gap-2">
+                  <span className="h-1 w-1 rounded-full bg-slate-600"></span>
+                  Expertise Profile
+                </Link>
+              </li>
+              <li>
+                <Link href="/#expert-forum" className="hover:text-primary transition-colors flex items-center gap-2">
+                  <span className="h-1 w-1 rounded-full bg-slate-600"></span>
+                  Seminar
+                </Link>
+              </li>
+              <li>
+                <Link href="/#podcast" className="hover:text-primary transition-colors flex items-center gap-2">
+                  <span className="h-1 w-1 rounded-full bg-slate-600"></span>
+                  Podcast
+                </Link>
+              </li>
+              <li>
+                <Link href="/#programs" className="hover:text-primary transition-colors flex items-center gap-2">
                   <span className="h-1 w-1 rounded-full bg-slate-600"></span>
                   Program & Kegiatan
                 </Link>
               </li>
               <li>
-                <Link href="#info" className="hover:text-primary transition-colors flex items-center gap-2">
+                <Link href="/#news" className="hover:text-primary transition-colors flex items-center gap-2">
                   <span className="h-1 w-1 rounded-full bg-slate-600"></span>
-                  Info Hunian
+                  Berita
+                </Link>
+              </li>
+              <li>
+                <Link href="/#info" className="hover:text-primary transition-colors flex items-center gap-2">
+                  <span className="h-1 w-1 rounded-full bg-slate-600"></span>
+                  Info Warga
+                </Link>
+              </li>
+              <li>
+                <Link href="/#contact" className="hover:text-primary transition-colors flex items-center gap-2">
+                  <span className="h-1 w-1 rounded-full bg-slate-600"></span>
+                  Kontak
                 </Link>
               </li>
             </ul>
