@@ -68,13 +68,14 @@ export function SiteFooter() {
           <div className="space-y-4">
             {/* LOGO FOOTER (PROPORSIONAL) */}
             <div className="relative">
-              <Image 
-                src="/logo-pprnp.png"
-                alt="Logo PPRNP"
-                width={0}
-                height={0}
-                sizes="100vw"
-                className="h-16 w-auto object-contain animate-[spin_12s_linear_infinite]"
+             <Image 
+  src="/logo-pprnp.png"
+  alt="Logo PPRNP"
+  width={0}
+  height={0}
+  sizes="100vw"
+  className="h-16 w-auto object-contain"
+ />
               />
             </div>
 
