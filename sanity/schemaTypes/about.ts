@@ -26,7 +26,7 @@ export const aboutType = defineType({
         {
           type: 'object',
           fields: [
-            { name: 'goal', type: 'text', title: 'Poin Tujuan' },
+            { name: 'goal', type: 'blockContent', title: 'Poin Tujuan' },
           ],
         },
       ],
