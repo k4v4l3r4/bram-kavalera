@@ -1,8 +1,8 @@
-"use client" // <--- WAJIB ADA KARENA KITA PAKAI STATE
+"use client"
 
 import { useState } from "react"
 import { SiteHeader } from "@/components/site-header"
-import { HeroSection } from "@/components/sections/hero"
+import { HeroSection } from "@/components/sections/hero" // Pastikan path import benar
 import { AboutSection } from "@/components/sections/about"
 import { ExpertForumSection } from "@/components/sections/expert-forum" 
 import { ExpertClustersSection } from "@/components/sections/expert-clusters"
@@ -14,22 +14,26 @@ import { ContactSection } from "@/components/sections/contact"
 import { SiteFooter } from "@/components/site-footer"
 
 export default function Home() {
-  // 1. State untuk mengontrol visibilitas AboutSection
-  // false = tersembunyi, true = muncul
   const [showAbout, setShowAbout] = useState(false)
 
-  // 2. Fungsi yang akan dipanggil saat tombol di Hero diklik
-  const handleShowAbout = () => {
-    setShowAbout(true) // Munculkan section
-    
-    // Beri jeda 100ms agar React sempat merender section tersebut
-    // sebelum kita perintahkan browser untuk scroll ke sana
-    setTimeout(() => {
-      const element = document.getElementById("about")
-      if (element) {
-        element.scrollIntoView({ behavior: "smooth" })
+  // LOGIKA TOGGLE (SAKLAR)
+  const handleToggleAbout = () => {
+    // 1. Ambil nilai kebalikan dari sekarang (!prev)
+    setShowAbout((prev) => {
+      const newState = !prev
+      
+      // 2. Jika newState == true (Artinya baru saja dibuka), maka scroll ke bawah
+      if (newState) {
+        setTimeout(() => {
+          const element = document.getElementById("about")
+          if (element) {
+            element.scrollIntoView({ behavior: "smooth" })
+          }
+        }, 100)
       }
-    }, 100)
+      
+      return newState
+    })
   }
 
   return (
@@ -37,16 +41,18 @@ export default function Home() {
       <SiteHeader />
       <main className="flex-1">
         
-        {/* 3. Oper fungsi handleShowAbout ke HeroSection */}
-        <HeroSection onShowAbout={handleShowAbout} />
+        {/* Pass fungsi toggle DAN status (isAboutOpen) ke Hero */}
+        <HeroSection 
+            onToggleAbout={handleToggleAbout} 
+            isAboutOpen={showAbout} 
+        />
         
-        {/* 4. Render Kondisional: AboutSection hanya muncul jika showAbout == true */}
+        {/* Render About jika showAbout = True */}
         {showAbout && <AboutSection />}
         
         <ExpertClustersSection /> 
         <ExpertForumSection />
 
-        {/* Urutan Sesuai Request: Podcast -> Program -> Berita */}
         <PodcastSection />         
         <ProgramsSection />        
         <AnnouncementsSection />   
