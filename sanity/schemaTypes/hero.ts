@@ -13,7 +13,7 @@ export const heroType = defineType({
     defineField({
       name: 'subtitle',
       title: 'Deskripsi Pendek',
-      type: 'text',
+      type: 'blockContent',
     }),
     defineField({
       name: 'images',

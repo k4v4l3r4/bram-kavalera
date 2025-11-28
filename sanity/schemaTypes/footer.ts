@@ -9,7 +9,7 @@ export const footerType = defineType({
     defineField({
       name: 'brandDescription',
       title: 'Deskripsi Singkat (Bawah Logo)',
-      type: 'text',
+      type: 'blockContent',
       rows: 3,
       initialValue: 'Wadah silaturahmi dan kolaborasi warga untuk menciptakan lingkungan yang harmonis.'
     }),
@@ -41,7 +41,7 @@ export const footerType = defineType({
     defineField({
       name: 'newsletterDesc',
       title: 'Deskripsi Newsletter',
-      type: 'text',
+      type: 'blockContent',
       initialValue: 'Dapatkan informasi terbaru seputar kegiatan dan pengumuman.'
     }),
   ],

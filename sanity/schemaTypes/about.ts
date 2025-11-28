@@ -14,7 +14,7 @@ export const aboutType = defineType({
     defineField({
       name: 'description',
       title: 'Deskripsi Panjang',
-      type: 'text',
+      type: 'blockContent',
     }),
     
     // FIELD OBJECTIVES (Tujuan PPRNP)

@@ -15,7 +15,7 @@ export const programsType = defineType({
     defineField({
       name: 'sectionDescription',
       title: 'Deskripsi Seksi',
-      type: 'text',
+      type: 'blockContent',
       initialValue: 'Berbagai inisiatif kolaboratif untuk meningkatkan kualitas hidup warga.'
     }),
 
@@ -29,7 +29,7 @@ export const programsType = defineType({
           type: 'object',
           fields: [
             { name: 'title', type: 'string', title: 'Nama Program' },
-            { name: 'description', type: 'text', title: 'Deskripsi Singkat' },
+            { name: 'description', type: 'blockContent', title: 'Deskripsi Singkat' },
             { name: 'tag', type: 'string', title: 'Label Tag (misal: Mingguan)' },
             { 
               name: 'image', 

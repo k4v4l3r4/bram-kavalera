@@ -15,7 +15,7 @@ export const announcementsType = defineType({
     defineField({
       name: 'description',
       title: 'Deskripsi Seksi',
-      type: 'text',
+      type: 'blockContent',
       initialValue: 'Informasi terkini seputar kegiatan dan himbauan untuk warga.'
     }),
 
@@ -63,7 +63,7 @@ export const announcementsType = defineType({
             },
             { 
               name: 'excerpt', 
-              type: 'text', 
+              type: 'blockContent', 
               title: 'Ringkasan Berita (Excerpt)',
               rows: 3
             },

@@ -14,7 +14,7 @@ export const contactType = defineType({
     defineField({
       name: 'description',
       title: 'Deskripsi Singkat',
-      type: 'text',
+      type: 'blockContent',
       initialValue: 'Punya pertanyaan, saran, atau ingin berpartisipasi? Hubungi pengurus.'
     }),
     
@@ -22,7 +22,7 @@ export const contactType = defineType({
     defineField({
       name: 'address',
       title: 'Alamat Sekretariat',
-      type: 'text',
+      type: 'blockContent',
       rows: 3
     }),
     defineField({

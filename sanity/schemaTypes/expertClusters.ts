@@ -20,7 +20,7 @@ export const expertClustersType = defineType({
           type: 'object',
           fields: [
             { name: 'title', type: 'string', title: 'Nama Klaster (misal: AGRICULTURE)' },
-            { name: 'description', type: 'text', title: 'Deskripsi Singkat' },
+            { name: 'description', type: 'blockContent', title: 'Deskripsi Singkat' },
             {
               name: 'icon',
               title: 'Pilih Ikon',

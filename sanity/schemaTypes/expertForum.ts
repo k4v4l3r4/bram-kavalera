@@ -14,7 +14,7 @@ export const expertForumType = defineType({
     defineField({
       name: 'description',
       title: 'Deskripsi Seksi',
-      type: 'text',
+      type: 'blockContent',
     }),
     defineField({
       name: 'image',

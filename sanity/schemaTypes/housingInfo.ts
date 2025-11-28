@@ -15,7 +15,7 @@ export const housingInfoType = defineType({
     defineField({
       name: 'description',
       title: 'Deskripsi Seksi',
-      type: 'text',
+      type: 'blockContent',
       initialValue: 'Panduan penting bagi penghuni kawasan Rumah Negara Puspiptek.'
     }),
 
@@ -29,7 +29,7 @@ export const housingInfoType = defineType({
           type: 'object',
           fields: [
             { name: 'title', type: 'string', title: 'Judul Info' },
-            { name: 'description', type: 'text', title: 'Isi Info' },
+            { name: 'description', type: 'blockContent', title: 'Isi Info' },
             {
               name: 'icon',
               title: 'Ikon',

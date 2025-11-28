@@ -15,7 +15,7 @@ export const podcastType = defineType({
     defineField({
       name: 'description',
       title: 'Deskripsi',
-      type: 'text',
+      type: 'blockContent',
       initialValue: 'Dengarkan bincang santai namun berbobot bersama para ahli.'
     }),
     // 👇👇 UPDATE BAGIAN INI 👇👇
