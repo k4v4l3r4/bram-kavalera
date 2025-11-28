@@ -7,19 +7,18 @@ import {
   HeartPulse, ShieldCheck, Lightbulb, HandHeart, Sprout, Microscope 
 } from "lucide-react"
 import { client } from "@/sanity/lib/client"
-import { PortableTextRenderer } from "@/components/portable-text-renderer"
+import { PortableTextRenderer } from "@/components/portable-text-renderer" // <-- Pastikan ini diimport
 
 export function AboutSection() {
   const [data, setData] = useState<any>(null)
 
-  // Fetch Data
   useEffect(() => {
     const fetchData = async () => {
       try {
         const result = await client.fetch(`
           *[_type == "about"][0]{
             title,
-            description,
+            description, // <-- Ini sekarang tipenya Block Content (Array)
             visiMisiGroup,
             objectives
           }
@@ -32,16 +31,13 @@ export function AboutSection() {
     fetchData()
   }, [])
 
-  // Jika data belum ada/loading, kita sembunyikan dulu agar rapi
   if (!data) return null
 
-  // Data default variable
   const missions = data.visiMisiGroup?.missions || []
   const visionBlocks = data.visiMisiGroup?.vision || [] 
   const objectives = data.objectives || []
 
   return (
-    // PENTING: id="about" adalah target yang dicari oleh tombol di Hero Section
     <section id="about" className="py-10 md:py-14 bg-muted/30 relative overflow-hidden">
       
       {/* Background Decoration */}
@@ -53,7 +49,7 @@ export function AboutSection() {
       <div className="container mx-auto px-4 md:px-6 relative z-10">
         <div className="grid lg:grid-cols-2 gap-8 items-start mb-4">
 
-          {/* KOLOM KIRI: Judul & Tujuan */}
+          {/* KOLOM KIRI */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -65,17 +61,19 @@ export function AboutSection() {
               {data.title || "Judul Tentang Kami"}
             </h2>
             
+            {/* 👇 PERBAIKAN DISINI 👇 */}
+            {/* Jangan pakai <p>{data.description}</p>, tapi pakai Renderer */}
             {data.description && (
-                <p className="text-muted-foreground text-base md:text-lg leading-relaxed">
-                  {data.description}
-                </p>
+                <div className="text-muted-foreground text-base md:text-lg">
+                  <PortableTextRenderer blocks={data.description} />
+                </div>
             )}
+            {/* 👆 SELESAI PERBAIKAN 👆 */}
 
             {objectives.length > 0 && (
-                <div className="h-px bg-border" />
+                <div className="h-px bg-border my-4" />
             )}
 
-            {/* List Tujuan */}
             <div className="space-y-3 pt-3">
                 <ul className="space-y-3">
                     {objectives.map((item: any, i: number) => (
@@ -97,7 +95,7 @@ export function AboutSection() {
             </div>
           </motion.div>
 
-          {/* KOLOM KANAN: Visi & Misi */}
+          {/* KOLOM KANAN */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -132,7 +130,6 @@ export function AboutSection() {
             </div>
           </motion.div>
         </div>
-        
       </div>
     </section>
   )
