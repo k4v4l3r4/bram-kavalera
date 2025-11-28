@@ -3,13 +3,14 @@
 import * as React from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { Menu, X, Mail } from "lucide-react"
+// SAYA TAMBAHKAN ChevronRight DI SINI AGAR TIDAK ERROR
+import { Menu, X, Mail, ChevronRight } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import { cn } from "@/lib/utils"
 
 const navigation = [
   { name: "Beranda", href: "/" },
-  { name: "Tentang Kami", href: "/#about" },
+  // { name: "Tentang Kami", href: "/#about" },  <-- SAYA HIDE (DI-KOMENTAR)
   { name: "Expertise Profile", href: "/#expert-clusters" },
   { name: "Workshop", href: "/#expert-forum" },
   { name: "Podcast", href: "/#podcast" },
@@ -22,29 +23,23 @@ const navigation = [
 export function SiteHeader() {
   const [isScrolled, setIsScrolled] = React.useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false)
-  
-  // State baru untuk melacak menu mana yang aktif berdasarkan scroll
+   
   const [activeSection, setActiveSection] = React.useState("/")
 
   React.useEffect(() => {
     const handleScroll = () => {
-      // 1. Deteksi apakah header harus transparan/putih
       setIsScrolled(window.scrollY > 20)
 
-      // 2. Logika SCROLL SPY (Mendeteksi posisi layar)
-      const scrollPosition = window.scrollY + 150 // Offset sedikit agar deteksi lebih akurat (tengah layar)
+      const scrollPosition = window.scrollY + 150 
 
-      // Loop semua item navigasi untuk cek posisinya
       for (const item of navigation) {
-        // Khusus Beranda (Paling Atas)
         if (item.href === "/") {
-           if (window.scrollY < 300) { // Jika scroll masih di atas banget
+           if (window.scrollY < 300) { 
              setActiveSection("/")
            }
            continue
         }
 
-        // Ambil ID dari href (misal "/#about" jadi "about")
         const sectionId = item.href.replace("/#", "")
         const element = document.getElementById(sectionId)
 
@@ -52,7 +47,6 @@ export function SiteHeader() {
           const offsetTop = element.offsetTop
           const offsetBottom = offsetTop + element.offsetHeight
 
-          // Jika posisi scroll ada di dalam area section ini
           if (scrollPosition >= offsetTop && scrollPosition < offsetBottom) {
             setActiveSection(item.href)
           }
@@ -60,7 +54,6 @@ export function SiteHeader() {
       }
     }
 
-    // Jalankan saat scroll dan saat pertama kali load
     window.addEventListener("scroll", handleScroll)
     handleScroll() 
     
@@ -76,12 +69,12 @@ export function SiteHeader() {
     >
       <div className="container mx-auto px-4 md:px-6">
         <div className="flex items-center justify-between">
-          
+           
           {/* LOGO SECTION */}
           <Link 
             href="/" 
             className="flex items-center gap-3 group z-50"
-            onClick={() => setActiveSection("/")} // Set aktif manual saat klik logo
+            onClick={() => setActiveSection("/")} 
           >
             <Image 
               src="/logo-pprnp.png" 
@@ -97,14 +90,13 @@ export function SiteHeader() {
           {/* DESKTOP NAVIGATION */}
           <nav className="hidden lg:flex items-center gap-1 bg-white/40 backdrop-blur-md px-2 py-1.5 rounded-full border border-white/30 shadow-sm absolute left-1/2 -translate-x-1/2">
             {navigation.map((item) => {
-              // Cek apakah section ini yang sedang aktif di variabel state kita
               const isActive = activeSection === item.href
               
               return (
                 <Link
                   key={item.name}
                   href={item.href}
-                  onClick={() => setActiveSection(item.href)} // Update manual agar instan saat diklik
+                  onClick={() => setActiveSection(item.href)}
                   className={cn(
                     "relative px-4 py-1.5 text-sm font-medium transition-colors rounded-full whitespace-nowrap z-10",
                     isActive ? "text-primary font-semibold" : "text-foreground/70 hover:text-primary"
@@ -112,7 +104,6 @@ export function SiteHeader() {
                 >
                   {item.name}
 
-                  {/* BACKGROUND PUTIH YANG BERGERAK (ANIMASI) */}
                   {isActive && (
                     <motion.span
                       layoutId="active-nav-bg"

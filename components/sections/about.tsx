@@ -9,20 +9,10 @@ import {
 import { client } from "@/sanity/lib/client"
 import { PortableTextRenderer } from "@/components/portable-text-renderer"
 
-// 1. Mapping Ikon
-const iconMap: any = {
-  HeartPulse: HeartPulse,
-  ShieldCheck: ShieldCheck,
-  Lightbulb: Lightbulb,
-  HandHeart: HandHeart,
-  Sprout: Sprout,
-  Microscope: Microscope,
-}
-
 export function AboutSection() {
   const [data, setData] = useState<any>(null)
 
-  // 2. Ambil data dari Sanity
+  // Fetch Data
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -42,16 +32,19 @@ export function AboutSection() {
     fetchData()
   }, [])
 
+  // Jika data belum ada/loading, kita sembunyikan dulu agar rapi
   if (!data) return null
 
-  // Data default
+  // Data default variable
   const missions = data.visiMisiGroup?.missions || []
   const visionBlocks = data.visiMisiGroup?.vision || [] 
   const objectives = data.objectives || []
 
   return (
+    // PENTING: id="about" adalah target yang dicari oleh tombol di Hero Section
     <section id="about" className="py-10 md:py-14 bg-muted/30 relative overflow-hidden">
-      {/* Background blobs */}
+      
+      {/* Background Decoration */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
         <div className="absolute -top-[20%] -left-[10%] w-[45%] h-[45%] rounded-full bg-primary/5 blur-3xl" />
         <div className="absolute bottom-[10%] right-[5%] w-[28%] h-[28%] rounded-full bg-secondary/5 blur-3xl" />
@@ -60,7 +53,6 @@ export function AboutSection() {
       <div className="container mx-auto px-4 md:px-6 relative z-10">
         <div className="grid lg:grid-cols-2 gap-8 items-start mb-4">
 
-          
           {/* KOLOM KIRI: Judul & Tujuan */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
@@ -83,7 +75,7 @@ export function AboutSection() {
                 <div className="h-px bg-border" />
             )}
 
-            {/* BAGIAN TUJUAN PPRNP */}
+            {/* List Tujuan */}
             <div className="space-y-3 pt-3">
                 <ul className="space-y-3">
                     {objectives.map((item: any, i: number) => (
@@ -141,8 +133,6 @@ export function AboutSection() {
           </motion.div>
         </div>
         
-        {/* BAGIAN KARTU FOKUS UTAMA SUDAH DIHAPUS DARI SINI */}
-
       </div>
     </section>
   )

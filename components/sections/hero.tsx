@@ -2,8 +2,10 @@
 
 import { useState, useEffect } from "react"
 import Image from "next/image"
+import Link from "next/link" // <-- TAMBAHAN IMPORT LINK
 import { motion, AnimatePresence } from "framer-motion"
-import { Atom, Microscope, Cpu, Landmark } from "lucide-react"
+// TAMBAHAN IMPORT ArrowRight
+import { Atom, Microscope, Cpu, Landmark, ArrowRight } from "lucide-react"
 import { client } from "@/sanity/lib/client"
 
 export function HeroSection() {
@@ -43,7 +45,7 @@ export function HeroSection() {
   }, [data])
 
   const heroImages = data?.images || []
-  
+   
   // Teks Default jika di Sanity kosong
   const titleText = data?.title || "MEDIA INFORMASI & KOMUNIKASI"
   const subtitleText = data?.subtitle || "Wadah silaturahmi, informasi, dan kolaborasi untuk mewujudkan komunitas Puspiptek yang sehat, aman, dan produktif."
@@ -74,7 +76,7 @@ export function HeroSection() {
                 Selamat Datang di Official Website
               </motion.div>
               
-              {/* JUDUL UTAMA: GABUNGAN MOTION + GRADIENT TOSCA */}
+              {/* JUDUL UTAMA */}
               <h1 className="text-5xl font-bold tracking-tight sm:text-6xl xl:text-7xl leading-[1.1] flex flex-wrap gap-x-3 gap-y-1">
                 {titleText.split(" ").map((word: string, i: number) => (
                   <motion.span
@@ -83,10 +85,9 @@ export function HeroSection() {
                     animate={{ y: 0, opacity: 1 }}
                     transition={{
                       duration: 0.5,
-                      delay: i * 0.1, // Delay bertingkat agar muncul satu-satu
+                      delay: i * 0.1, 
                       ease: "easeOut"
                     }}
-                    // Class Gradient Tosca -> Biru
                     className="bg-gradient-to-r from-teal-500 to-blue-600 bg-clip-text text-transparent pb-2"
                   >
                     {word}
@@ -137,6 +138,22 @@ export function HeroSection() {
                 )
               })}
             </motion.div>
+
+            {/* --- TAMBAHAN TOMBOL DI BAWAH ICON --- */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1.2 }} // Muncul setelah logo
+              className="pt-4"
+            >
+              <Link href="/#about">
+                <button className="group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full bg-gradient-to-r from-teal-500 to-blue-600 px-8 py-3 text-sm font-medium text-white transition-all hover:shadow-lg hover:shadow-teal-500/30 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2">
+                  <span>Tentang Kami</span>
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                </button>
+              </Link>
+            </motion.div>
+
           </div>
 
           {/* BAGIAN KANAN: SLIDER GAMBAR */}
