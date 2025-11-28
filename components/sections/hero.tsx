@@ -3,18 +3,20 @@
 import { useState, useEffect } from "react"
 import Image from "next/image"
 import { motion, AnimatePresence } from "framer-motion"
-import { Atom, Microscope, Cpu, Landmark, ArrowRight } from "lucide-react"
+// Tambahkan Icon X (Close)
+import { Atom, Microscope, Cpu, Landmark, ArrowRight, X } from "lucide-react"
 import { client } from "@/sanity/lib/client"
 
-// 1. Definisikan tipe Props agar bisa menerima fungsi dari luar
 interface HeroSectionProps {
-  onShowAbout?: () => void; // Fungsi opsional
+  onToggleAbout?: () => void; // Nama fungsi diganti biar lebih jelas
+  isAboutOpen?: boolean;      // Props baru: Status sedang buka atau tutup
 }
 
-export function HeroSection({ onShowAbout }: HeroSectionProps) {
+export function HeroSection({ onToggleAbout, isAboutOpen = false }: HeroSectionProps) {
   const [data, setData] = useState<any>(null)
   const [currentImage, setCurrentImage] = useState(0)
 
+  // Fetch Data (Sama seperti sebelumnya)
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -30,6 +32,7 @@ export function HeroSection({ onShowAbout }: HeroSectionProps) {
     fetchData()
   }, [])
 
+  // Auto Slide (Sama seperti sebelumnya)
   useEffect(() => {
     if (!data?.images?.length) return
     const timer = setInterval(() => {
@@ -84,7 +87,6 @@ export function HeroSection({ onShowAbout }: HeroSectionProps) {
               </motion.p>
             </div>
 
-            {/* LOGO INSTANSI */}
             <motion.div 
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8 }}
               className="grid grid-cols-4 gap-6 mt-6 items-center"
@@ -107,26 +109,35 @@ export function HeroSection({ onShowAbout }: HeroSectionProps) {
               })}
             </motion.div>
 
-            {/* TOMBOL AKSI (MODIFIED) */}
+            {/* TOMBOL TOGGLE (LOGIKA BARU) */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1.2 }}
               className="pt-4"
             >
-              {/* GANTI LINK DENGAN BUTTON ONCLICK */}
               <button 
-                onClick={onShowAbout} // Panggil fungsi dari Parent
-                className="group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full bg-gradient-to-r from-teal-500 to-blue-600 px-8 py-3 text-sm font-medium text-white transition-all hover:shadow-lg hover:shadow-teal-500/30 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2"
+                onClick={onToggleAbout}
+                className={`group relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full px-8 py-3 text-sm font-medium text-white transition-all hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 ${
+                    // Ganti warna background jika sedang terbuka (misal jadi merah/abu)
+                    isAboutOpen 
+                    ? "bg-slate-600 hover:bg-slate-700 hover:scale-105 focus:ring-slate-500" 
+                    : "bg-gradient-to-r from-teal-500 to-blue-600 hover:shadow-teal-500/30 hover:scale-105 focus:ring-teal-500"
+                }`}
               >
-                <span>Tentang Kami</span>
-                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                {/* Ubah Teks & Icon berdasarkan status */}
+                <span>{isAboutOpen ? "Tutup Info" : "Tentang Kami"}</span>
+                {isAboutOpen ? (
+                    <X className="h-4 w-4 transition-transform group-hover:rotate-90" />
+                ) : (
+                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                )}
               </button>
             </motion.div>
 
           </div>
 
-          {/* BAGIAN KANAN: SLIDER */}
+          {/* KANAN: SLIDER (Tetap sama) */}
           <div className="relative mx-auto w-full max-w-[600px] aspect-[4/3] lg:aspect-square lg:order-last">
              <div className="absolute inset-0 rounded-3xl bg-gradient-to-tr from-green-100 to-blue-100 rotate-6 scale-95 blur-2xl -z-10" />
              <div className="relative h-full w-full overflow-hidden rounded-3xl border-[6px] border-white shadow-2xl bg-muted">
