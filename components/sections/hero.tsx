@@ -10,14 +10,14 @@ export function HeroSection() {
   const [data, setData] = useState<any>(null)
   const [currentImage, setCurrentImage] = useState(0)
 
-  // 1. UPDATE QUERY DISINI
+  // Fetch Data dari Sanity
   useEffect(() => {
     const fetchData = async () => {
       try {
         const result = await client.fetch(`
           *[_type == "hero"][0]{
-            title,      // <-- TAMBAHAN: Mengambil Judul Besar
-            subtitle,   // <-- TAMBAHAN: Mengambil Deskripsi Pendek
+            title,
+            subtitle,
             images[]{
               label,
               alt,
@@ -33,7 +33,7 @@ export function HeroSection() {
     fetchData()
   }, [])
 
-  // Logika Auto-Slide Gambar
+  // Auto-Slide Logic
   useEffect(() => {
     if (!data?.images?.length) return
     const timer = setInterval(() => {
@@ -43,6 +43,10 @@ export function HeroSection() {
   }, [data])
 
   const heroImages = data?.images || []
+  
+  // Teks Default jika di Sanity kosong
+  const titleText = data?.title || "MEDIA INFORMASI & KOMUNIKASI"
+  const subtitleText = data?.subtitle || "Wadah silaturahmi, informasi, dan kolaborasi untuk mewujudkan komunitas Puspiptek yang sehat, aman, dan produktif."
 
   return (
     <section className="relative overflow-hidden bg-background pt-24 pb-16 md:pt-32 md:pb-20 lg:pt-32 lg:pb-24">
@@ -56,49 +60,56 @@ export function HeroSection() {
       <div className="container mx-auto px-4 md:px-6">
         <div className="grid gap-12 lg:grid-cols-2 lg:gap-16 items-center">
           
-          {/* BAGIAN KIRI: TEXT & LOGO INSTANSI */}
+          {/* BAGIAN KIRI: TEXT & LOGO */}
           <div className="flex flex-col justify-center space-y-8 z-10">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              className="space-y-4"
-            >
+            <div className="space-y-4">
               {/* Badge Hijau Muda */}
-              <div className="inline-flex items-center rounded-full px-4 py-1.5 text-sm font-medium bg-green-100 text-green-700 w-fit">
+              <motion.div 
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="inline-flex items-center rounded-full px-4 py-1.5 text-sm font-medium bg-green-100 text-green-700 w-fit"
+              >
                 <span className="flex h-2 w-2 rounded-full bg-green-600 mr-2 animate-pulse" />
                 Selamat Datang di Official Website
-              </div>
+              </motion.div>
               
-              {/* 2. UPDATE JUDUL (H1) DISINI */}
-              <h1 className="text-5xl font-bold tracking-tight text-slate-900 sm:text-6xl xl:text-7xl leading-[1.1]">
-                {/* Jika ada data dari Sanity, tampilkan. Jika loading/kosong, tampilkan default */}
-                {data?.title ? (
-                  data.title
-                ) : (
-                  <>
-                    Pioner Penghuni<br />
-                    <span className="text-[#009B7C]">Rumah Negara</span><br />
-                    Puspiptek
-                  </>
-                )}
+              {/* JUDUL UTAMA: GABUNGAN MOTION + GRADIENT TOSCA */}
+              <h1 className="text-5xl font-bold tracking-tight sm:text-6xl xl:text-7xl leading-[1.1] flex flex-wrap gap-x-3 gap-y-1">
+                {titleText.split(" ").map((word: string, i: number) => (
+                  <motion.span
+                    key={i}
+                    initial={{ y: 20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{
+                      duration: 0.5,
+                      delay: i * 0.1, // Delay bertingkat agar muncul satu-satu
+                      ease: "easeOut"
+                    }}
+                    // Class Gradient Tosca -> Biru
+                    className="bg-gradient-to-r from-teal-500 to-blue-600 bg-clip-text text-transparent pb-2"
+                  >
+                    {word}
+                  </motion.span>
+                ))}
               </h1>
               
-              {/* 3. UPDATE DESKRIPSI (P) DISINI */}
-              <p className="max-w-[600px] text-muted-foreground md:text-xl leading-relaxed">
-                {data?.subtitle ? (
-                   data.subtitle
-                ) : (
-                   "Wadah silaturahmi, informasi, dan kolaborasi untuk mewujudkan komunitas Puspiptek yang sehat, aman, dan produktif."
-                )}
-              </p>
-            </motion.div>
+              {/* DESKRIPSI */}
+              <motion.p 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.5, duration: 0.8 }}
+                className="max-w-[600px] text-muted-foreground md:text-xl leading-relaxed"
+              >
+                {subtitleText}
+              </motion.p>
+            </div>
 
-            {/* Logo Instansi dengan Rotasi Horizontal */}
+            {/* LOGO INSTANSI (Berputar) */}
             <motion.div 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 0.4 }}
+              transition={{ delay: 0.8 }}
               className="grid grid-cols-4 gap-6 mt-6 items-center"
             >
               {[
