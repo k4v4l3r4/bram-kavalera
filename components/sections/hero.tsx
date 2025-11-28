@@ -10,12 +10,14 @@ export function HeroSection() {
   const [data, setData] = useState<any>(null)
   const [currentImage, setCurrentImage] = useState(0)
 
-  // Ambil Data Gambar dari Sanity
+  // 1. UPDATE QUERY DISINI
   useEffect(() => {
     const fetchData = async () => {
       try {
         const result = await client.fetch(`
           *[_type == "hero"][0]{
+            title,      // <-- TAMBAHAN: Mengambil Judul Besar
+            subtitle,   // <-- TAMBAHAN: Mengambil Deskripsi Pendek
             images[]{
               label,
               alt,
@@ -68,16 +70,27 @@ export function HeroSection() {
                 Selamat Datang di Official Website
               </div>
               
-              {/* Judul Besar (tidak diubah) */}
+              {/* 2. UPDATE JUDUL (H1) DISINI */}
               <h1 className="text-5xl font-bold tracking-tight text-slate-900 sm:text-6xl xl:text-7xl leading-[1.1]">
-                Pioner Penghuni<br />
-                <span className="text-[#009B7C]">Rumah Negara</span><br />
-                Puspiptek
+                {/* Jika ada data dari Sanity, tampilkan. Jika loading/kosong, tampilkan default */}
+                {data?.title ? (
+                  data.title
+                ) : (
+                  <>
+                    Pioner Penghuni<br />
+                    <span className="text-[#009B7C]">Rumah Negara</span><br />
+                    Puspiptek
+                  </>
+                )}
               </h1>
               
-              {/* Deskripsi */}
+              {/* 3. UPDATE DESKRIPSI (P) DISINI */}
               <p className="max-w-[600px] text-muted-foreground md:text-xl leading-relaxed">
-                Wadah silaturahmi, informasi, dan kolaborasi untuk mewujudkan komunitas Puspiptek yang sehat, aman, dan produktif.
+                {data?.subtitle ? (
+                   data.subtitle
+                ) : (
+                   "Wadah silaturahmi, informasi, dan kolaborasi untuk mewujudkan komunitas Puspiptek yang sehat, aman, dan produktif."
+                )}
               </p>
             </motion.div>
 
@@ -99,12 +112,12 @@ export function HeroSection() {
                   <motion.div
                     key={idx}
                     className="flex flex-col items-center gap-3"
-                    animate={{ rotateY: [0, 180, 0] }} // putar horizontal
+                    animate={{ rotateY: [0, 180, 0] }}
                     transition={{
                       duration: 4,
                       repeat: Infinity,
                       ease: "linear",
-                      delay: idx * 0.5, // stagger tiap logo
+                      delay: idx * 0.5,
                     }}
                   >
                     <Icon className="text-[#0056b3] h-12 w-12" />
