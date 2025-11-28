@@ -75,7 +75,6 @@ export function SiteFooter() {
   height={0}
   sizes="100vw"
   className="h-16 w-auto object-contain"
- />
               />
             </div>
 
