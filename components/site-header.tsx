@@ -11,7 +11,7 @@ const navigation = [
   { name: "Beranda", href: "/" },
   { name: "Tentang Kami", href: "/#about" },
   { name: "Expertise Profile", href: "/#expert-clusters" },
-  { name: "Seminar", href: "/#expert-forum" },
+  { name: "Workshop", href: "/#expert-forum" },
   { name: "Podcast", href: "/#podcast" },
   { name: "Program", href: "/#programs" },
   { name: "Berita", href: "/#news" },
