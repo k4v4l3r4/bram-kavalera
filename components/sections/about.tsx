@@ -3,11 +3,10 @@
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { 
-  CheckCircle2, History, 
-  HeartPulse, ShieldCheck, Lightbulb, HandHeart, Sprout, Microscope 
+  CheckCircle2, History 
 } from "lucide-react"
 import { client } from "@/sanity/lib/client"
-import { PortableTextRenderer } from "@/components/portable-text-renderer" // <-- Pastikan ini diimport
+import { PortableTextRenderer } from "@/components/portable-text-renderer"
 
 export function AboutSection() {
   const [data, setData] = useState<any>(null)
@@ -18,7 +17,7 @@ export function AboutSection() {
         const result = await client.fetch(`
           *[_type == "about"][0]{
             title,
-            description, // <-- Ini sekarang tipenya Block Content (Array)
+            description,
             visiMisiGroup,
             objectives
           }
@@ -36,6 +35,24 @@ export function AboutSection() {
   const missions = data.visiMisiGroup?.missions || []
   const visionBlocks = data.visiMisiGroup?.vision || [] 
   const objectives = data.objectives || []
+
+  // --- FUNGSI PENGAMAN (SAFETY CHECK) ---
+  // Fungsi ini mengecek: Apakah ini data baru (Array) atau data lama (String)?
+  const renderSafeContent = (content: any) => {
+    if (!content) return null;
+
+    // Jika data berbentuk Array (Block Content Baru) -> Pakai Renderer Canggih
+    if (Array.isArray(content)) {
+      return <PortableTextRenderer blocks={content} />;
+    }
+
+    // Jika data berbentuk String (Teks Lama) -> Tampilkan biasa (Fallback)
+    if (typeof content === 'string') {
+      return <p className="text-muted-foreground leading-relaxed">{content}</p>;
+    }
+
+    return null;
+  };
 
   return (
     <section id="about" className="py-10 md:py-14 bg-muted/30 relative overflow-hidden">
@@ -61,19 +78,16 @@ export function AboutSection() {
               {data.title || "Judul Tentang Kami"}
             </h2>
             
-            {/* 👇 PERBAIKAN DISINI 👇 */}
-            {/* Jangan pakai <p>{data.description}</p>, tapi pakai Renderer */}
-            {data.description && (
-                <div className="text-muted-foreground text-base md:text-lg">
-                  <PortableTextRenderer blocks={data.description} />
-                </div>
-            )}
-            {/* 👆 SELESAI PERBAIKAN 👆 */}
+            {/* 1. DESKRIPSI (Gunakan Fungsi Pengaman) */}
+            <div className="text-muted-foreground text-base md:text-lg">
+               {renderSafeContent(data.description)}
+            </div>
 
             {objectives.length > 0 && (
                 <div className="h-px bg-border my-4" />
             )}
 
+            {/* 2. OBJECTIVES */}
             <div className="space-y-3 pt-3">
                 <ul className="space-y-3">
                     {objectives.map((item: any, i: number) => (
@@ -86,9 +100,12 @@ export function AboutSection() {
                             className="flex items-start gap-3 text-muted-foreground"
                         >
                             <CheckCircle2 className="h-5 w-5 text-secondary shrink-0 mt-1" />
-                            <p className="leading-relaxed text-sm md:text-base">
-                                {item.goal}
-                            </p>
+                            
+                            {/* Gunakan Fungsi Pengaman juga disini */}
+                            <div className="leading-relaxed text-sm md:text-base flex-1">
+                                {renderSafeContent(item.goal)}
+                            </div>
+                            
                         </motion.li>
                     ))}
                 </ul>
@@ -109,14 +126,17 @@ export function AboutSection() {
             </h3>
 
             <div className="space-y-6">
+              {/* 3. VISI */}
               <div>
                 <div className="text-muted-foreground text-sm md:text-base">
-                  <PortableTextRenderer blocks={visionBlocks} />
+                  {/* Vision biasanya sudah aman karena dari awal BlockContent, tapi pakai safe check lebih bagus */}
+                  {renderSafeContent(visionBlocks)}
                 </div>
               </div>
               
               <div className="h-px bg-border" />
               
+              {/* 4. MISI */}
               <div>
                 <ul className="space-y-3 mt-2">
                   {missions.map((misi: string, i: number) => (
