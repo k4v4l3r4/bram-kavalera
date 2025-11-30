@@ -1,10 +1,13 @@
+"use client"
+
 import Link from "next/link"
 import Image from "next/image"
 import { ArrowRight, Play } from "lucide-react"
-import { client } from "@/sanity/lib/client" // Pastikan path ini sesuai dengan setup Sanity Anda
-import { urlForImage } from "@/sanity/lib/image" // Helper untuk url gambar (jika ada)
+import { motion } from "framer-motion"
+import { client } from "@/sanity/lib/client" 
+import { urlFor } from "@/sanity/lib/image" // <-- PERBAIKAN: Menggunakan urlFor
 
-// 1. Definisikan Tipe Data sesuai hero.ts
+// 1. Definisikan Tipe Data
 interface HeroData {
   title: string
   subtitle: string
@@ -16,7 +19,7 @@ interface HeroData {
   }[]
 }
 
-// 2. Fungsi untuk mengambil data dari Sanity
+// 2. Fungsi Fetch Data
 async function getHeroData(): Promise<HeroData | null> {
   const query = `
     *[_type == "hero"][0] {
@@ -26,19 +29,25 @@ async function getHeroData(): Promise<HeroData | null> {
       institutions
     }
   `
-  const data = await client.fetch(query)
-  return data
+  // Tambahkan try-catch agar build tidak gagal jika fetch error
+  try {
+    const data = await client.fetch(query)
+    return data
+  } catch (error) {
+    console.error("Gagal mengambil data hero:", error)
+    return null
+  }
 }
 
-// 3. Ubah komponen menjadi ASYNC
 export async function HeroSection() {
   const data = await getHeroData()
 
-  // Fallback jika data di Sanity belum diisi (agar tidak error)
+  // Fallback jika data kosong
   if (!data) {
     return (
-      <section className="py-20 text-center">
-        <p className="text-muted-foreground">Data Hero belum diisi di Sanity Studio.</p>
+      <section className="py-32 text-center container">
+        <h2 className="text-2xl font-bold">Data Hero Belum Diisi</h2>
+        <p className="text-muted-foreground">Silakan input data di Sanity Studio (Desk > Hero).</p>
       </section>
     )
   }
@@ -51,17 +60,15 @@ export async function HeroSection() {
       <div className="container px-4 md:px-6">
         <div className="flex flex-col lg:flex-row items-center gap-12">
           
-          {/* BAGIAN KIRI: Teks & Tombol */}
+          {/* BAGIAN KIRI: Teks */}
           <div className="flex-1 space-y-8 text-center lg:text-left">
             <div className="space-y-4">
-              {/* Mengambil Title dari Sanity */}
               <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
-                {data.title || "Judul Belum Diisi"}
+                {data.title}
               </h1>
               
-              {/* Mengambil Subtitle dari Sanity */}
               <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto lg:mx-0">
-                {data.subtitle || "Deskripsi belum diisi."}
+                {data.subtitle}
               </p>
             </div>
 
@@ -82,19 +89,19 @@ export async function HeroSection() {
               </Link>
             </div>
 
-            {/* LOGO INSTITUSI (Diambil dari array 'institutions' di Sanity) */}
+            {/* LOGO INSTITUSI */}
             {data.institutions && data.institutions.length > 0 && (
               <div className="pt-8 border-t border-border/50">
                 <p className="text-sm text-muted-foreground mb-4 font-medium">Didukung oleh:</p>
                 <div className="flex flex-wrap items-center justify-center lg:justify-start gap-6 grayscale opacity-70 hover:opacity-100 transition-opacity">
                   {data.institutions.map((inst, index) => (
-                    <div key={index} className="relative h-8 w-auto min-w-[80px]">
-                      {/* Pastikan urlForImage sudah disetup, atau gunakan codingan di bawah jika pakai url builder manual */}
+                    <div key={index} className="relative h-10 w-auto min-w-[80px]">
                       {inst.logo && (
+                         // PERBAIKAN: Menggunakan urlFor
                          <img 
-                           src={urlForImage(inst.logo).url()} 
+                           src={urlFor(inst.logo).url()} 
                            alt={inst.alt || inst.label} 
-                           className="h-8 w-auto object-contain"
+                           className="h-10 w-auto object-contain"
                          />
                       )}
                     </div>
@@ -104,13 +111,13 @@ export async function HeroSection() {
             )}
           </div>
 
-          {/* BAGIAN KANAN: Gambar Utama */}
+          {/* BAGIAN KANAN: Gambar */}
           <div className="flex-1 w-full max-w-[600px] lg:max-w-none">
             {data.images && data.images.length > 0 ? (
               <div className="relative aspect-square md:aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl border border-border">
-                {/* Mengambil gambar PERTAMA dari array images */}
+                {/* PERBAIKAN: Menggunakan urlFor */}
                 <Image
-                  src={urlForImage(data.images[0]).url()}
+                  src={urlFor(data.images[0]).url()}
                   alt={data.images[0].alt || "Hero Image"}
                   fill
                   className="object-cover"
@@ -118,7 +125,6 @@ export async function HeroSection() {
                 />
               </div>
             ) : (
-              // Placeholder jika gambar belum diupload
               <div className="aspect-video bg-muted rounded-xl flex items-center justify-center text-muted-foreground">
                 No Image Uploaded
               </div>
