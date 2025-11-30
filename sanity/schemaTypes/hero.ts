@@ -1,3 +1,5 @@
+import { defineField, defineType } from 'sanity'
+
 export const heroType = defineType({
   name: 'hero',
   title: 'Hero Section (Halaman Depan)',
@@ -11,7 +13,8 @@ export const heroType = defineType({
     defineField({
       name: 'subtitle',
       title: 'Deskripsi Pendek',
-      type: 'blockContent',
+      type: 'text', // Lebih simpel daripada blockContent untuk deskripsi pendek
+      rows: 3,      // Memberikan kotak input 3 baris
     }),
     defineField({
       name: 'images',
@@ -28,6 +31,7 @@ export const heroType = defineType({
         },
       ],
     }),
+    // Field baru untuk Logo Institusi (BATAN, LIPI, dll)
     defineField({
       name: 'institutions',
       title: 'Logo Institusi',
