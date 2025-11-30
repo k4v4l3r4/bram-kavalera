@@ -1,5 +1,3 @@
-import { defineField, defineType } from 'sanity'
-
 export const heroType = defineType({
   name: 'hero',
   title: 'Hero Section (Halaman Depan)',
@@ -24,16 +22,23 @@ export const heroType = defineType({
           type: 'image',
           options: { hotspot: true },
           fields: [
-            {
-              name: 'label',
-              type: 'string',
-              title: 'Label',
-            },
-            {
-              name: 'alt',
-              type: 'string',
-              title: 'Alt Text',
-            },
+            { name: 'label', type: 'string', title: 'Label' },
+            { name: 'alt', type: 'string', title: 'Alt Text' },
+          ],
+        },
+      ],
+    }),
+    defineField({
+      name: 'institutions',
+      title: 'Logo Institusi',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            { name: 'label', title: 'Nama Institusi', type: 'string' },
+            { name: 'logo', title: 'Logo', type: 'image', options: { hotspot: true } },
+            { name: 'alt', title: 'Alt Text', type: 'string' },
           ],
         },
       ],
