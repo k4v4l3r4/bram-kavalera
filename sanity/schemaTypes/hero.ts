@@ -9,12 +9,13 @@ export const heroType = defineType({
       name: 'title',
       title: 'Judul Besar',
       type: 'string',
+      validation: (rule) => rule.required(), // <-- SARAN: Wajib diisi
     }),
     defineField({
       name: 'subtitle',
       title: 'Deskripsi Pendek',
-      type: 'text', // Lebih simpel daripada blockContent untuk deskripsi pendek
-      rows: 3,      // Memberikan kotak input 3 baris
+      type: 'text',
+      rows: 3,
     }),
     defineField({
       name: 'images',
@@ -31,7 +32,6 @@ export const heroType = defineType({
         },
       ],
     }),
-    // Field baru untuk Logo Institusi (BATAN, LIPI, dll)
     defineField({
       name: 'institutions',
       title: 'Logo Institusi',
@@ -48,4 +48,20 @@ export const heroType = defineType({
       ],
     }),
   ],
+  // --- TAMBAHAN PREVIEW AGAR LIST DI ADMIN BAGUS ---
+  preview: {
+    select: {
+      title: 'title',
+      subtitle: 'subtitle',
+      media: 'images.0', // Mengambil gambar pertama dari array images
+    },
+    prepare(selection) {
+      const { title, subtitle, media } = selection
+      return {
+        title: title || 'Tanpa Judul',
+        subtitle: subtitle || 'Hero Section',
+        media: media,
+      }
+    },
+  },
 })
