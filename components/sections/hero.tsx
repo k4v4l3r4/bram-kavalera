@@ -5,7 +5,7 @@ import Image from "next/image"
 import { ArrowRight, Play } from "lucide-react"
 import { motion } from "framer-motion"
 import { client } from "@/sanity/lib/client" 
-import { urlFor } from "@/sanity/lib/image" // <-- PERBAIKAN: Menggunakan urlFor
+import { urlFor } from "@/sanity/lib/image" 
 
 // 1. Definisikan Tipe Data
 interface HeroData {
@@ -29,7 +29,6 @@ async function getHeroData(): Promise<HeroData | null> {
       institutions
     }
   `
-  // Tambahkan try-catch agar build tidak gagal jika fetch error
   try {
     const data = await client.fetch(query)
     return data
@@ -47,7 +46,8 @@ export async function HeroSection() {
     return (
       <section className="py-32 text-center container">
         <h2 className="text-2xl font-bold">Data Hero Belum Diisi</h2>
-        <p className="text-muted-foreground">Silakan input data di Sanity Studio (Desk > Hero).</p>
+        {/* PERBAIKAN: Menggunakan &gt; sebagai pengganti simbol > */}
+        <p className="text-muted-foreground">Silakan input data di Sanity Studio (Desk &gt; Hero).</p>
       </section>
     )
   }
@@ -97,7 +97,6 @@ export async function HeroSection() {
                   {data.institutions.map((inst, index) => (
                     <div key={index} className="relative h-10 w-auto min-w-[80px]">
                       {inst.logo && (
-                         // PERBAIKAN: Menggunakan urlFor
                          <img 
                            src={urlFor(inst.logo).url()} 
                            alt={inst.alt || inst.label} 
@@ -115,7 +114,6 @@ export async function HeroSection() {
           <div className="flex-1 w-full max-w-[600px] lg:max-w-none">
             {data.images && data.images.length > 0 ? (
               <div className="relative aspect-square md:aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl border border-border">
-                {/* PERBAIKAN: Menggunakan urlFor */}
                 <Image
                   src={urlFor(data.images[0]).url()}
                   alt={data.images[0].alt || "Hero Image"}
