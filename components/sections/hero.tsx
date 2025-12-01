@@ -3,7 +3,6 @@
 import Link from "next/link"
 import Image from "next/image"
 import { ArrowRight, Play } from "lucide-react"
-import { motion } from "framer-motion"
 import { client } from "@/sanity/lib/client" 
 import { urlFor } from "@/sanity/lib/image" 
 
@@ -19,7 +18,7 @@ interface HeroData {
   }[]
 }
 
-// 2. Fungsi Fetch Data
+// 2. Fungsi Fetch Data dengan CACHING (ISR)
 async function getHeroData(): Promise<HeroData | null> {
   const query = `
     *[_type == "hero"][0] {
@@ -30,7 +29,12 @@ async function getHeroData(): Promise<HeroData | null> {
     }
   `
   try {
-    const data = await client.fetch(query)
+    // Tambahkan opsi caching (next: { revalidate: 3600 })
+    // Artinya data akan disimpan server selama 3600 detik (1 jam)
+    // Website akan terasa instan seperti file statis
+    const data = await client.fetch(query, {}, {
+      next: { revalidate: 3600 } 
+    })
     return data
   } catch (error) {
     console.error("Gagal mengambil data hero:", error)
@@ -46,7 +50,6 @@ export async function HeroSection() {
     return (
       <section className="py-32 text-center container">
         <h2 className="text-2xl font-bold">Data Hero Belum Diisi</h2>
-        {/* PERBAIKAN: Menggunakan &gt; sebagai pengganti simbol > */}
         <p className="text-muted-foreground">Silakan input data di Sanity Studio (Desk &gt; Hero).</p>
       </section>
     )
@@ -95,12 +98,15 @@ export async function HeroSection() {
                 <p className="text-sm text-muted-foreground mb-4 font-medium">Didukung oleh:</p>
                 <div className="flex flex-wrap items-center justify-center lg:justify-start gap-6 grayscale opacity-70 hover:opacity-100 transition-opacity">
                   {data.institutions.map((inst, index) => (
-                    <div key={index} className="relative h-10 w-auto min-w-[80px]">
+                    <div key={index} className="relative h-10 w-24"> 
+                      {/* OPTIMASI: Ganti <img> dengan <Image> */}
                       {inst.logo && (
-                         <img 
+                         <Image 
                            src={urlFor(inst.logo).url()} 
                            alt={inst.alt || inst.label} 
-                           className="h-10 w-auto object-contain"
+                           fill
+                           className="object-contain"
+                           sizes="(max-width: 768px) 100px, 150px"
                          />
                       )}
                     </div>
@@ -120,6 +126,7 @@ export async function HeroSection() {
                   fill
                   className="object-cover"
                   priority
+                  sizes="(max-width: 768px) 100vw, 50vw"
                 />
               </div>
             ) : (
