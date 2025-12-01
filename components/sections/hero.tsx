@@ -1,36 +1,56 @@
-// FILE: components/sections/hero.tsx
-// =======================================
-// INI SUDAH LENGKAP + FIX + OPTIMASI MAX
-// =======================================
-
+// components/sections/hero.tsx
+import React from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { ArrowRight, Play } from "lucide-react"
 import { client } from "@/sanity/lib/client"
 import { urlFor } from "@/sanity/lib/image"
-import { motion } from "framer-motion"
 
-// ====================
-// 1. IMAGE BUILDER (OPTIMASI)
-// ====================
-function img(url: any, w: number = 1600, q: number = 70) {
-  return urlFor(url).width(w).quality(q).auto("format").url()
+// NOTE:
+// - Server component (fetch) + client component (animasi).
+// - Simpan file ini utuh, jangan memecah kecuali paham.
+
+type Institution = {
+  label?: string
+  logo?: any
+  alt?: string
 }
 
-// ====================
-// 2. AMBIL DATA (SERVER)
-// ====================
-async function getHeroData() {
-  const query = `
-    *[_type == "hero"][0] {
-      title,
-      subtitle,
-      images,
-      institutions
-    }
-  `
+type HeroData = {
+  title?: string
+  subtitle?: string
+  images?: any[]
+  institutions?: Institution[]
+}
 
+// -----------------------------
+// helper: build optimized image url
+// -----------------------------
+function img(url: any, w: number = 1200, q: number = 70) {
   try {
+    return urlFor(url).width(w).quality(q).auto("format").url()
+  } catch (e) {
+    // fallback: jika urlFor error, kembalikan null
+    return null
+  }
+}
+
+// -----------------------------
+// tiny inline SVG blur placeholder (very small, avoids extra fetch)
+// -----------------------------
+function tinyBlurDataURL(hex = "#f6f7f8") {
+  const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='16' height='10' viewBox='0 0 16 10'><rect width='16' height='10' fill='${hex}'/></svg>`
+  return `data:image/svg+xml;base64,${Buffer.from(svg).toString("base64")}`
+}
+
+// -----------------------------
+// server: ambil data hero dari Sanity (ISR)
+// -----------------------------
+async function getHeroData(): Promise<HeroData | null> {
+  const query = `*[_type == "hero"][0] { title, subtitle, images, institutions }`
+  try {
+    // next revalidate = 3600s (1 jam). aman dan cepat.
+    // @ts-ignore
     return await client.fetch(query, {}, { next: { revalidate: 3600 } })
   } catch (err) {
     console.error("Gagal fetch hero:", err)
@@ -38,57 +58,49 @@ async function getHeroData() {
   }
 }
 
-// ====================
-// 3. HERO SECTION
-// ====================
-export async function HeroSection() {
-  const data = await getHeroData()
+// -----------------------------
+// client component: berisi animasi & rendering safe
+// -----------------------------
+/* eslint-disable react/prop-types */
+"use client"
+import { motion } from "framer-motion"
 
-  if (!data) {
-    return (
-      <section className="py-32 text-center container">
-        <h2 className="text-2xl font-bold">Data Hero Belum Diisi</h2>
-        <p className="text-muted-foreground">Silakan input data di Sanity.</p>
-      </section>
-    )
-  }
+function HeroClient({ data }: { data: HeroData }) {
+  // safe checks
+  const heroImageObj = data.images && data.images.length > 0 ? data.images[0] : null
+  const heroImgSrc = heroImageObj ? img(heroImageObj, 1400, 70) : null
+
+  const institutions = Array.isArray(data.institutions) ? data.institutions : []
 
   return (
-    <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
-      
-      {/* Background Smooth Gradient */}
-      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-primary/5 via-background to-background" />
+    <section className="relative pt-28 pb-16 lg:pt-44 lg:pb-28 overflow-hidden">
+      {/* light background (GPU-friendly) */}
+      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-primary/6 via-background to-background will-change-transform" />
 
       <div className="container px-4 md:px-6">
-        <div className="flex flex-col lg:flex-row items-center gap-12">
+        <div className="flex flex-col lg:flex-row items-center gap-10">
 
-          {/* ========================
-             BAGIAN TEKS + ANIMASI
-          ========================= */}
+          {/* LEFT: text + buttons + logos */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-            className="flex-1 space-y-8 text-center lg:text-left"
+            viewport={{ once: true, amount: 0.25 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            className="flex-1 space-y-6 text-center lg:text-left"
           >
-            
-            <div className="space-y-4">
-              <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
-                {data.title}
+            <div className="space-y-3">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight">
+                {data.title || "Judul Tidak Diisi"}
               </h1>
-
               <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto lg:mx-0">
-                {data.subtitle}
+                {data.subtitle || "Subjudul belum tersedia."}
               </p>
             </div>
 
-            {/* BUTTON */}
-            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4">
-              
+            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-3">
               <Link
                 href="/#expert-clusters"
-                className="inline-flex h-12 items-center justify-center rounded-full bg-primary px-8 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90"
+                className="inline-flex h-11 items-center justify-center rounded-full bg-primary px-6 text-sm font-medium text-primary-foreground shadow-sm transition-transform hover:translate-y-[-1px] active:translate-y-0"
               >
                 Jelajahi Expertise
                 <ArrowRight className="ml-2 h-4 w-4" />
@@ -96,71 +108,100 @@ export async function HeroSection() {
 
               <Link
                 href="/#about"
-                className="inline-flex h-12 items-center justify-center rounded-full border border-input bg-background px-8 text-sm font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground"
+                className="inline-flex h-11 items-center justify-center rounded-full border border-input bg-background px-6 text-sm font-medium shadow-sm transition-transform hover:translate-y-[-1px]"
               >
-                <Play className="mr-2 h-4 w-4 fill-current" />
+                <Play className="mr-2 h-4 w-4" />
                 Tentang Kami
               </Link>
-
             </div>
 
-            {/* LOGO INSTITUSI */}
-            {data.institutions?.length > 0 && (
-              <div className="pt-8 border-t border-border/50">
-                
-                <p className="text-sm text-muted-foreground mb-4 font-medium">
-                  Didukung oleh:
-                </p>
-
-                <div className="flex flex-wrap items-center justify-center lg:justify-start gap-6 grayscale opacity-70 hover:opacity-100 transition-opacity">
-
-                  {data.institutions.map((inst: any, index: number) => (
-                    <div key={index} className="relative h-10 w-24 shrink-0">
-                      <Image
-                        src={img(inst.logo, 300, 60)}
-                        alt={inst.alt || inst.label}
-                        fill
-                        className="object-contain"
-                        sizes="100px"
-                        placeholder="blur"
-                        blurDataURL={img(inst.logo, 20, 20)}
-                      />
-                    </div>
-                  ))}
-
+            {/* logos */}
+            {institutions.length > 0 && (
+              <div className="pt-6 border-t border-border/40">
+                <p className="text-sm text-muted-foreground mb-3 font-medium">Didukung oleh:</p>
+                <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 opacity-80 transition-opacity">
+                  {institutions.map((inst: Institution, idx: number) => {
+                    // safe: hanya render jika ada asset (inst.logo.asset)
+                    const hasAsset = !!inst?.logo?.asset
+                    const src = hasAsset ? img(inst.logo, 360, 60) : null
+                    return (
+                      <div key={idx} className="flex items-center justify-center h-8 w-20 shrink-0">
+                        {hasAsset && src ? (
+                          <Image
+                            src={src}
+                            alt={inst.alt || inst.label || `logo-${idx}`}
+                            width={120}
+                            height={40}
+                            className="object-contain"
+                            loading="lazy"
+                            placeholder="blur"
+                            blurDataURL={tinyBlurDataURL("#f6f7f8")}
+                          />
+                        ) : (
+                          <div className="h-8 w-20 bg-gray-100 rounded-md flex items-center justify-center text-xs text-muted-foreground">
+                            {inst.label || "Logo"}
+                          </div>
+                        )}
+                      </div>
+                    )
+                  })}
                 </div>
               </div>
             )}
-
           </motion.div>
 
-          {/* ========================
-             GAMBAR HERO + ANIMASI
-          ========================= */}
+          {/* RIGHT: hero image */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
+            initial={{ opacity: 0, scale: 0.985 }}
             whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-            className="flex-1 w-full max-w-[600px] lg:max-w-none"
+            className="flex-1 w-full max-w-[640px] lg:max-w-none"
           >
-            <div className="relative aspect-square md:aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl border border-border">
-              <Image
-                src={img(data.images[0], 1800, 65)}
-                alt={data.images[0]?.alt || "Hero Image"}
-                fill
-                className="object-cover"
-                priority
-                sizes="(max-width: 768px) 100vw, 50vw"
-                placeholder="blur"
-                blurDataURL={img(data.images[0], 30, 20)}
-              />
+            <div className="relative rounded-2xl overflow-hidden shadow-lg border border-border will-change-transform">
+              {heroImgSrc ? (
+                // use fixed width/height instead of fill to avoid heavy layout
+                <Image
+                  src={heroImgSrc}
+                  alt={heroImageObj?.alt || "Hero Image"}
+                  width={1200}
+                  height={900} // 4:3-ish
+                  className="w-full h-auto object-cover block"
+                  loading="eager"
+                  placeholder="blur"
+                  blurDataURL={tinyBlurDataURL("#eceff1")}
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                />
+              ) : (
+                <div className="w-full aspect-[4/3] bg-muted flex items-center justify-center text-muted-foreground">
+                  Belum ada gambar hero
+                </div>
+              )}
             </div>
           </motion.div>
 
         </div>
       </div>
-
     </section>
   )
+}
+
+// -----------------------------
+// Server component: fetch + pass to client
+// -----------------------------
+export default async function HeroSection() {
+  const data = await getHeroData()
+
+  // jika data null atau tidak ada, kembalikan fallback ringan
+  if (!data) {
+    return (
+      <section className="py-24 text-center container">
+        <h2 className="text-2xl font-bold">Data Hero belum tersedia</h2>
+        <p className="text-muted-foreground">Silakan isi di Sanity Studio.</p>
+      </section>
+    )
+  }
+
+  // render client component (animasi) dengan data aman
+  return <HeroClient data={data} />
 }
