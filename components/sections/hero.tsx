@@ -1,13 +1,12 @@
-// FILE: components/sections/hero.tsx (VERSI FINAL TERHUBUNG SANITY)
+// FILE: components/sections/hero.tsx
+// TIDAK ADA "use client" DI SINI
 
-// TIDAK ADA "use client" DI SINI (Server Component untuk fetch data)
 import Link from "next/link"
 import Image from "next/image"
 import { ArrowRight, Play } from "lucide-react"
 import { client } from "@/sanity/lib/client" 
 import { urlFor } from "@/sanity/lib/image" 
 
-// Definisikan props yang dikirim dari page.tsx (wajib diterima)
 interface HeroProps {
   onToggleAbout: () => void;
   isAboutOpen: boolean;
@@ -41,23 +40,21 @@ async function getHeroData(): Promise<HeroData | null> {
   }
 }
 
-// ✅ Komponen Utama (Default Export untuk page.tsx)
+// ✅ Default Export untuk page.tsx
 export default async function HeroSection({ onToggleAbout, isAboutOpen }: HeroProps) {
   const data = await getHeroData()
 
-  // Fallback jika data kosong atau gagal fetch
   if (!data || !data.title) { 
     return (
       <section className="py-32 text-center container bg-gray-50">
-        <h2 className="text-2xl font-bold">Data Hero Belum Sinkron</h2>
-        <p className="text-muted-foreground">Cek **Console Vercel** atau **Environment Variables** Anda.</p>
+        <h2 className="text-2xl font-bold">Data Hero Belum Tersedia</h2>
+        <p className="text-muted-foreground">Silakan cek Environment Variables Vercel Anda.</p>
       </section>
     )
   }
 
   return (
     <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
-      {/* ... BAGIAN JSOX SISANYA (Menggunakan data.title, data.subtitle, dll) */}
       <div className="absolute inset-0 -z-10 bg-gradient-to-b from-primary/5 via-background to-background" />
 
       <div className="container px-4 md:px-6">
@@ -78,7 +75,7 @@ export default async function HeroSection({ onToggleAbout, isAboutOpen }: HeroPr
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
               <button
-                onClick={onToggleAbout} // Tombol yang menggunakan prop dari page.tsx
+                onClick={onToggleAbout}
                 className="inline-flex h-12 items-center justify-center rounded-full border border-input bg-background px-8 text-sm font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground"
               >
                 <Play className="mr-2 h-4 w-4 fill-current" />

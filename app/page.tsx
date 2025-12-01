@@ -3,7 +3,7 @@
 
 import { useState } from "react"
 import { SiteHeader } from "@/components/site-header"
-// ✅ Import HeroSection sebagai DEFAULT (tanpa kurung kurawal)
+// Menggunakan Default Import
 import HeroSection from "@/components/sections/hero" 
 import { AboutSection } from "@/components/sections/about"
 import { ExpertForumSection } from "@/components/sections/expert-forum" 
@@ -18,13 +18,10 @@ import { SiteFooter } from "@/components/site-footer"
 export default function Home() {
   const [showAbout, setShowAbout] = useState(false)
 
-  // LOGIKA TOGGLE (SAKLAR)
   const handleToggleAbout = () => {
-    // 1. Ambil nilai kebalikan dari sekarang (!prev)
     setShowAbout((prev) => {
       const newState = !prev
       
-      // 2. Jika newState == true (Artinya baru saja dibuka), maka scroll ke bawah
       if (newState) {
         setTimeout(() => {
           const element = document.getElementById("about")
@@ -43,13 +40,11 @@ export default function Home() {
       <SiteHeader />
       <main className="flex-1">
         
-        {/* Pass fungsi toggle DAN status (isAboutOpen) ke Hero */}
         <HeroSection 
             onToggleAbout={handleToggleAbout} 
             isAboutOpen={showAbout} 
         />
         
-        {/* Render About jika showAbout = True */}
         {showAbout && <AboutSection />}
         
         <ExpertClustersSection /> 
