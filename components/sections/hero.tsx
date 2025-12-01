@@ -1,4 +1,4 @@
-"use client"
+// FILE: components/sections/hero.tsx (VERSI FINAL)
 
 import Link from "next/link"
 import Image from "next/image"
@@ -18,7 +18,7 @@ interface HeroData {
   }[]
 }
 
-// 2. Fungsi Fetch Data dengan CACHING (ISR)
+// 2. Fungsi Fetch Data dengan CACHING (ISR) - Berjalan di Server
 async function getHeroData(): Promise<HeroData | null> {
   const query = `
     *[_type == "hero"][0] {
@@ -29,9 +29,9 @@ async function getHeroData(): Promise<HeroData | null> {
     }
   `
   try {
-    // Tambahkan opsi caching (next: { revalidate: 3600 })
-    // Artinya data akan disimpan server selama 3600 detik (1 jam)
-    // Website akan terasa instan seperti file statis
+    // Fungsi fetch data ini adalah Server Logic. 
+    // Oleh karena itu, file TIDAK boleh diawali dengan "use client".
+    // @ts-ignore
     const data = await client.fetch(query, {}, {
       next: { revalidate: 3600 } 
     })
@@ -42,6 +42,7 @@ async function getHeroData(): Promise<HeroData | null> {
   }
 }
 
+// Komponen ini adalah Server Component murni
 export async function HeroSection() {
   const data = await getHeroData()
 
@@ -99,7 +100,6 @@ export async function HeroSection() {
                 <div className="flex flex-wrap items-center justify-center lg:justify-start gap-6 grayscale opacity-70 hover:opacity-100 transition-opacity">
                   {data.institutions.map((inst, index) => (
                     <div key={index} className="relative h-10 w-24"> 
-                      {/* OPTIMASI: Ganti <img> dengan <Image> */}
                       {inst.logo && (
                          <Image 
                            src={urlFor(inst.logo).url()} 
