@@ -1,8 +1,9 @@
+// FILE: app/page.tsx
 "use client"
 
 import { useState } from "react"
 import { SiteHeader } from "@/components/site-header"
-// ✅ PERBAIKAN: Menggunakan Default Import (tanpa kurung kurawal)
+// ✅ Import HeroSection sebagai DEFAULT (tanpa kurung kurawal)
 import HeroSection from "@/components/sections/hero" 
 import { AboutSection } from "@/components/sections/about"
 import { ExpertForumSection } from "@/components/sections/expert-forum" 

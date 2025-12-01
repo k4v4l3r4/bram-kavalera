@@ -1,9 +1,16 @@
-// file: components/HeroSection.tsx
+// FILE: components/sections/hero.tsx
 "use client";
 
 import Image from "next/image";
 
-export default function HeroSection() {
+// Definisikan props yang harus diterima
+interface HeroProps {
+  onToggleAbout: () => void;
+  isAboutOpen: boolean;
+}
+
+// ✅ Menggunakan export default dan menerima props
+export default function HeroSection({ onToggleAbout, isAboutOpen }: HeroProps) {
   return (
     <section className="flex flex-col items-center justify-center py-16 bg-gray-50">
       {/* Gambar Logo dari folder public */}
@@ -17,8 +24,7 @@ export default function HeroSection() {
         />
       </div>
 
-      {/* Jika ingin efek shimmer, bisa diterapkan di elemen lain atau border gambar */}
-      {/* Contoh shimmer di border */}
+      {/* Placeholder Loading Visual */}
       <div className="w-40 h-40 rounded-full border-4 border-gradient-to-r from-yellow-400 via-red-500 to-purple-500 animate-pulse"></div>
     </section>
   );
