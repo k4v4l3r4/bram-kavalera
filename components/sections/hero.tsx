@@ -1,10 +1,46 @@
-// FILE: components/sections/hero.tsx (OPTIMASI MAX)
+// FILE: components/sections/hero.tsx
+// =======================================
+// INI SUDAH LENGKAP + FIX + OPTIMASI MAX
+// =======================================
 
-// FIX: Buat builder image untuk kompres otomatis
+import Link from "next/link"
+import Image from "next/image"
+import { ArrowRight, Play } from "lucide-react"
+import { client } from "@/sanity/lib/client"
+import { urlFor } from "@/sanity/lib/image"
+import { motion } from "framer-motion"
+
+// ====================
+// 1. IMAGE BUILDER (OPTIMASI)
+// ====================
 function img(url: any, w: number = 1600, q: number = 70) {
   return urlFor(url).width(w).quality(q).auto("format").url()
 }
 
+// ====================
+// 2. AMBIL DATA (SERVER)
+// ====================
+async function getHeroData() {
+  const query = `
+    *[_type == "hero"][0] {
+      title,
+      subtitle,
+      images,
+      institutions
+    }
+  `
+
+  try {
+    return await client.fetch(query, {}, { next: { revalidate: 3600 } })
+  } catch (err) {
+    console.error("Gagal fetch hero:", err)
+    return null
+  }
+}
+
+// ====================
+// 3. HERO SECTION
+// ====================
 export async function HeroSection() {
   const data = await getHeroData()
 
@@ -12,7 +48,7 @@ export async function HeroSection() {
     return (
       <section className="py-32 text-center container">
         <h2 className="text-2xl font-bold">Data Hero Belum Diisi</h2>
-        <p className="text-muted-foreground">Silakan input data di Sanity Studio.</p>
+        <p className="text-muted-foreground">Silakan input data di Sanity.</p>
       </section>
     )
   }
@@ -20,13 +56,22 @@ export async function HeroSection() {
   return (
     <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
       
+      {/* Background Smooth Gradient */}
       <div className="absolute inset-0 -z-10 bg-gradient-to-b from-primary/5 via-background to-background" />
 
       <div className="container px-4 md:px-6">
         <div className="flex flex-col lg:flex-row items-center gap-12">
-          
-          {/* TEKS */}
-          <div className="flex-1 space-y-8 text-center lg:text-left">
+
+          {/* ========================
+             BAGIAN TEKS + ANIMASI
+          ========================= */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="flex-1 space-y-8 text-center lg:text-left"
+          >
             
             <div className="space-y-4">
               <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
@@ -38,7 +83,9 @@ export async function HeroSection() {
               </p>
             </div>
 
+            {/* BUTTON */}
             <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4">
+              
               <Link
                 href="/#expert-clusters"
                 className="inline-flex h-12 items-center justify-center rounded-full bg-primary px-8 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90"
@@ -54,18 +101,21 @@ export async function HeroSection() {
                 <Play className="mr-2 h-4 w-4 fill-current" />
                 Tentang Kami
               </Link>
+
             </div>
 
             {/* LOGO INSTITUSI */}
             {data.institutions?.length > 0 && (
               <div className="pt-8 border-t border-border/50">
-                <p className="text-sm text-muted-foreground mb-4 font-medium">Didukung oleh:</p>
+                
+                <p className="text-sm text-muted-foreground mb-4 font-medium">
+                  Didukung oleh:
+                </p>
 
                 <div className="flex flex-wrap items-center justify-center lg:justify-start gap-6 grayscale opacity-70 hover:opacity-100 transition-opacity">
 
-                  {data.institutions.map((inst, index) => (
+                  {data.institutions.map((inst: any, index: number) => (
                     <div key={index} className="relative h-10 w-24 shrink-0">
-
                       <Image
                         src={img(inst.logo, 300, 60)}
                         alt={inst.alt || inst.label}
@@ -75,7 +125,6 @@ export async function HeroSection() {
                         placeholder="blur"
                         blurDataURL={img(inst.logo, 20, 20)}
                       />
-
                     </div>
                   ))}
 
@@ -83,10 +132,18 @@ export async function HeroSection() {
               </div>
             )}
 
-          </div>
+          </motion.div>
 
-          {/* GAMBAR HERO */}
-          <div className="flex-1 w-full max-w-[600px] lg:max-w-none">
+          {/* ========================
+             GAMBAR HERO + ANIMASI
+          ========================= */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="flex-1 w-full max-w-[600px] lg:max-w-none"
+          >
             <div className="relative aspect-square md:aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl border border-border">
               <Image
                 src={img(data.images[0], 1800, 65)}
@@ -99,10 +156,11 @@ export async function HeroSection() {
                 blurDataURL={img(data.images[0], 30, 20)}
               />
             </div>
-          </div>
+          </motion.div>
 
         </div>
       </div>
+
     </section>
   )
 }
