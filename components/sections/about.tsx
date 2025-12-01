@@ -1,58 +1,81 @@
-"use client"
+// FILE: components/sections/about.tsx
+// TIDAK ADA "use client" DI SINI (Jadikan Server Component)
 
-import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
-import { 
-  CheckCircle2, History 
-} from "lucide-react"
 import { client } from "@/sanity/lib/client"
 import { PortableTextRenderer } from "@/components/portable-text-renderer"
+import { CheckCircle2, History } from "lucide-react" 
+// Hapus import useState dan useEffect karena tidak dibutuhkan lagi
 
-export function AboutSection() {
-  const [data, setData] = useState<any>(null)
+// 1. Definisikan Tipe Data
+interface AboutData {
+  title: string | null;
+  description: any; 
+  visiMisiGroup: {
+    missions: string[];
+    vision: any;
+  } | null;
+  objectives: { goal: any }[] | null;
+}
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const result = await client.fetch(`
-          *[_type == "about"][0]{
-            title,
-            description,
-            visiMisiGroup,
-            objectives
-          }
-        `)
-        setData(result)
-      } catch (error) {
-        console.error("Gagal ambil data about:", error)
-      }
+// --- FUNGSI PENGAMAN (SAFETY CHECK) ---
+// Biarkan fungsi ini di luar komponen agar tidak perlu diinisialisasi ulang
+const renderSafeContent = (content: any) => {
+  if (!content) return null;
+
+  // Jika data berbentuk Array (Block Content Baru)
+  if (Array.isArray(content)) {
+    return <PortableTextRenderer blocks={content} />;
+  }
+
+  // Jika data berbentuk String (Teks Lama/Fallback)
+  if (typeof content === 'string') {
+    return <p className="text-muted-foreground leading-relaxed">{content}</p>;
+  }
+
+  return null;
+};
+
+// 2. Fungsi Fetch Data dengan Caching
+async function getAboutData(): Promise<AboutData | null> {
+  // Tambahkan type agar query lebih aman
+  const query = `
+    *[_type == "about"][0]{
+      title,
+      description,
+      visiMisiGroup,
+      objectives
     }
-    fetchData()
-  }, [])
+  `
+  try {
+    const data = await client.fetch(query, {}, {
+      next: { revalidate: 3600 } // Ambil data baru setiap 1 jam
+    })
+    return data
+  } catch (error) {
+    console.error("Gagal ambil data about:", error)
+    return null
+  }
+}
 
-  if (!data) return null
+// 3. Komponen Utama (Sekarang ASYNC)
+export async function AboutSection() {
+  const data = await getAboutData()
 
+  // Fallback rendering jika data tidak ditemukan
+  if (!data || !data.title) {
+    return (
+      <section id="about" className="py-20 text-center container">
+        <p className="text-muted-foreground">Konten Tentang Kami belum tersedia di Sanity.</p>
+      </section>
+    )
+  }
+
+  // Siapkan data untuk rendering
   const missions = data.visiMisiGroup?.missions || []
-  const visionBlocks = data.visiMisiGroup?.vision || [] 
+  const visionBlocks = data.visiMisiGroup?.vision || []  
   const objectives = data.objectives || []
 
-  // --- FUNGSI PENGAMAN (SAFETY CHECK) ---
-  // Fungsi ini mengecek: Apakah ini data baru (Array) atau data lama (String)?
-  const renderSafeContent = (content: any) => {
-    if (!content) return null;
-
-    // Jika data berbentuk Array (Block Content Baru) -> Pakai Renderer Canggih
-    if (Array.isArray(content)) {
-      return <PortableTextRenderer blocks={content} />;
-    }
-
-    // Jika data berbentuk String (Teks Lama) -> Tampilkan biasa (Fallback)
-    if (typeof content === 'string') {
-      return <p className="text-muted-foreground leading-relaxed">{content}</p>;
-    }
-
-    return null;
-  };
 
   return (
     <section id="about" className="py-10 md:py-14 bg-muted/30 relative overflow-hidden">
@@ -75,12 +98,12 @@ export function AboutSection() {
             className="space-y-4 bg-background/80 backdrop-blur-sm rounded-2xl p-6 md:p-8 shadow-lg border h-full"
           >
             <h2 className="text-2xl md:text-3xl font-bold tracking-tighter">
-              {data.title || "Judul Tentang Kami"}
+              {data.title}
             </h2>
             
-            {/* 1. DESKRIPSI (Gunakan Fungsi Pengaman) */}
+            {/* 1. DESKRIPSI */}
             <div className="text-muted-foreground text-base md:text-lg">
-               {renderSafeContent(data.description)}
+                {renderSafeContent(data.description)}
             </div>
 
             {objectives.length > 0 && (
@@ -101,7 +124,6 @@ export function AboutSection() {
                         >
                             <CheckCircle2 className="h-5 w-5 text-secondary shrink-0 mt-1" />
                             
-                            {/* Gunakan Fungsi Pengaman juga disini */}
                             <div className="leading-relaxed text-sm md:text-base flex-1">
                                 {renderSafeContent(item.goal)}
                             </div>
@@ -129,7 +151,6 @@ export function AboutSection() {
               {/* 3. VISI */}
               <div>
                 <div className="text-muted-foreground text-sm md:text-base">
-                  {/* Vision biasanya sudah aman karena dari awal BlockContent, tapi pakai safe check lebih bagus */}
                   {renderSafeContent(visionBlocks)}
                 </div>
               </div>
