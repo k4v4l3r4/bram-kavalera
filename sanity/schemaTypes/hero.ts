@@ -5,18 +5,23 @@ export const heroType = defineType({
   title: 'Hero Section (Halaman Depan)',
   type: 'document',
   fields: [
+    // 1. Judul Besar
     defineField({
       name: 'title',
       title: 'Judul Besar',
       type: 'string',
-      validation: (rule) => rule.required(), // <-- SARAN: Wajib diisi
+      validation: (rule) => rule.required().error('Judul wajib diisi agar website tidak error.'),
     }),
+    
+    // 2. Subjudul / Deskripsi
     defineField({
       name: 'subtitle',
       title: 'Deskripsi Pendek',
       type: 'text',
       rows: 3,
     }),
+
+    // 3. Slide Gambar Utama
     defineField({
       name: 'images',
       title: 'Gambar Slide',
@@ -26,12 +31,21 @@ export const heroType = defineType({
           type: 'image',
           options: { hotspot: true },
           fields: [
-            { name: 'label', type: 'string', title: 'Label' },
-            { name: 'alt', type: 'string', title: 'Alt Text' },
+            { 
+              name: 'alt', 
+              type: 'string', 
+              title: 'Alt Text (Untuk SEO)',
+              validation: (rule) => rule.required().warning('Sebaiknya isi Alt Text untuk Google search.'),
+            },
           ],
         },
       ],
+      options: {
+        layout: 'grid',
+      },
     }),
+
+    // 4. Logo Institusi Partner
     defineField({
       name: 'institutions',
       title: 'Logo Institusi',
@@ -41,25 +55,37 @@ export const heroType = defineType({
           type: 'object',
           fields: [
             { name: 'label', title: 'Nama Institusi', type: 'string' },
-            { name: 'logo', title: 'Logo', type: 'image', options: { hotspot: true } },
+            { 
+              name: 'logo', 
+              title: 'Logo', 
+              type: 'image', 
+              options: { hotspot: true } 
+            },
             { name: 'alt', title: 'Alt Text', type: 'string' },
           ],
+          preview: {
+            select: {
+              title: 'label',
+              media: 'logo'
+            }
+          }
         },
       ],
     }),
   ],
-  // --- TAMBAHAN PREVIEW AGAR LIST DI ADMIN BAGUS ---
+
+  // Preview di Admin Panel
   preview: {
     select: {
       title: 'title',
       subtitle: 'subtitle',
-      media: 'images.0', // Mengambil gambar pertama dari array images
+      media: 'images.0',
     },
     prepare(selection) {
       const { title, subtitle, media } = selection
       return {
-        title: title || 'Tanpa Judul',
-        subtitle: subtitle || 'Hero Section',
+        title: title || 'Hero Belum Ada Judul',
+        subtitle: subtitle || 'Halaman Depan',
         media: media,
       }
     },
