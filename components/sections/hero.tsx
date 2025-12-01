@@ -1,50 +1,85 @@
-"use client"
+// Hero.tsx - Final Fix Version (Server Component, Sanity Data, Animasi Ringan)
 
 import Image from "next/image"
+import { client } from "@/lib/sanity/client"
 import { motion } from "framer-motion"
 
-export function HeroSection() {
+export const revalidate = 0 // selalu fetch data terbaru
+
+export default async function Hero() {
+  const data = await client.fetch(`*[_type == "hero"][0]{
+    title,
+    subtitle,
+    description,
+    ctaText,
+    image{ asset->{ url } }
+  }`)
+
   return (
-    <section className="w-full relative overflow-hidden bg-white">
-      <div className="max-w-7xl mx-auto px-4 pt-24 pb-32 text-center relative">
+    <section className="relative w-full min-h-[85vh] flex items-center justify-center overflow-hidden bg-black text-white px-6">
+      {/* Background Gradient */}
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/80 z-0" />
 
-        {/* Highlight bergerak */}
-        <motion.div
-          initial={{ backgroundPosition: "0% 50%" }}
-          animate={{ backgroundPosition: "200% 50%" }}
-          transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
-          className="inline-block px-4 py-2 text-4xl font-extrabold
-          bg-gradient-to-r from-yellow-300 via-orange-400 to-yellow-300
-          bg-[length:200%_200%] text-transparent bg-clip-text"
+      {/* Hero Content */}
+      <div className="relative z-10 max-w-4xl mx-auto text-center">
+        {/* Title */}
+        <motion.h1
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="text-4xl md:text-6xl font-bold leading-tight"
         >
-          Rumah Negara
-        </motion.div>
+          <span className="px-4 py-1 rounded-xl bg-white/10 backdrop-blur-sm animate-pulse">
+            {data?.title}
+          </span>
+        </motion.h1>
 
-        <h1 className="text-3xl md:text-5xl font-bold mt-6 text-gray-900 leading-snug">
-          Pioner Penghuni Rumah Negara Puspiptek
-        </h1>
+        {/* Subtitle */}
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.4, duration: 0.7 }}
+          className="mt-4 text-lg md:text-xl text-gray-300"
+        >
+          {data?.subtitle}
+        </motion.p>
 
-        <p className="mt-6 text-lg text-gray-600 max-w-2xl mx-auto">
-          Menghubungkan para penghuni, pakar, dan komunitas untuk membangun
-          masa depan yang lebih baik melalui kolaborasi.
-        </p>
-
-        <div className="mt-10 flex justify-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+        {/* Description */}
+        {data?.description && (
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.7, duration: 0.75 }}
+            className="mt-4 text-base text-gray-400 max-w-2xl mx-auto"
           >
-            <Image
-              src="/images/hero-image.png"
-              width={900}
-              height={600}
-              alt="Hero Image"
-              className="rounded-2xl shadow-xl"
-            />
-          </motion.div>
-        </div>
+            {data.description}
+          </motion.p>
+        )}
+
+        {/* CTA Button */}
+        {data?.ctaText && (
+          <motion.button
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            whileHover={{ scale: 1.05 }}
+            transition={{ delay: 1, duration: 0.5 }}
+            className="mt-8 px-6 py-3 rounded-xl bg-blue-600 text-white font-semibold shadow-lg hover:bg-blue-700"
+          >
+            {data.ctaText}
+          </motion.button>
+        )}
       </div>
+
+      {/* Background Image (Super Light) */}
+      {data?.image?.asset?.url && (
+        <Image
+          src={data.image.asset.url}
+          fill
+          alt="Hero Background"
+          className="object-cover opacity-40 z-0"
+          priority
+        />
+      )}
     </section>
   )
 }
