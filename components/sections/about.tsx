@@ -1,8 +1,11 @@
 // FILE: components/sections/about.tsx
-"use client";
-// TIDAK ADA "use client" DI SINI (Jadikan Server Component)
-import { motion } from "framer-motion"
-import { motion } from "framer-motion"
+
+"use client"; // 👈 DITAMBAHKAN/DIPASTIKAN ADA DI BARIS PERTAMA
+
+// Hapus komentar lama yang tidak relevan.
+import { motion } from "framer-motion" // 👈 HANYA SATU BARIS INI
+// Hapus baris 'import { motion } from "framer-motion"' yang duplikat
+
 import { client } from "@/sanity/lib/client"
 import { PortableTextRenderer } from "@/components/portable-text-renderer"
 import { CheckCircle2, History } from "lucide-react" 
@@ -60,7 +63,7 @@ async function getAboutData(): Promise<AboutData | null> {
 }
 
 // 3. Komponen Utama (Sekarang ASYNC)
-// 🌟 PERUBAHAN UTAMA DI SINI: Ditambahkan 'default' untuk mengatasi error
+// 🌟 export default sudah benar di sini
 export default async function AboutSection() {
   const data = await getAboutData()
 
