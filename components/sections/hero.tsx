@@ -3,14 +3,9 @@
 
 import Link from "next/link"
 import Image from "next/image"
-import { ArrowRight, Play } from "lucide-react"
+import { ArrowRight } from "lucide-react"
 import { client } from "@/sanity/lib/client"
 import { urlFor } from "@/sanity/lib/image"
-
-interface HeroProps {
-  onToggleAbout: () => void
-  isAboutOpen: boolean
-}
 
 interface HeroData {
   title: string
@@ -34,14 +29,16 @@ async function getHeroData(): Promise<HeroData | null> {
   }
 }
 
-export default async function HeroSection({ onToggleAbout, isAboutOpen }: HeroProps) {
+export default async function HeroSection() {
   const data = await getHeroData()
 
   if (!data || !data.title) {
     return (
       <section className="py-32 text-center container bg-gray-50">
         <h2 className="text-2xl font-bold">Data Hero Belum Tersedia</h2>
-        <p className="text-muted-foreground">Silakan cek Environment Variables Vercel Anda.</p>
+        <p className="text-muted-foreground">
+          Silakan cek Environment Variables Vercel Anda.
+        </p>
       </section>
     )
   }
@@ -52,7 +49,6 @@ export default async function HeroSection({ onToggleAbout, isAboutOpen }: HeroPr
 
       <div className="container px-4 md:px-6">
         <div className="flex flex-col lg:flex-row items-center gap-12">
-
           {/* Konten teks */}
           <div className="flex-1 space-y-8 text-center lg:text-left">
             <div className="space-y-4">
@@ -72,25 +68,27 @@ export default async function HeroSection({ onToggleAbout, isAboutOpen }: HeroPr
                 Jelajahi Expertise
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
-              <button
-                onClick={onToggleAbout}
-                className="inline-flex h-12 items-center justify-center rounded-full border border-input bg-background px-8 text-sm font-medium shadow-sm transition-transform duration-300 hover:scale-105 hover:bg-accent hover:text-accent-foreground"
-              >
-                <Play className="mr-2 h-4 w-4 fill-current" />
-                {isAboutOpen ? 'Tutup Tentang Kami' : 'Tentang Kami'}
-              </button>
             </div>
 
             {/* Logo Institusi */}
             {data.institutions?.length > 0 && (
               <div className="pt-8 border-t border-border/50">
-                <p className="text-sm text-muted-foreground mb-4 font-medium">Didukung oleh:</p>
+                <p className="text-sm text-muted-foreground mb-4 font-medium">
+                  Didukung oleh:
+                </p>
                 <div className="flex flex-wrap items-center justify-center lg:justify-start gap-6 grayscale opacity-70 hover:opacity-100 transition-opacity">
                   {data.institutions.map((inst, index) => (
-                    <div key={index} className="relative h-10 w-24 transition-transform duration-500 hover:scale-110">
+                    <div
+                      key={index}
+                      className="relative h-10 w-24 transition-transform duration-500 hover:scale-110"
+                    >
                       {inst.logo && (
                         <Image
-                          src={urlFor(inst.logo).width(200).auto("format").quality(80).url()}
+                          src={urlFor(inst.logo)
+                            .width(200)
+                            .auto("format")
+                            .quality(80)
+                            .url()}
                           alt={inst.alt || inst.label}
                           fill
                           loading="lazy"
@@ -110,7 +108,11 @@ export default async function HeroSection({ onToggleAbout, isAboutOpen }: HeroPr
             {data.images?.length > 0 ? (
               <div className="relative aspect-square md:aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl border border-border group">
                 <Image
-                  src={urlFor(data.images[0]).width(1200).auto("format").quality(80).url()}
+                  src={urlFor(data.images[0])
+                    .width(1200)
+                    .auto("format")
+                    .quality(80)
+                    .url()}
                   alt={data.images[0].alt || "Hero Image"}
                   fill
                   className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
@@ -124,7 +126,6 @@ export default async function HeroSection({ onToggleAbout, isAboutOpen }: HeroPr
               </div>
             )}
           </div>
-
         </div>
       </div>
     </section>

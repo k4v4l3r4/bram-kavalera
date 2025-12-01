@@ -1,6 +1,4 @@
-"use client"
-
-import { useState } from "react"
+// FILE: app/page.tsx
 import HeroSection from "@/components/sections/hero"
 import AboutSection from "@/components/sections/about"
 import ProgramsSection from "@/components/sections/programs"
@@ -12,14 +10,9 @@ import ContactSection from "@/components/sections/contact"
 import FooterSection from "@/components/sections/footer"
 
 export default function Page() {
-  const [isAboutOpen, setIsAboutOpen] = useState(false)
-
   return (
     <main>
-      <HeroSection
-        onToggleAbout={() => setIsAboutOpen(!isAboutOpen)}
-        isAboutOpen={isAboutOpen}
-      />
+      <HeroSection />
       <AboutSection />
       <ProgramsSection />
       <ExpertForumSection />
