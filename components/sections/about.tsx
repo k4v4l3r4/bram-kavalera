@@ -1,6 +1,7 @@
 // FILE: components/sections/about.tsx
+"use client";
 // TIDAK ADA "use client" DI SINI (Jadikan Server Component)
-
+import { motion } from "framer-motion"
 import { motion } from "framer-motion"
 import { client } from "@/sanity/lib/client"
 import { PortableTextRenderer } from "@/components/portable-text-renderer"
