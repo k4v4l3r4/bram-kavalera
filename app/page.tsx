@@ -17,7 +17,7 @@ import HousingInfoSection from "@/components/sections/housing-info";
 import ContactSection from "@/components/sections/contact";
 
 // Catatan: Pastikan Anda telah membuat file footer.tsx!
-import FooterSection from "@/components/sections/footer"; 
+import FooterSection from "@/components/site-footer";
 
 
 export default function Page() {
