@@ -2,7 +2,8 @@
 
 import { useState } from "react"
 import { SiteHeader } from "@/components/site-header"
-import { HeroSection } from "@/components/sections/hero" // Pastikan path import benar
+// ✅ PERBAIKAN: Menggunakan Default Import (tanpa kurung kurawal)
+import HeroSection from "@/components/sections/hero" 
 import { AboutSection } from "@/components/sections/about"
 import { ExpertForumSection } from "@/components/sections/expert-forum" 
 import { ExpertClustersSection } from "@/components/sections/expert-clusters"
@@ -53,9 +54,9 @@ export default function Home() {
         <ExpertClustersSection /> 
         <ExpertForumSection />
 
-        <PodcastSection />         
-        <ProgramsSection />        
-        <AnnouncementsSection />   
+        <PodcastSection />      
+        <ProgramsSection />     
+        <AnnouncementsSection /> 
         
         <HousingInfoSection />
         <ContactSection />
