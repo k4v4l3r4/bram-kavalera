@@ -5,36 +5,39 @@ import HeroSection from "@/components/sections/hero";
 import AboutSection from "@/components/sections/about";
 import ProgramsSection from "@/components/sections/programs";
 
-// 👇 PERUBAHAN: Disesuaikan dengan nama file Anda (expert-forum.tsx)
-import ExpertForumSection from "@/components/sections/expert-forum"; 
+// ✅ Jalur Kebab-Case sudah benar
+import ExpertForumSection from "@/components/sections/expert-forum"; 
 
 import PodcastSection from "@/components/sections/podcast";
 import AnnouncementsSection from "@/components/sections/announcements";
 
-// 👇 PERUBAHAN: Disesuaikan dengan nama file Anda (housing-info.tsx)
-import HousingInfoSection from "@/components/sections/housing-info"; 
+// ✅ Jalur Kebab-Case sudah benar
+import HousingInfoSection from "@/components/sections/housing-info"; 
 
 import ContactSection from "@/components/sections/contact";
 
-// Catatan: Pastikan Anda telah membuat file footer.tsx!
-import FooterSection from "@/components/site-footer";
+// ❌ PERUBAHAN: Import SiteFooter sebagai Named Export ({ SiteFooter })
+// Karena komponen aslinya (site-footer.tsx) menggunakan 'export function SiteFooter()'
+import { SiteFooter } from "@/components/site-footer";
 
 
 export default function Page() {
-  return (
-    <main>
-      <HeroSection />
-      <AboutSection />
-      <ProgramsSection />
-      <ExpertForumSection />
-      <PodcastSection />
-      <AnnouncementsSection />
-      <HousingInfoSection />
-      <ContactSection />
-      <FooterSection />
-    </main>
-  );
+  return (
+    <main>
+      <HeroSection />
+      <AboutSection />
+      <ProgramsSection />
+      <ExpertForumSection />
+      <PodcastSection />
+      <AnnouncementsSection />
+      <HousingInfoSection />
+      <ContactSection />
+      
+      {/* ❌ PERUBAHAN: Menggunakan nama komponen yang diimpor, yaitu SiteFooter */}
+      <SiteFooter /> 
+    </main>
+  );
 }
 
-// Catatan Penting: Pastikan SEMUA komponen ini diekspor sebagai 'export default' 
-// di file masing-masing (misalnya, about.tsx, programs.tsx, dll.)
+// Hapus komentar lama: Pastikan SEMUA komponen lain (Hero, Programs, dll.) menggunakan 'export default' 
+// di file masing-masing untuk menghindari kesalahan 'Element type is invalid' di masa mendatang.
