@@ -1,6 +1,6 @@
 import { type SchemaTypeDefinition } from 'sanity'
 
-// Import semua schema yang sudah dibuat
+// Import semua schema
 import { heroType } from './hero'
 import { aboutType } from './about'
 import { programsType } from './programs'
@@ -10,21 +10,21 @@ import { announcementsType } from './announcements'
 import { housingInfoType } from './housingInfo'
 import { contactType } from './contact'
 import { footerType } from './footer'
-import { blockContentType } from './blockContent' // Editor Teks Canggih
-import { expertClustersType } from './expertClusters' // Klaster Kepakaran (Menu Baru)
+import { blockContentType } from './blockContent'
+import { expertClustersType } from './expertClusters'
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
-    heroType, 
-    aboutType, 
-    programsType, 
-    expertForumType, 
-    podcastType, 
-    announcementsType, 
+    heroType,
+    aboutType,
+    programsType,
+    expertForumType,
+    podcastType,
+    announcementsType,
     housingInfoType,
     contactType,
     footerType,
-    blockContentType, // <-- Wajib untuk Visi (Rich Text)
-    expertClustersType, // <-- Wajib untuk Klaster Kepakaran
+    blockContentType,
+    expertClustersType,
   ],
 }
