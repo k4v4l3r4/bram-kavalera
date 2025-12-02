@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { client } from "@/sanity/lib/client"
 
-export function ContactSection() {
+export default function ContactSection() {
   const [data, setData] = useState<any>(null)
 
   useEffect(() => {
@@ -31,7 +31,7 @@ export function ContactSection() {
       <div className="container mx-auto px-4 md:px-6">
         <div className="grid lg:grid-cols-2 gap-12">
           
-          {/* BAGIAN KIRI: INFO KONTAK */}
+          {/* INFO KONTAK */}
           <div className="space-y-8">
             <div>
               <h2 className="text-3xl font-bold tracking-tighter md:text-4xl mb-4">
@@ -43,7 +43,8 @@ export function ContactSection() {
             </div>
 
             <div className="space-y-6">
-              {/* Alamat */}
+              
+              {/* ALAMAT */}
               <div className="flex items-start gap-4">
                 <MapPin className="h-6 w-6 text-primary mt-1" />
                 <div>
@@ -54,7 +55,7 @@ export function ContactSection() {
                 </div>
               </div>
 
-              {/* Email */}
+              {/* EMAIL */}
               <div className="flex items-start gap-4">
                 <Mail className="h-6 w-6 text-primary mt-1" />
                 <div>
@@ -68,7 +69,7 @@ export function ContactSection() {
                 </div>
               </div>
 
-              {/* WhatsApp */}
+              {/* WHATSAPP */}
               <div className="flex items-start gap-4">
                 <Phone className="h-6 w-6 text-primary mt-1" />
                 <div>
@@ -83,44 +84,44 @@ export function ContactSection() {
                   </a>
                 </div>
               </div>
+
             </div>
           </div>
 
-          {/* BAGIAN KANAN: FORMULIR */}
+          {/* FORM KONTAK */}
           <div className="bg-background rounded-xl p-8 shadow-sm border">
             <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
               <div className="grid sm:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <label htmlFor="name" className="text-sm font-medium">
-                    Nama Lengkap
-                  </label>
+                  <label htmlFor="name" className="text-sm font-medium">Nama Lengkap</label>
                   <Input id="name" placeholder="Nama Anda" />
                 </div>
                 <div className="space-y-2">
-                  <label htmlFor="email" className="text-sm font-medium">
-                    Email
-                  </label>
+                  <label htmlFor="email" className="text-sm font-medium">Email</label>
                   <Input id="email" type="email" placeholder="email@contoh.com" />
                 </div>
               </div>
+
               <div className="space-y-2">
-                <label htmlFor="subject" className="text-sm font-medium">
-                  Subjek
-                </label>
+                <label htmlFor="subject" className="text-sm font-medium">Subjek</label>
                 <Input id="subject" placeholder="Perihal pesan" />
               </div>
+
               <div className="space-y-2">
-                <label htmlFor="message" className="text-sm font-medium">
-                  Pesan
-                </label>
-                <Textarea id="message" placeholder="Tulis pesan Anda di sini..." className="min-h-[120px]" />
+                <label htmlFor="message" className="text-sm font-medium">Pesan</label>
+                <Textarea 
+                  id="message"
+                  placeholder="Tulis pesan Anda di sini..."
+                  className="min-h-[120px]"
+                />
               </div>
+
               <Button type="submit" className="w-full bg-primary hover:bg-primary/90 text-primary-foreground">
                 Kirim Pesan
               </Button>
             </form>
           </div>
-          
+
         </div>
       </div>
     </section>

@@ -7,27 +7,33 @@ import { Button } from "@/components/ui/button"
 import { Calendar, ArrowRight } from "lucide-react"
 import { client } from "@/sanity/lib/client"
 
-export function ExpertForumSection() {
+export default function ExpertForumSection() {
   const [data, setData] = useState<any>(null)
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const result = await client.fetch(`
-          *[_type == "expertForum"][0]{
-            heading,
-            description,
-            overlayTitle,
-            schedule,
-            buttonText,
-            "imageUrl": image.asset->url
-          }
-        `)
+        const result = await client.fetch(
+          `
+            *[_type == "expertForum"][0]{
+              heading,
+              description,
+              overlayTitle,
+              schedule,
+              buttonText,
+              "imageUrl": image.asset->url
+            }
+          `,
+          {},
+          { next: { revalidate: 3600 } } // 🔥 caching aman
+        )
+
         setData(result)
       } catch (error) {
         console.error("Gagal ambil data expert forum:", error)
       }
     }
+
     fetchData()
   }, [])
 
@@ -49,7 +55,7 @@ export function ExpertForumSection() {
             transition={{ duration: 0.8 }}
             className="relative rounded-3xl overflow-hidden shadow-2xl aspect-video lg:aspect-[4/3] group w-full h-full min-h-[380px]"
           >
-            {data.imageUrl ? (
+            {data?.imageUrl ? (
               <Image
                 src={data.imageUrl}
                 alt="Expert Forum Banner"
@@ -69,11 +75,11 @@ export function ExpertForumSection() {
                   LIVE SESSION
                 </div>
                 <p className="font-bold text-2xl mb-1 drop-shadow-md leading-tight">
-                  {data.overlayTitle || "Sesi Berbagi Pengetahuan"}
+                  {data?.overlayTitle || "Sesi Berbagi Pengetahuan"}
                 </p>
                 <p className="text-sm opacity-90 flex items-center gap-2">
                   <Calendar className="h-4 w-4" />
-                  {data.schedule || "Jumat, 19:00 WIB"}
+                  {data?.schedule || "Jumat, 19:00 WIB"}
                 </p>
               </div>
             </div>
@@ -88,12 +94,12 @@ export function ExpertForumSection() {
             className="space-y-8"
           >
             <h2 className="text-3xl font-bold tracking-tight md:text-4xl lg:text-5xl text-slate-900 leading-tight">
-              {data.heading || "Diskusi & Kolaborasi Para Expert"}
+              {data?.heading || "Diskusi & Kolaborasi Para Expert"}
             </h2>
 
             <blockquote className="border-l-4 border-primary pl-6 py-2">
               <p className="text-muted-foreground text-lg leading-relaxed italic">
-                {data.description ||
+                {data?.description ||
                   "Solusi cerdas dari para pakar senior — cepat, tepat, dan berbasis pengalaman nyata."}
               </p>
             </blockquote>
@@ -102,7 +108,7 @@ export function ExpertForumSection() {
               size="lg"
               className="rounded-full shadow-xl bg-primary hover:bg-primary/90 px-8 py-6 text-lg group"
             >
-              {data.buttonText || "Lihat Jadwal"}
+              {data?.buttonText || "Lihat Jadwal"}
               <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
             </Button>
           </motion.div>
