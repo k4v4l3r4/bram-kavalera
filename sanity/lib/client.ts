@@ -6,4 +6,6 @@ export const client = createClient({
   dataset,
   apiVersion,
   useCdn: false,
+  token: process.env.SANITY_API_READ_TOKEN,   // 👈 WAJIB
+  perspective: "published",                    // 👈 BIAR DATA PUBLISHED MUNCUL
 })
