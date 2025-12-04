@@ -9,7 +9,8 @@ import PodcastSection from "@/components/sections/podcast";
 import AnnouncementsSection from "@/components/sections/announcements";
 import HousingInfoSection from "@/components/sections/housing-info";
 import ContactSection from "@/components/sections/contact";
-import { SiteFooter } from "@/components/site-footer";
+// Perbaikan: import default (sesuai export di site-footer.tsx)
+import SiteFooter from "@/components/site-footer";
 
 export default function Page() {
   return (
