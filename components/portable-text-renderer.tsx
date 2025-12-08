@@ -1,7 +1,10 @@
-import { PortableText, PortableTextComponents } from '@portabletext/react'
+// src/components/PortableTextRenderer.tsx
+
 import * as React from 'react'
+import { PortableText, PortableTextComponents } from '@portabletext/react'
 import { cn } from '@/lib/utils'
 
+// Custom components untuk PortableText
 const components: PortableTextComponents = {
   block: ({ children, value }) => {
     switch (value.style) {
@@ -16,53 +19,104 @@ const components: PortableTextComponents = {
       case 'h5':
         return <h5 className="text-base font-bold mt-3 mb-2">{children}</h5>
       case 'h6':
-        return <h6 className="text-sm font-bold mt-2 mb-1 uppercase text-muted-foreground">{children}</h6>
+        return (
+          <h6 className="text-sm font-bold mt-2 mb-1 uppercase text-muted-foreground">
+            {children}
+          </h6>
+        )
       case 'blockquote':
         return (
           <blockquote className="border-l-4 border-primary pl-4 py-2 italic my-4 text-muted-foreground bg-muted/30 rounded-r-lg">
             {children}
           </blockquote>
         )
-      
-      // 👇 LOGIKA ALIGNMENT LENGKAP 👇
+
+      // 👇 Alignment custom
       case 'normal_justify':
-        return <p className="mb-4 leading-relaxed text-muted-foreground text-justify">{children}</p>
+        return (
+          <p className="mb-4 leading-relaxed text-muted-foreground text-justify">
+            {children}
+          </p>
+        )
       case 'normal_center':
-        return <p className="mb-4 leading-relaxed text-muted-foreground text-center">{children}</p>
+        return (
+          <p className="mb-4 leading-relaxed text-muted-foreground text-center">
+            {children}
+          </p>
+        )
       case 'normal_right':
-        return <p className="mb-4 leading-relaxed text-muted-foreground text-right">{children}</p>
+        return (
+          <p className="mb-4 leading-relaxed text-muted-foreground text-right">
+            {children}
+          </p>
+        )
       case 'normal_left':
-        return <p className="mb-4 leading-relaxed text-muted-foreground text-left">{children}</p>
-      // 👆 ------------------------- 👆
+        return (
+          <p className="mb-4 leading-relaxed text-muted-foreground text-left">
+            {children}
+          </p>
+        )
 
       default:
         // Default (Normal)
-        return <p className={cn("mb-4 leading-relaxed", value.style === 'normal' ? 'text-muted-foreground' : 'text-foreground')}>{children}</p>
+        return (
+          <p
+            className={cn(
+              'mb-4 leading-relaxed',
+              value.style === 'normal'
+                ? 'text-muted-foreground'
+                : 'text-foreground'
+            )}
+          >
+            {children}
+          </p>
+        )
     }
   },
+
   list: ({ children, value }) => {
-    return value.list === 'bullet' 
-      ? <ul className="list-disc space-y-1 ml-6 mb-4 text-muted-foreground marker:text-primary">{children}</ul> 
-      : <ol className="list-decimal space-y-1 ml-6 mb-4 text-muted-foreground marker:text-primary">{children}</ol>
+    return value.list === 'bullet' ? (
+      <ul className="list-disc space-y-1 ml-6 mb-4 text-muted-foreground marker:text-primary">
+        {children}
+      </ul>
+    ) : (
+      <ol className="list-decimal space-y-1 ml-6 mb-4 text-muted-foreground marker:text-primary">
+        {children}
+      </ol>
+    )
   },
+
   listItem: ({ children }) => <li className="pl-1">{children}</li>,
-  
-  // 👇 LOGIKA DEKORASI (MARKS) 👇
+
+  // 👇 Dekorasi (marks)
   marks: {
-    strong: ({children}) => <strong className="font-bold text-foreground">{children}</strong>,
-    em: ({children}) => <em className="italic text-foreground">{children}</em>,
-    underline: ({children}) => <span className="underline underline-offset-4 decoration-primary/50">{children}</span>,
-    'strike-through': ({children}) => <span className="line-through decoration-destructive/50">{children}</span>,
-    code: ({children}) => <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono text-primary">{children}</code>,
-    
+    strong: ({ children }) => (
+      <strong className="font-bold text-foreground">{children}</strong>
+    ),
+    em: ({ children }) => (
+      <em className="italic text-foreground">{children}</em>
+    ),
+    underline: ({ children }) => (
+      <span className="underline underline-offset-4 decoration-primary/50">
+        {children}
+      </span>
+    ),
+    'strike-through': ({ children }) => (
+      <span className="line-through decoration-destructive/50">{children}</span>
+    ),
+    code: ({ children }) => (
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono text-primary">
+        {children}
+      </code>
+    ),
     link: ({ children, value }) => {
       const href = value.href || '#'
       const target = value.blank ? '_blank' : undefined
       return (
-        <a 
-          href={href} 
-          target={target} 
-          rel={target === '_blank' ? "noopener noreferrer" : undefined} 
+        <a
+          href={href}
+          target={target}
+          rel={target === '_blank' ? 'noopener noreferrer' : undefined}
           className="text-primary hover:underline font-medium transition-colors"
         >
           {children}
@@ -72,6 +126,7 @@ const components: PortableTextComponents = {
   },
 }
 
+// Renderer utama
 export function PortableTextRenderer({ blocks }: { blocks: any }) {
   if (!blocks) return null
   return <PortableText value={blocks} components={components} />
