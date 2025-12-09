@@ -1,3 +1,4 @@
+// FILE: components/site-footer.tsx
 "use client"
 
 import { useState, useEffect } from "react"
@@ -7,6 +8,7 @@ import { Facebook, Instagram, Youtube, Mail, MapPin, Phone, ArrowRight } from "l
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { client } from "@/sanity/lib/client"
+import { PortableTextRenderer } from "@/components/PortableTextRenderer"
 
 export default function SiteFooter() {
   const [data, setData] = useState<any>(null)
@@ -15,7 +17,10 @@ export default function SiteFooter() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const result = await client.fetch(`{ "footer": *[_type == "footer"][0], "contact": *[_type == "contact"][0] }`)
+        const result = await client.fetch(`{
+          "footer": *[_type == "footer"][0],
+          "contact": *[_type == "contact"][0]
+        }`)
         setData(result.footer)
         setContactData(result.contact)
       } catch (error) {
@@ -27,44 +32,136 @@ export default function SiteFooter() {
 
   return (
     <footer className="bg-slate-900 text-slate-200">
-      {/* top */}
+      {/* Newsletter */}
       <div className="border-b border-slate-800">
         <div className="container mx-auto py-12 md:py-16 px-4">
           <div className="grid md:grid-cols-2 gap-8 items-center">
             <div>
-              <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">{data?.newsletterTitle || "Tetap Terhubung Bersama Kami"}</h2>
-              <p className="text-slate-400">{data?.newsletterDesc || "Dapatkan informasi terbaru seputar kegiatan kawasan Puspiptek."}</p>
+              <h2 className="text-2xl md:text-3xl font-bold text-white mb-2">
+                {data?.newsletterTitle || "Tetap Terhubung Bersama Kami"}
+              </h2>
+              {data?.newsletterDesc ? (
+                <PortableTextRenderer blocks={data.newsletterDesc} />
+              ) : (
+                <p className="text-slate-400">
+                  Dapatkan informasi terbaru seputar kegiatan kawasan Puspiptek.
+                </p>
+              )}
             </div>
             <div className="flex gap-2 max-w-md md:ml-auto w-full">
-              <Input type="email" placeholder="Masukkan email anda" className="bg-slate-800 border-slate-700 text-white placeholder:text-slate-500 focus-visible:ring-primary" />
-              <Button size="icon" className="shrink-0 bg-primary hover:bg-primary/90"><ArrowRight className="h-4 w-4" /><span className="sr-only">Subscribe</span></Button>
+              <Input
+                type="email"
+                placeholder="Masukkan email anda"
+                className="bg-slate-800 border-slate-700 text-white placeholder:text-slate-500 focus-visible:ring-primary"
+              />
+              <Button size="icon" className="shrink-0 bg-primary hover:bg-primary/90">
+                <ArrowRight className="h-4 w-4" />
+                <span className="sr-only">Subscribe</span>
+              </Button>
             </div>
           </div>
         </div>
       </div>
 
-      {/* main */}
+      {/* Main content */}
       <div className="container mx-auto py-12 md:py-16 px-4">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+          {/* Brand & Social */}
           <div className="space-y-4">
             <div className="relative">
-              <Image src="/logo-pprnp.png" alt="Logo PPRNP" width={0} height={0} sizes="100vw" className="h-16 w-auto object-contain" />
+              <Image
+                src="/logo-pprnp.png"
+                alt="Logo PPRNP"
+                width={0}
+                height={0}
+                sizes="100vw"
+                className="h-16 w-auto object-contain"
+              />
             </div>
-            <p className="text-sm text-slate-400 leading-relaxed">{data?.brandDescription || "Wadah silaturahmi..."}</p>
+            {data?.brandDescription ? (
+              <PortableTextRenderer blocks={data.brandDescription} />
+            ) : (
+              <p className="text-sm text-slate-400 leading-relaxed">
+                Wadah silaturahmi...
+              </p>
+            )}
             <div className="flex gap-4 pt-2">
-              {data?.socialInstagram && (<Link href={data.socialInstagram} target="_blank" className="h-8 w-8 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary hover:text-white transition-colors"><Instagram className="h-4 w-4" /></Link>)}
-              {data?.socialFacebook && (<Link href={data.socialFacebook} target="_blank" className="h-8 w-8 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary hover:text-white transition-colors"><Facebook className="h-4 w-4" /></Link>)}
-              {data?.socialYoutube && (<Link href={data.socialYoutube} target="_blank" className="h-8 w-8 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary hover:text-white transition-colors"><Youtube className="h-4 w-4" /></Link>)}
+              {data?.socialInstagram && (
+                <Link
+                  href={data.socialInstagram}
+                  target="_blank"
+                  className="h-8 w-8 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary hover:text-white transition-colors"
+                >
+                  <Instagram className="h-4 w-4" />
+                </Link>
+              )}
+              {data?.socialFacebook && (
+                <Link
+                  href={data.socialFacebook}
+                  target="_blank"
+                  className="h-8 w-8 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary hover:text-white transition-colors"
+                >
+                  <Facebook className="h-4 w-4" />
+                </Link>
+              )}
+              {data?.socialYoutube && (
+                <Link
+                  href={data.socialYoutube}
+                  target="_blank"
+                  className="h-8 w-8 rounded-full bg-slate-800 flex items-center justify-center hover:bg-primary hover:text-white transition-colors"
+                >
+                  <Youtube className="h-4 w-4" />
+                </Link>
+              )}
             </div>
           </div>
 
-          {/* other columns (tautan cepat, layanan warga, kontak) */}
-          <div>/* ... sama seperti yang sebelumnya kamu kirim ... */</div>
-          <div>/* ... */</div>
-          <div>/* ... */</div>
+          {/* Quick links */}
+          <div>
+            <h3 className="font-semibold text-white mb-4">Tautan Cepat</h3>
+            <ul className="space-y-2 text-slate-400 text-sm">
+              <li><Link href="/about" className="hover:text-white">Tentang Kami</Link></li>
+              <li><Link href="/programs" className="hover:text-white">Program</Link></li>
+              <li><Link href="/announcements" className="hover:text-white">Pengumuman</Link></li>
+            </ul>
+          </div>
+
+          {/* Services */}
+          <div>
+            <h3 className="font-semibold text-white mb-4">Layanan Warga</h3>
+            <ul className="space-y-2 text-slate-400 text-sm">
+              <li><Link href="/housing" className="hover:text-white">Informasi Perumahan</Link></li>
+              <li><Link href="/forum" className="hover:text-white">Forum Warga</Link></li>
+              <li><Link href="/contact" className="hover:text-white">Hubungi Kami</Link></li>
+            </ul>
+          </div>
+
+          {/* Contact */}
+          <div>
+            <h3 className="font-semibold text-white mb-4">Kontak</h3>
+            <ul className="space-y-3 text-slate-400 text-sm">
+              {contactData?.email && (
+                <li className="flex items-center gap-2">
+                  <Mail className="h-4 w-4" /> {contactData.email}
+                </li>
+              )}
+              {contactData?.phone && (
+                <li className="flex items-center gap-2">
+                  <Phone className="h-4 w-4" /> {contactData.phone}
+                </li>
+              )}
+              {contactData?.address && (
+                <li className="flex items-center gap-2">
+                  <MapPin className="h-4 w-4" />
+                  <PortableTextRenderer blocks={contactData.address} />
+                </li>
+              )}
+            </ul>
+          </div>
         </div>
       </div>
 
+      {/* Bottom bar */}
       <div className="border-t border-slate-800 bg-slate-950">
         <div className="container mx-auto py-6 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-slate-500 px-4">
           <p>&copy; {new Date().getFullYear()} PPRNP. All rights reserved.</p>

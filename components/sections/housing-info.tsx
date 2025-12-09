@@ -1,9 +1,11 @@
+// FILE: components/HousingInfoSection.tsx
 "use client"
 
 import { useState, useEffect } from "react"
 import { MapPin, Siren, Bus, Building2, Info, ChevronLeft, ChevronRight } from "lucide-react"
 import Image from "next/image"
 import { client } from "@/sanity/lib/client"
+import { PortableTextRenderer } from "@/components/PortableTextRenderer"
 
 // 1. Mapping Ikon
 const iconMap: any = {
@@ -50,11 +52,9 @@ export default function HousingInfoSection() {
 
   useEffect(() => {
     if (maps.length <= 1) return
-
     const timer = setInterval(() => {
       setCurrentMap((prev) => (prev + 1) % maps.length)
     }, 5000)
-
     return () => clearInterval(timer)
   }, [maps.length])
 
@@ -67,31 +67,42 @@ export default function HousingInfoSection() {
     <section id="info" className="py-16 md:py-20 bg-primary/5">
       <div className="container mx-auto px-4 md:px-6">
         <div className="grid lg:grid-cols-2 gap-12">
-          
           {/* BAGIAN KIRI: LIST INFO */}
           <div>
             <h2 className="text-3xl font-bold tracking-tighter md:text-4xl mb-6">
               {data.title || "Informasi Rumah Negara"}
             </h2>
-            <p className="text-muted-foreground mb-8 text-lg">
-              {data.description || "Panduan penting bagi penghuni kawasan."}
-            </p>
 
-            <div className="grid gap-6">
+            {data.description ? (
+              <PortableTextRenderer blocks={data.description} />
+            ) : (
+              <p className="text-muted-foreground mb-8 text-lg">
+                Panduan penting bagi penghuni kawasan.
+              </p>
+            )}
+
+            <div className="grid gap-6 mt-8">
               {items.map((item: any, i: number) => {
                 const IconComponent = iconMap[item.icon] || Info
                 const style = colorMap[item.color] || colorMap.default
 
                 return (
-                  <div key={i} className="flex gap-4 p-4 bg-background rounded-xl border shadow-sm hover:shadow-md transition-shadow">
+                  <div
+                    key={i}
+                    className="flex gap-4 p-4 bg-background rounded-xl border shadow-sm hover:shadow-md transition-shadow"
+                  >
                     <div className={`p-3 rounded-full h-fit ${style.bg} ${style.text}`}>
                       <IconComponent className="h-6 w-6" />
                     </div>
                     <div>
                       <h3 className="font-semibold text-lg mb-1">{item.title}</h3>
-                      <p className="text-sm text-muted-foreground leading-relaxed">
-                        {item.description}
-                      </p>
+                      {item.description ? (
+                        <PortableTextRenderer blocks={item.description} />
+                      ) : (
+                        <p className="text-sm text-muted-foreground leading-relaxed">
+                          Deskripsi belum tersedia.
+                        </p>
+                      )}
                     </div>
                   </div>
                 )
@@ -101,7 +112,6 @@ export default function HousingInfoSection() {
 
           {/* BAGIAN KANAN: GALERI PETA (AUTO SLIDER) */}
           <div className="relative h-full min-h-[400px] rounded-2xl overflow-hidden border shadow-lg bg-muted group">
-            
             {maps.length > 0 ? (
               <>
                 <Image
@@ -120,24 +130,26 @@ export default function HousingInfoSection() {
 
                 {maps.length > 1 && (
                   <>
-                    <button 
+                    <button
                       onClick={prevMap}
                       className="absolute left-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white/80 hover:bg-white text-black shadow-lg transition-all opacity-0 group-hover:opacity-100 z-20 cursor-pointer"
                     >
                       <ChevronLeft className="h-6 w-6" />
                     </button>
-                    <button 
+                    <button
                       onClick={nextMap}
                       className="absolute right-4 top-1/2 -translate-y-1/2 p-2 rounded-full bg-white/80 hover:bg-white text-black shadow-lg transition-all opacity-0 group-hover:opacity-100 z-20 cursor-pointer"
                     >
                       <ChevronRight className="h-6 w-6" />
                     </button>
-                    
+
                     <div className="absolute top-4 right-4 flex gap-1 z-20">
                       {maps.map((_: any, idx: number) => (
-                        <div 
+                        <div
                           key={idx}
-                          className={`h-2 w-2 rounded-full shadow-sm transition-all duration-500 ${idx === currentMap ? 'bg-white w-4' : 'bg-white/50'}`}
+                          className={`h-2 w-2 rounded-full shadow-sm transition-all duration-500 ${
+                            idx === currentMap ? "bg-white w-4" : "bg-white/50"
+                          }`}
                         />
                       ))}
                     </div>
@@ -153,7 +165,6 @@ export default function HousingInfoSection() {
               </div>
             )}
           </div>
-
         </div>
       </div>
     </section>

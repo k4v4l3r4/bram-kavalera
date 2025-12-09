@@ -1,74 +1,78 @@
-import { defineField, defineType } from 'sanity'
+// FILE: schemas/announcements.ts
+import { defineField, defineType } from "sanity"
 
 export const announcementsType = defineType({
-  name: 'announcements',
-  title: 'Announcements (Pengumuman)',
-  type: 'document',
+  name: "announcements",
+  title: "Announcements (Pengumuman)",
+  type: "document",
   fields: [
     // BAGIAN JUDUL SEKSI
     defineField({
-      name: 'title',
-      title: 'Judul Seksi',
-      type: 'string',
-      initialValue: 'Pengumuman & Berita'
+      name: "title",
+      title: "Judul Seksi",
+      type: "string",
+      initialValue: "Pengumuman & Berita",
     }),
     defineField({
-      name: 'description',
-      title: 'Deskripsi Seksi',
-      type: 'blockContent',
-      initialValue: 'Informasi terkini seputar kegiatan dan himbauan untuk warga.'
+      name: "description",
+      title: "Deskripsi Seksi",
+      type: "blockContent",
+      // Tidak pakai initialValue string, isi manual di Studio
     }),
 
     // BAGIAN DAFTAR BERITA
     defineField({
-      name: 'items',
-      title: 'Daftar Berita',
-      type: 'array',
+      name: "items",
+      title: "Daftar Berita",
+      type: "array",
       of: [
-        {
-          type: 'object',
+        defineType({
+          type: "object",
           fields: [
-            { name: 'title', type: 'string', title: 'Judul Berita' },
-            { 
-              name: 'date', 
-              type: 'date', 
-              title: 'Tanggal Tayang',
-              options: { dateFormat: 'DD-MM-YYYY' } 
-            },
-            {
-              name: 'category',
-              title: 'Kategori / Label',
-              type: 'string',
+            defineField({
+              name: "title",
+              type: "string",
+              title: "Judul Berita",
+            }),
+            defineField({
+              name: "date",
+              type: "date",
+              title: "Tanggal Tayang",
+              options: { dateFormat: "YYYY-MM-DD" }, // format aman
+            }),
+            defineField({
+              name: "category",
+              title: "Kategori / Label",
+              type: "string",
               options: {
                 list: [
-                  { title: 'Info Penting', value: 'Info Penting' },
-                  { title: 'Agenda', value: 'Agenda' },
-                  { title: 'Keamanan', value: 'Keamanan' },
-                  { title: 'Sosial', value: 'Sosial' },
-                  { title: 'Berita Duka', value: 'Berita Duka' },
+                  { title: "Info Penting", value: "Info Penting" },
+                  { title: "Agenda", value: "Agenda" },
+                  { title: "Keamanan", value: "Keamanan" },
+                  { title: "Sosial", value: "Sosial" },
+                  { title: "Berita Duka", value: "Berita Duka" },
                 ],
               },
-            },
-            { 
-              name: 'readTime', 
-              type: 'string', 
-              title: 'Waktu Baca (misal: 2 min read)',
-              initialValue: '2 min read'
-            },
-            { 
-              name: 'image', 
-              type: 'image', 
-              title: 'Foto Utama',
-              options: { hotspot: true }
-            },
-            { 
-              name: 'excerpt', 
-              type: 'blockContent', 
-              title: 'Ringkasan Berita (Excerpt)',
-              rows: 3
-            },
+            }),
+            defineField({
+              name: "readTime",
+              type: "string",
+              title: "Waktu Baca (misal: 2 min read)",
+              initialValue: "2 min read",
+            }),
+            defineField({
+              name: "image",
+              type: "image",
+              title: "Foto Utama",
+              options: { hotspot: true },
+            }),
+            defineField({
+              name: "excerpt",
+              type: "blockContent",
+              title: "Ringkasan Berita (Excerpt)",
+            }),
           ],
-        },
+        }),
       ],
     }),
   ],

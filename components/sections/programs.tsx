@@ -6,7 +6,7 @@ import Image from "next/image"
 import { Calendar, Users2, BookOpen, Camera, ArrowRight, HelpCircle } from "lucide-react"
 import { motion } from "framer-motion"
 import { client } from "@/sanity/lib/client"
-import { PortableTextRenderer } from "@/components/portable-text-renderer"
+import { PortableTextRenderer } from "@/components/PortableTextRenderer"
 
 // Ikon Map (HARUS sama dengan schema)
 const iconMap: Record<string, any> = {
@@ -27,7 +27,7 @@ const colorMap: Record<string, string> = {
 
 type ProgramItem = {
   title: string
-  description: any        // PERBAIKAN: blockContent bukan string
+  description: any        // blockContent dari Sanity
   tag: string
   color: string
   icon: string
@@ -36,7 +36,7 @@ type ProgramItem = {
 
 type ProgramsData = {
   sectionTitle: string
-  sectionDescription: any     // PERBAIKAN: blockContent
+  sectionDescription: any // blockContent dari Sanity
   items: ProgramItem[]
 }
 
@@ -74,7 +74,6 @@ export default function ProgramsSection() {
 
   return (
     <section id="programs" className="pt-16 pb-20 md:pt-20 md:pb-24 bg-background relative">
-      
       <div className="container mx-auto px-4 md:px-6 relative z-10">
 
         {/* HEADER */}
@@ -90,7 +89,7 @@ export default function ProgramsSection() {
               {data.sectionTitle}
             </h2>
 
-            {/* PERBAIKAN: SUPPORT BLOCKCONTENT */}
+            {/* SUPPORT BLOCKCONTENT */}
             <div className="text-lg text-muted-foreground">
               <PortableTextRenderer blocks={data.sectionDescription} />
             </div>
@@ -107,7 +106,6 @@ export default function ProgramsSection() {
         {/* GRID */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
           {data.items?.map((program, i) => {
-            
             const Icon = iconMap[program.icon] || HelpCircle
             const colorClass = colorMap[program.color] || "bg-gray-500"
 
@@ -120,7 +118,6 @@ export default function ProgramsSection() {
                 transition={{ duration: 0.5, delay: i * 0.1 }}
                 className="group relative overflow-hidden rounded-3xl bg-background border border-border shadow-sm hover:shadow-2xl transition-all duration-500 ease-out h-[320px] md:h-[350px]"
               >
-                
                 {/* IMAGE */}
                 <div className="absolute inset-0 z-0">
                   {program.image ? (
@@ -152,19 +149,17 @@ export default function ProgramsSection() {
 
                     <h3 className="text-2xl font-bold text-white mb-2">{program.title}</h3>
 
-                    {/* PERBAIKAN: DESCRIPTION SUPPORT BLOCK TEXT */}
+                    {/* DESCRIPTION SUPPORT BLOCK TEXT */}
                     <div className="text-white/80 line-clamp-2 group-hover:line-clamp-none transition-all duration-300">
                       <PortableTextRenderer blocks={program.description} />
                     </div>
 
                   </div>
                 </div>
-
               </motion.div>
             )
           })}
         </div>
-
       </div>
     </section>
   )

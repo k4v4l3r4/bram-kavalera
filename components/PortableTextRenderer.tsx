@@ -1,8 +1,9 @@
 // src/components/PortableTextRenderer.tsx
+"use client"
 
 import * as React from 'react'
-import { PortableText, PortableTextComponents } from '@portabletext/react'
 import { cn } from '@/lib/utils'
+import { PortableText, PortableTextComponents } from '@portabletext/react'
 
 // Custom components untuk PortableText
 const components: PortableTextComponents = {
@@ -30,35 +31,15 @@ const components: PortableTextComponents = {
             {children}
           </blockquote>
         )
-
-      // 👇 Alignment custom
       case 'normal_justify':
-        return (
-          <p className="mb-4 leading-relaxed text-muted-foreground text-justify">
-            {children}
-          </p>
-        )
+        return <p className="mb-4 leading-relaxed text-muted-foreground text-justify">{children}</p>
       case 'normal_center':
-        return (
-          <p className="mb-4 leading-relaxed text-muted-foreground text-center">
-            {children}
-          </p>
-        )
+        return <p className="mb-4 leading-relaxed text-muted-foreground text-center">{children}</p>
       case 'normal_right':
-        return (
-          <p className="mb-4 leading-relaxed text-muted-foreground text-right">
-            {children}
-          </p>
-        )
+        return <p className="mb-4 leading-relaxed text-muted-foreground text-right">{children}</p>
       case 'normal_left':
-        return (
-          <p className="mb-4 leading-relaxed text-muted-foreground text-left">
-            {children}
-          </p>
-        )
-
+        return <p className="mb-4 leading-relaxed text-muted-foreground text-left">{children}</p>
       default:
-        // Default (Normal)
         return (
           <p
             className={cn(
@@ -74,8 +55,8 @@ const components: PortableTextComponents = {
     }
   },
 
-  list: ({ children, value }) => {
-    return value.list === 'bullet' ? (
+  list: ({ children, value }) =>
+    value.list === 'bullet' ? (
       <ul className="list-disc space-y-1 ml-6 mb-4 text-muted-foreground marker:text-primary">
         {children}
       </ul>
@@ -83,31 +64,21 @@ const components: PortableTextComponents = {
       <ol className="list-decimal space-y-1 ml-6 mb-4 text-muted-foreground marker:text-primary">
         {children}
       </ol>
-    )
-  },
+    ),
 
   listItem: ({ children }) => <li className="pl-1">{children}</li>,
 
-  // 👇 Dekorasi (marks)
   marks: {
-    strong: ({ children }) => (
-      <strong className="font-bold text-foreground">{children}</strong>
-    ),
-    em: ({ children }) => (
-      <em className="italic text-foreground">{children}</em>
-    ),
+    strong: ({ children }) => <strong className="font-bold text-foreground">{children}</strong>,
+    em: ({ children }) => <em className="italic text-foreground">{children}</em>,
     underline: ({ children }) => (
-      <span className="underline underline-offset-4 decoration-primary/50">
-        {children}
-      </span>
+      <span className="underline underline-offset-4 decoration-primary/50">{children}</span>
     ),
     'strike-through': ({ children }) => (
       <span className="line-through decoration-destructive/50">{children}</span>
     ),
     code: ({ children }) => (
-      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono text-primary">
-        {children}
-      </code>
+      <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono text-primary">{children}</code>
     ),
     link: ({ children, value }) => {
       const href = value.href || '#'
