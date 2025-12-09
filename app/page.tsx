@@ -16,9 +16,6 @@ export default function Page() {
       {/* Hero */}
       <HeroSection />
 
-      {/* Programs */}
-      <ProgramsSection />
-
       {/* Expert Clusters */}
       <ExpertClustersSection />
 
@@ -27,6 +24,9 @@ export default function Page() {
 
       {/* Podcast */}
       <PodcastSection />
+	  
+	  {/* Programs */}
+      <ProgramsSection />
 
       {/* Pengumuman & Berita */}
       <AnnouncementsSection />

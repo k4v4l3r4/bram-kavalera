@@ -1,12 +1,14 @@
 // FILE: components/sections/hero.tsx
-// Server Component (tidak menggunakan "use client")
+"use client"
 
+import React, { useState, useEffect } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { ArrowRight } from "lucide-react"
 import { client } from "@/sanity/lib/client"
 import { urlFor } from "@/sanity/lib/image"
 import type { SanityImageSource } from "@sanity/image-url/lib/types"
+import { motion } from "framer-motion"
 
 interface Institution {
   label: string
@@ -37,10 +39,13 @@ async function getHeroData(): Promise<HeroData | null> {
   }
 }
 
-export default async function HeroSection() {
-  const data = await getHeroData()
+export default function HeroSection() {
+  const [data, setData] = useState<HeroData | null>(null)
 
-  // Fallback jika data tidak ada
+  useEffect(() => {
+    getHeroData().then(setData)
+  }, [])
+
   if (!data?.title) {
     return (
       <section className="py-32 text-center container bg-gray-50">
@@ -56,30 +61,46 @@ export default async function HeroSection() {
 
   return (
     <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
-      <div className="absolute inset-0 -z-10 bg-gradient-to-b from-primary/5 via-background to-background" />
+      {/* Background gradient animasi */}
+      <div className="absolute inset-0 -z-10 bg-gradient-to-r from-primary via-purple-500 to-pink-500 animate-gradient-x opacity-20" />
 
       <div className="container px-4 md:px-6">
         <div className="flex flex-col lg:flex-row items-center gap-12">
           {/* === KONTEN TEKS === */}
           <div className="flex-1 space-y-8 text-center lg:text-left">
             <div className="space-y-4">
-              <h1 className="text-4xl md:text-6xl font-bold tracking-tight animate-fadeIn">
+              <motion.h1
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 1 }}
+                className="text-4xl md:text-6xl font-bold tracking-tight"
+              >
                 {data.title}
-              </h1>
-              <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto lg:mx-0 animate-slideUp">
+              </motion.h1>
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 1.2 }}
+                className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto lg:mx-0"
+              >
                 {data.subtitle}
-              </p>
+              </motion.p>
             </div>
 
-            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4">
-            <Link
-  href="/about"
-  className="inline-flex h-12 items-center justify-center rounded-full bg-primary px-8 text-sm font-medium text-primary-foreground shadow transition-transform duration-300 hover:scale-105 hover:bg-primary/90"
->
-  VISI & MISI
-  <ArrowRight className="ml-2 h-4 w-4" />
-</Link>
-            </div>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 1.4 }}
+              className="flex flex-wrap items-center justify-center lg:justify-start gap-4"
+            >
+              <Link
+                href="/about"
+                className="inline-flex h-12 items-center justify-center rounded-full bg-gradient-to-r from-primary to-pink-500 px-8 text-sm font-medium text-white shadow-lg transition-transform duration-300 hover:scale-105"
+              >
+                VISI & MISI
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            </motion.div>
 
             {/* === LOGO INSTITUSI === */}
             {data.institutions?.length > 0 && (
@@ -88,24 +109,29 @@ export default async function HeroSection() {
                   Didukung oleh:
                 </p>
 
-                <div className="flex flex-wrap items-center justify-center lg:justify-start gap-6 grayscale opacity-70 hover:opacity-100 transition-opacity">
+                <div className="flex flex-wrap items-center justify-center lg:justify-start gap-10">
                   {data.institutions.map((inst, index) => {
                     if (!inst.logo) return null
                     return (
-                      <div
+                      <motion.div
                         key={index}
-                        className="relative h-10 w-24 transition-transform duration-500 hover:scale-110"
+                        whileHover={{ scale: 1.15 }}
+                        className="relative h-24 w-24"
                       >
                         <Image
-                          src={urlFor(inst.logo).width(200).auto("format").quality(80).url()}
+                          src={urlFor(inst.logo)
+                            .width(300)
+                            .auto("format")
+                            .quality(90)
+                            .url()}
                           alt={inst.alt || inst.label || "Institution Logo"}
                           fill
                           loading="lazy"
                           decoding="async"
-                          className="object-contain"
-                          sizes="100px"
+                          className="object-contain brightness-110 contrast-110 hover:drop-shadow-lg transition"
+                          sizes="96px"
                         />
-                      </div>
+                      </motion.div>
                     )
                   })}
                 </div>
@@ -116,16 +142,24 @@ export default async function HeroSection() {
           {/* === GAMBAR HERO === */}
           <div className="flex-1 w-full max-w-[600px] lg:max-w-none">
             {heroImage ? (
-              <div className="relative aspect-square md:aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl border border-border group">
+              <motion.div
+                animate={{ y: [0, -15, 0] }}
+                transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                className="relative aspect-square md:aspect-[4/3] rounded-2xl overflow-hidden shadow-2xl border border-border group"
+              >
                 <Image
-                  src={urlFor(heroImage).width(1200).auto("format").quality(80).url()}
+                  src={urlFor(heroImage)
+                    .width(1200)
+                    .auto("format")
+                    .quality(80)
+                    .url()}
                   alt={(heroImage as any).alt || "Hero Image"}
                   fill
                   priority
                   className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                   sizes="(max-width: 768px) 100vw, 50vw"
                 />
-              </div>
+              </motion.div>
             ) : (
               <div
                 className="aspect-video bg-muted rounded-xl flex items-center justify-center text-muted-foreground"

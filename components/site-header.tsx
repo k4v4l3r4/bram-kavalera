@@ -62,20 +62,27 @@ export function SiteHeader() {
     >
       <div className="container mx-auto px-4 md:px-6">
         <div className="flex items-center justify-between">
-          {/* Logo */}
+          {/* Logo dengan animasi flip depan-belakang */}
           <Link
             href="/"
             className="flex items-center gap-3 group z-50"
             onClick={() => setActiveSection("/")}
           >
-            <Image
-              src="/logo-pprnp.png"
-              alt="Logo PPRNP"
-              width={64}
-              height={64}
-              className="h-16 w-auto object-contain animate-[spin_12s_linear_infinite]"
-              priority
-            />
+            <motion.div
+              animate={{ rotateY: [0, 180, 0] }}
+              transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+              className="h-16 w-16"
+              style={{ transformStyle: "preserve-3d" }}
+            >
+              <Image
+                src="/logo-pprnp.png"
+                alt="Logo PPRNP"
+                width={64}
+                height={64}
+                className="h-16 w-auto object-contain"
+                priority
+              />
+            </motion.div>
           </Link>
 
           {/* Desktop Nav */}
