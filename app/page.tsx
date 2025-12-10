@@ -10,35 +10,20 @@ import HousingInfoSection from "@/components/sections/housing-info"
 import ContactSection from "@/components/sections/contact"
 import SiteFooter from "@/components/site-footer"
 
-export default function Page() {
+export default function HomePage() {
   return (
-    <main>
-      {/* Hero */}
-      <HeroSection />
-
-      {/* Expert Clusters */}
-      <ExpertClustersSection />
-
-      {/* Expert Forum */}
-      <ExpertForumSection />
-
-      {/* Podcast */}
-      <PodcastSection />
-	  
-	  {/* Programs */}
-      <ProgramsSection />
-
-      {/* Pengumuman & Berita */}
-      <AnnouncementsSection />
-
-      {/* Info Warga */}
-      <HousingInfoSection />
-
-      {/* Kontak */}
-      <ContactSection />
-
-      {/* Footer */}
+    <>
+      <main>
+        <HeroSection />
+        <ExpertClustersSection />
+        <ExpertForumSection />
+        <PodcastSection />
+        <ProgramsSection />
+        <AnnouncementsSection />
+        <HousingInfoSection />
+        <ContactSection />
+      </main>
       <SiteFooter />
-    </main>
+    </>
   )
 }
