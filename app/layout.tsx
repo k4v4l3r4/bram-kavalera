@@ -5,12 +5,12 @@ import { Inter } from "next/font/google"
 import "./globals.css"
 import { cn } from "@/lib/utils"
 
-// Import komponen untuk efek visual & Audio
+// Komponen efek visual & audio
 import { ScrollProgress } from "@/components/ui/scroll-progress"
 import { BackToTop } from "@/components/ui/back-to-top"
 import { BackgroundMusic } from "@/components/ui/background-music"
 
-// Import Header
+// Header utama website
 import { SiteHeader } from "@/components/site-header"
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" })
@@ -34,19 +34,19 @@ export default function RootLayout({
         )}
         suppressHydrationWarning
       >
-        {/* 1. Garis Progress di Atas */}
+        {/* Garis progress scroll */}
         <ScrollProgress />
 
-        {/* 2. Background Pola Bintik */}
+        {/* Background grid */}
         <div className="absolute inset-0 -z-10 bg-grid-pattern" />
 
-        {/* 3. Header */}
+        {/* Header global */}
         <SiteHeader />
 
-        {/* Konten Utama Website */}
+        {/* Konten utama */}
         <main className="flex-1">{children}</main>
 
-        {/* 4. Tombol Kembali ke Atas & Musik */}
+        {/* Audio & tombol kembali ke atas */}
         <BackgroundMusic />
         <BackToTop />
       </body>
