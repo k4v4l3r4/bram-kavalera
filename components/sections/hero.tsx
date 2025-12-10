@@ -76,7 +76,7 @@ export default async function HeroSection() {
                 href="/about"
                 className="inline-flex h-12 items-center justify-center rounded-full bg-primary px-8 text-sm font-medium text-primary-foreground shadow transition-transform duration-300 hover:scale-105 hover:bg-primary/90"
               >
-                VISI & MISI
+                ABOUT US
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </div>
