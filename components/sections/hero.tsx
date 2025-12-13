@@ -1,5 +1,3 @@
-// === HERO SECTION UPDATED WITH 3D TEXT + LETTER BY LETTER ===
-
 "use client"
 
 import Link from "next/link"
@@ -24,7 +22,6 @@ interface HeroData {
   institutions: Institution[]
 }
 
-// === ANIMASI HURUF PER HURUF + EFEK 3D ===
 const letterVariants = {
   hidden: {
     opacity: 0,
@@ -42,7 +39,6 @@ const letterVariants = {
   },
 }
 
-// === KOMPUTASI LOGO PROPORSIONAL ===
 function InstitutionLogo({ logo, alt, label }: Institution) {
   return (
     <div className="flex items-center justify-center h-24 w-24 p-2 bg-white/10 rounded-xl shadow-sm transition-transform duration-300 hover:-translate-y-1">
@@ -84,8 +80,6 @@ export default function HeroSection() {
     )
   }
 
-  const heroImage = data.images?.[0] || null
-
   return (
     <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden animate-gradient">
       <div className="absolute inset-0 -z-10 bg-gradient-to-b from-primary/10 via-background to-background" />
@@ -105,50 +99,22 @@ export default function HeroSection() {
               Official Website PPRNP
             </span>
 
-            {/* === TEKS 3D ANIMATED === */}
             <div className="space-y-4 text-balance group transition-transform duration-700 ease-out">
-
-              {/* PURNABHAKTI */}
-              <motion.h1
-                className="text-5xl md:text-6xl font-extrabold text-blue-800 drop-shadow-[0_3px_6px_rgba(0,0,0,0.35)]"
-                initial="hidden"
-                animate="visible"
-                variants={{ visible: { transition: { staggerChildren: 0.06 } } }}
-              >
-                {"PURNABHAKTI".split("").map((char, i) => (
-                  <motion.span key={i} variants={letterVariants}>
-                    {char}
-                  </motion.span>
-                ))}
-              </motion.h1>
-
-              {/* BATAN · BPPT */}
-              <motion.h2
-                className="text-4xl md:text-5xl font-bold text-blue-700 drop-shadow-[0_3px_6px_rgba(0,0,0,0.35)]"
-                initial="hidden"
-                animate="visible"
-                variants={{ visible: { transition: { staggerChildren: 0.06, delayChildren: 0.7 } } }}
-              >
-                {"BATAN · BPPT".split("").map((char, i) => (
-                  <motion.span key={i} variants={letterVariants}>
-                    {char}
-                  </motion.span>
-                ))}
-              </motion.h2>
-
-              {/* LIPI · PUSPIPTEK */}
-              <motion.h2
-                className="text-4xl md:text-5xl font-bold text-blue-700 drop-shadow-[0_3px_6px_rgba(0,0,0,0.35)]"
-                initial="hidden"
-                animate="visible"
-                variants={{ visible: { transition: { staggerChildren: 0.06, delayChildren: 1.5 } } }}
-              >
-                {"LIPI · PUSPIPTEK".split("").map((char, i) => (
-                  <motion.span key={i} variants={letterVariants}>
-                    {char}
-                  </motion.span>
-                ))}
-              </motion.h2>
+              {["PURNABHAKTI", "BATAN · BPPT", "LIPI · PUSPIPTEK"].map((text, i) => (
+                <motion.h2
+                  key={i}
+                  className={`text-${i === 0 ? "5xl md:text-6xl" : "4xl md:text-5xl"} font-bold text-blue-700 drop-shadow-[0_3px_6px_rgba(0,0,0,0.35)]`}
+                  initial="hidden"
+                  animate="visible"
+                  variants={{ visible: { transition: { staggerChildren: 0.06, delayChildren: i * 0.8 } } }}
+                >
+                  {text.split("").map((char, j) => (
+                    <motion.span key={j} variants={letterVariants}>
+                      {char}
+                    </motion.span>
+                  ))}
+                </motion.h2>
+              ))}
             </div>
 
             <p className="mt-4 text-base sm:text-lg md:text-xl text-muted-foreground leading-relaxed max-w-2xl mx-auto lg:mx-0">
@@ -187,26 +153,29 @@ export default function HeroSection() {
             )}
           </motion.div>
 
-          {/* === GAMBAR HERO === */}
+          {/* === GAMBAR SLIDES === */}
           <motion.div
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, ease: "easeOut" }}
             viewport={{ once: true }}
-            className="w-full max-w-[600px] lg:max-w-none"
+            className="w-full space-y-6"
           >
-            {heroImage ? (
-              <div className="relative aspect-square md:aspect-[4/3] rounded-2xl overflow-hidden border border-white/20 backdrop-blur-md bg-white/10 shadow-xl group perspective">
+            {data.images?.map((img, index) => (
+              <div
+                key={index}
+                className="relative w-full h-[400px] md:h-[500px] rounded-2xl overflow-hidden border border-white/20 backdrop-blur-md bg-white/10 shadow-xl group"
+              >
                 <Image
-                  src={urlFor(heroImage).width(1200).auto("format").quality(80).url()}
-                  alt={(heroImage as any).alt || "Hero Image"}
+                  src={urlFor(img).width(1600).auto("format").quality(85).url()}
+                  alt={(img as any).alt || `Hero Image ${index + 1}`}
                   fill
-                  priority
-                  className="object-cover transition-transform duration-700 ease-out group-hover:rotate-y-6 group-hover:scale-105"
+                  priority={index === 0}
+                  className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                   sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 600px"
                 />
               </div>
-            ) : null}
+            ))}
           </motion.div>
 
         </div>
