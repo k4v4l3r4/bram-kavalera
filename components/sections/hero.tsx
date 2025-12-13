@@ -4,7 +4,7 @@
 
 import Link from "next/link"
 import Image from "next/image"
-import { ArrowRight } from "lucide-react"a
+import { ArrowRight } from "lucide-react"
 import { motion } from "framer-motion"
 import { client } from "@/sanity/lib/client"
 import { urlFor } from "@/sanity/lib/image"
