@@ -42,6 +42,23 @@ const letterVariants = {
   },
 }
 
+// === KOMPUTASI LOGO PROPORSIONAL ===
+function InstitutionLogo({ logo, alt, label }: Institution) {
+  return (
+    <div className="flex items-center justify-center h-24 w-24 p-2 bg-white/10 rounded-xl shadow-sm transition-transform duration-300 hover:-translate-y-1">
+      <Image
+        src={urlFor(logo).width(200).auto("format").quality(90).url()}
+        alt={alt || label || "Institution Logo"}
+        width={96}
+        height={96}
+        loading="lazy"
+        decoding="async"
+        className="object-contain brightness-110 contrast-110"
+      />
+    </div>
+  )
+}
+
 export default function HeroSection() {
   const [data, setData] = useState<HeroData | null>(null)
 
@@ -139,44 +156,32 @@ export default function HeroSection() {
             </p>
 
             <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4">
-<Link
-  href="/about"
-  className="relative inline-block px-8 py-3 font-medium text-white bg-blue-600 rounded-full overflow-hidden group shadow-lg hover:shadow-blue-500/40 hover:scale-105 transition-all duration-500 cta-pulse"
->
-  <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-out" />
-  <span className="relative z-10 flex items-center gap-2 animate-pulse">
-    ABOUT US <ArrowRight className="h-4 w-4" />
-  </span>
-</Link>
+              <Link
+                href="/about"
+                className="relative inline-block px-8 py-3 font-medium text-white bg-blue-600 rounded-full overflow-hidden group shadow-lg hover:shadow-blue-500/40 hover:scale-105 transition-all duration-500 cta-pulse"
+              >
+                <span className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-out" />
+                <span className="relative z-10 flex items-center gap-2 animate-pulse">
+                  ABOUT US <ArrowRight className="h-4 w-4" />
+                </span>
+              </Link>
             </div>
 
             {data.institutions?.length > 0 && (
               <div className="pt-8 border-t border-border/50">
                 <p className="text-sm text-muted-foreground mb-4 font-medium">Didukung oleh:</p>
                 <div className="flex flex-wrap items-center justify-center lg:justify-start gap-10">
-                  {data.institutions.map((inst, index) => {
-                    if (!inst.logo) return null
-                    return (
-                      <motion.div
-                        key={index}
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6, delay: index * 0.1 }}
-                        viewport={{ once: true }}
-                        className="relative h-24 w-24 transition-transform duration-300 hover:-translate-y-1"
-                      >
-                        <Image
-                          src={urlFor(inst.logo).width(300).auto("format").quality(90).url()}
-                          alt={inst.alt || inst.label || "Institution Logo"}
-                          fill
-                          loading="lazy"
-                          decoding="async"
-                          className="object-contain brightness-110 contrast-110"
-                          sizes="96px"
-                        />
-                      </motion.div>
-                    )
-                  })}
+                  {data.institutions.map((inst, index) => (
+                    <motion.div
+                      key={index}
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.6, delay: index * 0.1 }}
+                      viewport={{ once: true }}
+                    >
+                      <InstitutionLogo {...inst} />
+                    </motion.div>
+                  ))}
                 </div>
               </div>
             )}
@@ -209,4 +214,3 @@ export default function HeroSection() {
     </section>
   )
 }
-
