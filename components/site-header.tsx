@@ -14,7 +14,7 @@ const navigation = [
   { name: "Workshop", href: "/#expert-forum" },
   { name: "Podcast", href: "/#podcast" },
   { name: "Program", href: "/#programs" },
-  { name: "Berita", href: "/#news" },
+  { name: "Informasi", href: "/#news" }, // ← diganti dari Berita
   { name: "Info Warga", href: "/#info" },
   { name: "Kontak", href: "/#contact" },
 ]
@@ -100,6 +100,7 @@ export function SiteHeader() {
                       ? "text-primary font-semibold"
                       : "text-foreground/70 hover:text-primary"
                   )}
+                  aria-current={isActive ? "page" : undefined}
                 >
                   {item.name}
                   {isActive && (
@@ -169,7 +170,7 @@ export function SiteHeader() {
 
               <div className="mt-8 space-y-4">
                 <div className="flex justify-center gap-6 py-6 text-muted-foreground">
-                  <a href="#" className="hover:text-primary">
+                  <a href="mailto:info@pprnp.or.id" className="hover:text-primary">
                     <Mail className="h-5 w-5" />
                   </a>
                 </div>
