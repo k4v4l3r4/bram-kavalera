@@ -11,49 +11,63 @@ export const aboutType = defineType({
       type: 'string',
       initialValue: 'Membangun Kebersamaan di Lingkungan Teknologi'
     }),
-    
-    // Deskripsi (Block Content agar bisa Justify)
+
+    //-----------------------------------------
+    // 1. PENJELASAN TENTANG PUSIPTEK
+    //-----------------------------------------
     defineField({
-      name: 'description',
-      title: 'Deskripsi Panjang',
-      type: 'blockContent', 
+      name: 'penjelasanPusiptek',
+      title: 'Penjelasan Tentang Pusiptek',
+      type: 'blockContent',
     }),
-     
-    // FIELD OBJECTIVES (Tujuan PPRNP)
+
+    //-----------------------------------------
+    // 2. TENTANG PPRNP (editable nanti dari sekretariat)
+    //-----------------------------------------
     defineField({
-      name: 'objectives',
-      title: 'Objectives (Tujuan PPRNP)',
+      name: 'tentangPPRNP',
+      title: 'Tentang PPRNP',
+      type: 'blockContent',
+    }),
+
+    //-----------------------------------------
+    // 3. PENGURUS PPRNP
+    //-----------------------------------------
+    defineField({
+      name: 'pengurus',
+      title: 'Pengurus PPRNP',
       type: 'array',
       of: [
         {
           type: 'object',
+          title: 'Pengurus',
           fields: [
-            // Goal juga Block Content agar bisa diatur style-nya
-            { name: 'goal', type: 'blockContent', title: 'Poin Tujuan' },
-          ],
-        },
-      ],
-      description: 'Gunakan untuk poin-poin panjang Tujuan PPRNP. Masukkan satu poin per item.',
+            { name: 'nama', title: 'Nama Pengurus', type: 'string' },
+            { name: 'jabatan', title: 'Jabatan', type: 'string' },
+            { name: 'foto', title: 'Foto', type: 'image' },
+          ]
+        }
+      ]
     }),
-     
-    // GROUP VISI & MISI
+
+    //-----------------------------------------
+    // 4. DATA & INFORMASI PPRNP
+    //-----------------------------------------
     defineField({
-        name: 'visiMisiGroup',
-        title: 'Visi & Misi',
-        type: 'object',
-        fields: [
-            defineField({
-                name: 'vision',
-                title: 'Visi', 
-                type: 'blockContent', 
-            }),
-            defineField({
-                name: 'missions',
-                title: 'Misi', 
-                type: 'array',
-                of: [{ type: 'string' }],
-            }),
-        ]
+      name: 'dataInformasi',
+      title: 'Data & Informasi PPRNP',
+      type: 'array',
+      of: [
+        {
+          type: 'object',
+          title: 'Data atau Dokumen',
+          fields: [
+            { name: 'judul', type: 'string', title: 'Judul Data/Informasi' },
+            { name: 'file', type: 'file', title: 'Upload File (PDF/Dokumen)' },
+            { name: 'deskripsi', type: 'text', title: 'Deskripsi Singkat' },
+          ]
+        }
+      ]
     }),
   ],
 })
