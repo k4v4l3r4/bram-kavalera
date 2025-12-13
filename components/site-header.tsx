@@ -14,7 +14,7 @@ const navigation = [
   { name: "Workshop", href: "/#expert-forum" },
   { name: "Podcast", href: "/#podcast" },
   { name: "Program", href: "/#programs" },
-  { name: "Informasi", href: "/#news" },
+  { name: "Berita", href: "/#news" },
   { name: "Info Warga", href: "/#info" },
   { name: "Kontak", href: "/#contact" },
 ]
