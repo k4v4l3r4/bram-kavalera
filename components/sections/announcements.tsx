@@ -50,28 +50,37 @@ export default function AnnouncementsSection() {
   if (!data) return null
 
   return (
-    <section id="news" className="py-20 bg-muted/50">
-      <div className="container px-4 md:px-6">
-        <h2 className="text-3xl font-bold mb-6 text-center text-slate-800">
-          {data.title || "Pengumuman & Berita"}
-        </h2>
+    <section id="news" className="py-16 md:py-24 bg-muted/50">
+      <div className="container mx-auto px-4 md:px-6">
 
-        {data.description && (
-          <div className="max-w-2xl mx-auto mb-10 text-center text-muted-foreground">
-            <PortableTextRenderer blocks={data.description} />
-          </div>
-        )}
+        {/* Header */}
+        <div className="mb-8 max-w-3xl">
+          <h2 className="text-3xl md:text-4xl font-extrabold text-slate-800">
+            {data.title || "Pengumuman & Berita"}
+          </h2>
 
+          {data.description && (
+            <div className="mt-3 text-muted-foreground">
+              <PortableTextRenderer blocks={data.description} />
+            </div>
+          )}
+        </div>
+
+        {/* Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {data.items?.map((item, i) => (
             <div
               key={i}
-              className="flex flex-col bg-white rounded-xl shadow border overflow-hidden"
+              className="flex flex-col bg-white rounded-xl border shadow-sm overflow-hidden hover:shadow-md transition"
             >
               {item.image && (
                 <div className="relative h-48 w-full">
                   <Image
-                    src={urlFor(item.image).width(600).auto("format").quality(80).url()}
+                    src={urlFor(item.image)
+                      .width(600)
+                      .auto("format")
+                      .quality(80)
+                      .url()}
                     alt={item.title}
                     fill
                     className="object-cover"
@@ -80,16 +89,17 @@ export default function AnnouncementsSection() {
               )}
 
               <div className="p-6 flex flex-col flex-1">
-                <h3 className="font-bold text-lg text-slate-800 mb-2">
+                <h3 className="font-bold text-lg text-slate-800 mb-2 line-clamp-2">
                   {item.title}
                 </h3>
+
                 <p className="text-xs text-muted-foreground mb-3">
-                  {item.date} • {item.readTime || "2 min read"}{" "}
-                  {item.category && `• ${item.category}`}
+                  {item.date} • {item.readTime || "2 min read"}
+                  {item.category && ` • ${item.category}`}
                 </p>
 
                 {item.excerpt && (
-                  <div className="text-sm text-muted-foreground flex-1">
+                  <div className="text-sm text-muted-foreground flex-1 line-clamp-3">
                     <PortableTextRenderer blocks={item.excerpt} />
                   </div>
                 )}
@@ -97,6 +107,7 @@ export default function AnnouncementsSection() {
             </div>
           ))}
         </div>
+
       </div>
     </section>
   )
