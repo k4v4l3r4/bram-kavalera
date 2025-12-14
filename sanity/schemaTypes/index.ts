@@ -12,6 +12,7 @@ import { contactType } from './contact'
 import { footerType } from './footer'
 import { blockContentType } from './blockContent'
 import { expertClustersType } from './expertClusters'
+import { productInnovation } from "./productInnovation"
 
 export const schema: { types: SchemaTypeDefinition[] } = {
   types: [
@@ -26,5 +27,6 @@ export const schema: { types: SchemaTypeDefinition[] } = {
     footerType,
     blockContentType,
     expertClustersType,
+	productInnovation,
   ],
 }

@@ -4,6 +4,7 @@ import HeroSection from "@/components/sections/hero"
 import ProgramsSection from "@/components/sections/programs"
 import ExpertClustersSection from "@/components/sections/expert-clusters"
 import ExpertForumSection from "@/components/sections/expert-forum"
+import { ProductInnovation } from "@/components/sections/product-innovation"
 import PodcastSection from "@/components/sections/podcast"
 import AnnouncementsSection from "@/components/sections/announcements"
 import HousingInfoSection from "@/components/sections/housing-info"
@@ -17,6 +18,7 @@ export default function HomePage() {
         <HeroSection />
         <ExpertClustersSection />
         <ExpertForumSection />
+		 <ProductInnovation />
         <PodcastSection />
         <ProgramsSection />
         <AnnouncementsSection />

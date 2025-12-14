@@ -1,29 +1,36 @@
-// FILE: components/SiteHeader.tsx
 "use client"
 
 import * as React from "react"
 import Link from "next/link"
 import Image from "next/image"
+import { usePathname } from "next/navigation"
 import { Menu, X, Mail, ChevronRight } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import { cn } from "@/lib/utils"
 
+/* ================= NAVIGATION ================= */
 const navigation = [
   { name: "Beranda", href: "/" },
   { name: "Expertise Profile", href: "/#expert-clusters" },
   { name: "Workshop", href: "/#expert-forum" },
   { name: "Podcast", href: "/#podcast" },
   { name: "Program", href: "/#programs" },
-  { name: "Informasi", href: "/#news" }, // ← diganti dari Berita
+  { name: "Informasi", href: "/#news" },
   { name: "Info Warga", href: "/#info" },
   { name: "Kontak", href: "/#contact" },
 ]
 
 export function SiteHeader() {
+  /* ================= HIDE DI SANITY STUDIO ================= */
+  const pathname = usePathname()
+  if (pathname?.startsWith("/studio")) return null
+
+  /* ================= STATE ================= */
   const [isScrolled, setIsScrolled] = React.useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false)
   const [activeSection, setActiveSection] = React.useState("/")
 
+  /* ================= SCROLL DETECTION ================= */
   React.useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20)
@@ -34,14 +41,16 @@ export function SiteHeader() {
           if (window.scrollY < 300) setActiveSection("/")
           continue
         }
+
         const sectionId = item.href.replace("/#", "")
         const element = document.getElementById(sectionId)
-        if (element) {
-          const offsetTop = element.offsetTop
-          const offsetBottom = offsetTop + element.offsetHeight
-          if (scrollPosition >= offsetTop && scrollPosition < offsetBottom) {
-            setActiveSection(item.href)
-          }
+        if (!element) continue
+
+        const offsetTop = element.offsetTop
+        const offsetBottom = offsetTop + element.offsetHeight
+
+        if (scrollPosition >= offsetTop && scrollPosition < offsetBottom) {
+          setActiveSection(item.href)
         }
       }
     }
@@ -51,6 +60,7 @@ export function SiteHeader() {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
+  /* ================= RENDER ================= */
   return (
     <header
       className={cn(
@@ -62,7 +72,7 @@ export function SiteHeader() {
     >
       <div className="container mx-auto px-4 md:px-6">
         <div className="flex items-center justify-between">
-          {/* Logo dengan animasi flip depan-belakang */}
+          {/* ================= LOGO ================= */}
           <Link
             href="/"
             className="flex items-center gap-3 group z-50"
@@ -85,7 +95,7 @@ export function SiteHeader() {
             </motion.div>
           </Link>
 
-          {/* Desktop Nav */}
+          {/* ================= DESKTOP NAV ================= */}
           <nav className="hidden lg:flex items-center gap-1 bg-white/40 backdrop-blur-md px-2 py-1.5 rounded-full border border-white/30 shadow-sm absolute left-1/2 -translate-x-1/2">
             {navigation.map((item) => {
               const isActive = activeSection === item.href
@@ -115,22 +125,26 @@ export function SiteHeader() {
             })}
           </nav>
 
-          <div className="hidden lg:block w-16"></div>
+          <div className="hidden lg:block w-16" />
 
-          {/* Mobile Menu Button */}
+          {/* ================= MOBILE BUTTON ================= */}
           <div className="lg:hidden z-50">
             <button
               aria-label="Toggle menu"
               className="p-2 text-foreground/80 hover:text-primary transition-colors"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >
-              {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              {isMobileMenuOpen ? (
+                <X className="h-6 w-6" />
+              ) : (
+                <Menu className="h-6 w-6" />
+              )}
             </button>
           </div>
         </div>
       </div>
 
-      {/* Mobile Menu */}
+      {/* ================= MOBILE MENU ================= */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div

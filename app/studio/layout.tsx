@@ -1,13 +1,14 @@
-// FILE: app/studio/layout.tsx
+// app/studio/layout.tsx
 import type React from "react"
 
-export default function StudioLayout({ children }: { children: React.ReactNode }) {
+export default function StudioLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
   return (
-    <html lang="id">
-      <body className="font-sans min-h-screen">
-        {/* Tidak ada SiteHeader di sini */}
-        {children}
-      </body>
-    </html>
+    <div className="min-h-screen font-sans">
+      {children}
+    </div>
   )
 }
