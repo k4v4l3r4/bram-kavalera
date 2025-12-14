@@ -43,7 +43,7 @@ export default function AboutSection() {
   return (
     <section className="max-w-5xl mx-auto py-12 px-4">
       {/* JUDUL */}
-      <h1 className="text-3xl font-bold mb-8 text-center">
+      <h1 className="text-3xl font-bold mb-8 text-center scroll-mt-24">
         {data.title}
       </h1>
 
@@ -51,7 +51,12 @@ export default function AboutSection() {
             1. PENJELASAN PUSIPTEK
       ============================ */}
       <div className="mb-12">
-        <h2 className="text-2xl font-semibold mb-2">Penjelasan Pusiptek</h2>
+        <h2
+          id="penjelasan-pusiptek"
+          className="text-2xl font-semibold mb-2 scroll-mt-24"
+        >
+          Penjelasan Pusiptek
+        </h2>
         <PortableText value={data.penjelasanPusiptek} />
       </div>
 
@@ -59,7 +64,12 @@ export default function AboutSection() {
             2. TENTANG PPRNP
       ============================ */}
       <div className="mb-12">
-        <h2 className="text-2xl font-semibold mb-2">Tentang PPRNP</h2>
+        <h2
+          id="tentang-pprnp"
+          className="text-2xl font-semibold mb-2 scroll-mt-24"
+        >
+          Tentang PPRNP
+        </h2>
         <PortableText value={data.tentangPPRNP} />
       </div>
 
@@ -67,7 +77,12 @@ export default function AboutSection() {
             3. PENGURUS PPRNP
       ============================ */}
       <div className="mb-12">
-        <h2 className="text-2xl font-semibold mb-4">Pengurus PPRNP</h2>
+        <h2
+          id="pengurus-pprnp"
+          className="text-2xl font-semibold mb-4 scroll-mt-24"
+        >
+          Pengurus PPRNP
+        </h2>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           {data.pengurus?.map((item: any, index: number) => (
@@ -91,7 +106,12 @@ export default function AboutSection() {
             4. DATA & INFORMASI
       ============================ */}
       <div className="mb-12">
-        <h2 className="text-2xl font-semibold mb-4">Data & Informasi PPRNP</h2>
+        <h2
+          id="data-informasi"
+          className="text-2xl font-semibold mb-4 scroll-mt-24"
+        >
+          Data & Informasi PPRNP
+        </h2>
 
         <div className="space-y-4">
           {data.dataInformasi?.map((item: any, index: number) => (
