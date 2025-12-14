@@ -1,73 +1,156 @@
-import { defineField, defineType } from 'sanity'
+// sanity/schemas/about.ts
+import { defineType, defineField } from "sanity"
 
 export const aboutType = defineType({
-  name: 'about',
-  title: 'About Section (Tentang Kami)',
-  type: 'document',
+  name: "about",
+  title: "About Section (Tentang Kami)",
+  type: "document",
+
   fields: [
+    /* ===============================
+       JUDUL HALAMAN
+    =============================== */
     defineField({
-      name: 'title',
-      title: 'Judul Utama',
-      type: 'string',
-      initialValue: 'Membangun Kebersamaan di Lingkungan Teknologi'
+      name: "title",
+      title: "Judul Halaman",
+      type: "string",
+      validation: (Rule) => Rule.required(),
     }),
 
-    //-----------------------------------------
-    // 1. PENJELASAN TENTANG PUSIPTEK
-    //-----------------------------------------
+    /* ===============================
+       PENJELASAN PUSPIPTEK
+    =============================== */
     defineField({
-      name: 'penjelasanPusiptek',
-      title: 'Penjelasan Tentang Pusiptek',
-      type: 'blockContent',
+      name: "penjelasanPusiptekTitle",
+      title: "Judul Penjelasan Pusiptek",
+      type: "string",
+      initialValue: "Penjelasan Pusiptek",
     }),
 
-    //-----------------------------------------
-    // 2. TENTANG PPRNP (editable nanti dari sekretariat)
-    //-----------------------------------------
     defineField({
-      name: 'tentangPPRNP',
-      title: 'Tentang PPRNP',
-      type: 'blockContent',
+      name: "penjelasanPusiptekImage",
+      title: "Gambar Penjelasan Pusiptek",
+      type: "image",
+      options: { hotspot: true },
     }),
 
-    //-----------------------------------------
-    // 3. PENGURUS PPRNP
-    //-----------------------------------------
     defineField({
-      name: 'pengurus',
-      title: 'Pengurus PPRNP',
-      type: 'array',
+      name: "penjelasanPusiptekContent",
+      title: "Isi Penjelasan Pusiptek",
+      type: "blockContent",
+    }),
+
+    /* ===============================
+       TENTANG PPRNP
+    =============================== */
+    defineField({
+      name: "tentangPPRNPTitle",
+      title: "Judul Tentang PPRNP",
+      type: "string",
+      initialValue: "Tentang PPRNP",
+    }),
+
+    defineField({
+      name: "tentangPPRNPImage",
+      title: "Gambar Tentang PPRNP",
+      type: "image",
+      options: { hotspot: true },
+    }),
+
+    defineField({
+      name: "tentangPPRNPContent",
+      title: "Isi Tentang PPRNP",
+      type: "blockContent",
+    }),
+
+    /* ===============================
+       VISI, MISI, NILAI
+    =============================== */
+    defineField({
+      name: "visi",
+      title: "Visi PPRNP",
+      type: "text",
+      rows: 3,
+      description: "Visi organisasi dalam satu pernyataan strategis",
+    }),
+
+    defineField({
+      name: "misi",
+      title: "Misi PPRNP",
+      type: "array",
+      of: [{ type: "string" }],
+      description: "Daftar misi dalam bentuk poin-poin",
+    }),
+
+    defineField({
+      name: "nilai",
+      title: "Nilai-Nilai PPRNP",
+      type: "array",
+      of: [{ type: "string" }],
+      description: "Nilai utama yang dijunjung organisasi",
+    }),
+
+    /* ===============================
+       PENGURUS
+    =============================== */
+    defineField({
+      name: "pengurus",
+      title: "Pengurus PPRNP",
+      type: "array",
       of: [
         {
-          type: 'object',
-          title: 'Pengurus',
+          type: "object",
           fields: [
-            { name: 'nama', title: 'Nama Pengurus', type: 'string' },
-            { name: 'jabatan', title: 'Jabatan', type: 'string' },
-            { name: 'foto', title: 'Foto', type: 'image' },
-          ]
-        }
-      ]
+            defineField({
+              name: "nama",
+              title: "Nama",
+              type: "string",
+            }),
+            defineField({
+              name: "jabatan",
+              title: "Jabatan",
+              type: "string",
+            }),
+            defineField({
+              name: "foto",
+              title: "Foto",
+              type: "image",
+              options: { hotspot: true },
+            }),
+          ],
+        },
+      ],
     }),
 
-    //-----------------------------------------
-    // 4. DATA & INFORMASI PPRNP
-    //-----------------------------------------
+    /* ===============================
+       DATA & INFORMASI
+    =============================== */
     defineField({
-      name: 'dataInformasi',
-      title: 'Data & Informasi PPRNP',
-      type: 'array',
+      name: "dataInformasi",
+      title: "Data & Informasi",
+      type: "array",
       of: [
         {
-          type: 'object',
-          title: 'Data atau Dokumen',
+          type: "object",
           fields: [
-            { name: 'judul', type: 'string', title: 'Judul Data/Informasi' },
-            { name: 'file', type: 'file', title: 'Upload File (PDF/Dokumen)' },
-            { name: 'deskripsi', type: 'text', title: 'Deskripsi Singkat' },
-          ]
-        }
-      ]
+            defineField({
+              name: "judul",
+              title: "Judul",
+              type: "string",
+            }),
+            defineField({
+              name: "deskripsi",
+              title: "Deskripsi",
+              type: "text",
+            }),
+            defineField({
+              name: "file",
+              title: "File",
+              type: "file",
+            }),
+          ],
+        },
+      ],
     }),
   ],
 })

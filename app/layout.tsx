@@ -27,7 +27,7 @@ export default function RootLayout({
           Header bersifat fixed (SiteHeader ada di dalam children),
           maka konten utama WAJIB diberi padding-top
         */}
-        <main className="pt-[50px]">
+        <main className="pt-[100px]">
           {children}
         </main>
       </body>
