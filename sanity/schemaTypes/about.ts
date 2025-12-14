@@ -1,4 +1,3 @@
-// sanity/schemas/about.ts
 import { defineType, defineField } from "sanity"
 
 export const aboutType = defineType({
@@ -7,14 +6,11 @@ export const aboutType = defineType({
   type: "document",
 
   fields: [
-    /* ===============================
-       JUDUL HALAMAN
-    =============================== */
     defineField({
       name: "title",
       title: "Judul Halaman",
       type: "string",
-      validation: (Rule) => Rule.required(),
+      validation: Rule => Rule.required(),
     }),
 
     /* ===============================
@@ -22,21 +18,18 @@ export const aboutType = defineType({
     =============================== */
     defineField({
       name: "penjelasanPusiptekTitle",
-      title: "Judul Penjelasan Pusiptek",
+      title: "Judul Penjelasan PUSPIPTEK",
       type: "string",
-      initialValue: "Penjelasan Pusiptek",
     }),
-
     defineField({
       name: "penjelasanPusiptekImage",
-      title: "Gambar Penjelasan Pusiptek",
+      title: "Gambar PUSPIPTEK",
       type: "image",
       options: { hotspot: true },
     }),
-
     defineField({
       name: "penjelasanPusiptekContent",
-      title: "Isi Penjelasan Pusiptek",
+      title: "Isi Penjelasan PUSPIPTEK",
       type: "blockContent",
     }),
 
@@ -47,16 +40,13 @@ export const aboutType = defineType({
       name: "tentangPPRNPTitle",
       title: "Judul Tentang PPRNP",
       type: "string",
-      initialValue: "Tentang PPRNP",
     }),
-
     defineField({
       name: "tentangPPRNPImage",
-      title: "Gambar Tentang PPRNP",
+      title: "Gambar PPRNP",
       type: "image",
       options: { hotspot: true },
     }),
-
     defineField({
       name: "tentangPPRNPContent",
       title: "Isi Tentang PPRNP",
@@ -64,89 +54,52 @@ export const aboutType = defineType({
     }),
 
     /* ===============================
-       VISI, MISI, NILAI
+       VISI MISI NILAI
     =============================== */
     defineField({
       name: "visi",
-      title: "Visi PPRNP",
+      title: "Visi",
       type: "text",
-      rows: 3,
-      description: "Visi organisasi dalam satu pernyataan strategis",
     }),
-
     defineField({
       name: "misi",
-      title: "Misi PPRNP",
+      title: "Misi",
       type: "array",
       of: [{ type: "string" }],
-      description: "Daftar misi dalam bentuk poin-poin",
     }),
-
     defineField({
       name: "nilai",
-      title: "Nilai-Nilai PPRNP",
+      title: "Nilai",
       type: "array",
       of: [{ type: "string" }],
-      description: "Nilai utama yang dijunjung organisasi",
     }),
 
     /* ===============================
-       PENGURUS
+       STRUKTUR ORGANISASI
     =============================== */
     defineField({
       name: "pengurus",
-      title: "Pengurus PPRNP",
+      title: "Struktur Pengurus",
       type: "array",
       of: [
         {
           type: "object",
           fields: [
+            defineField({ name: "nama", title: "Nama", type: "string" }),
+            defineField({ name: "jabatan", title: "Jabatan", type: "string" }),
             defineField({
-              name: "nama",
-              title: "Nama",
+              name: "level",
+              title: "Level Struktur",
               type: "string",
-            }),
-            defineField({
-              name: "jabatan",
-              title: "Jabatan",
-              type: "string",
-            }),
-            defineField({
-              name: "foto",
-              title: "Foto",
-              type: "image",
-              options: { hotspot: true },
-            }),
-          ],
-        },
-      ],
-    }),
-
-    /* ===============================
-       DATA & INFORMASI
-    =============================== */
-    defineField({
-      name: "dataInformasi",
-      title: "Data & Informasi",
-      type: "array",
-      of: [
-        {
-          type: "object",
-          fields: [
-            defineField({
-              name: "judul",
-              title: "Judul",
-              type: "string",
-            }),
-            defineField({
-              name: "deskripsi",
-              title: "Deskripsi",
-              type: "text",
-            }),
-            defineField({
-              name: "file",
-              title: "File",
-              type: "file",
+              options: {
+                list: [
+                  { title: "Penasehat", value: "penasehat" },
+                  { title: "Inti", value: "inti" },
+                  { title: "Bidang", value: "bidang" },
+                ],
+                layout: "radio",
+              },
+              validation: Rule => Rule.required(),
             }),
           ],
         },
