@@ -1,64 +1,131 @@
-{/* ================= ORG CHART ================= */}
-{pengurus.length > 0 && (
-  <section className="mb-40">
-    <h2 className="text-3xl font-bold text-center mb-20">
-      Struktur Pengurus PPRNP
-    </h2>
+"use client"
 
-    <div className="relative mx-auto max-w-6xl h-[780px]">
+type Pengurus = {
+  nama: string
+  jabatan: string
+  level: "penasehat" | "inti" | "bidang"
+  bidang?: string
+}
 
-      {/* ================= SVG GARIS ================= */}
-      <svg className="absolute inset-0 w-full h-full" viewBox="0 0 1000 780">
-        {penasehat.length > 0 && inti.length > 0 && (
-          <>
-            <line x1="500" y1="120" x2="500" y2="180" stroke="#CBD5E1" strokeWidth="2" />
-            <line x1="200" y1="180" x2="800" y2="180" stroke="#CBD5E1" strokeWidth="2" />
-          </>
-        )}
+/* ================= ORG CHART ================= */
 
-        {inti.length > 0 && bidang.length > 0 && (
-          <>
-            <line x1="500" y1="360" x2="500" y2="420" stroke="#CBD5E1" strokeWidth="2" />
-            <line x1="150" y1="420" x2="850" y2="420" stroke="#CBD5E1" strokeWidth="2" />
-          </>
-        )}
-      </svg>
+export function OrgChart({
+  penasehat,
+  ketua,
+  wakil,
+  sekretaris,
+  bendahara,
+  bidang,
+}: {
+  penasehat: Pengurus[]
+  ketua?: Pengurus
+  wakil?: Pengurus
+  sekretaris?: Pengurus
+  bendahara?: Pengurus
+  bidang: Pengurus[]
+}) {
+  return (
+    <div className="mx-auto max-w-6xl space-y-20">
 
       {/* ================= PENASEHAT ================= */}
-      {penasehat.map((p, i) => (
-        <OrgBox
-          key={`penasehat-${i}`}
-          x="50%"
-          y={`${30 + i * 72}px`}
-          nama={p.nama}
-          jabatan={p.jabatan?.toUpperCase() || ""}
-          primary
-        />
-      ))}
+      {penasehat.length > 0 && (
+        <section className="text-center">
+          <h3 className="mb-6 text-xl font-semibold">Dewan Penasehat</h3>
+          <div className="flex flex-col items-center gap-4">
+            {penasehat.map((p, i) => (
+              <OrgBox
+                key={i}
+                nama={p.nama}
+                jabatan="PENASEHAT"
+                variant="primary"
+              />
+            ))}
+          </div>
+        </section>
+      )}
 
-      {/* ================= INTI ================= */}
-      {inti.map((p, i) => (
-        <OrgBox
-          key={`inti-${i}`}
-          x={`${20 + i * (60 / Math.max(inti.length - 1, 1))}%`}
-          y="260px"
-          nama={p.nama}
-          jabatan={p.jabatan?.toUpperCase() || ""}
-        />
-      ))}
+      {/* ================= KETUA ================= */}
+      {ketua && (
+        <section className="text-center">
+          <OrgBox
+            nama={ketua.nama}
+            jabatan="KETUA"
+            variant="primary"
+          />
+        </section>
+      )}
+
+      {/* ================= PENGURUS INTI ================= */}
+      <section className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {wakil && (
+          <OrgBox
+            nama={wakil.nama}
+            jabatan="WAKIL KETUA"
+          />
+        )}
+
+        {sekretaris && (
+          <OrgBox
+            nama={sekretaris.nama}
+            jabatan="SEKRETARIS"
+          />
+        )}
+
+        {bendahara && (
+          <OrgBox
+            nama={bendahara.nama}
+            jabatan="BENDAHARA"
+          />
+        )}
+      </section>
 
       {/* ================= BIDANG ================= */}
-      {bidang.map((p, i) => (
-        <OrgBox
-          key={`bidang-${i}`}
-          x={`${15 + i * (70 / Math.max(bidang.length - 1, 1))}%`}
-          y="460px"
-          nama={p.nama}
-          jabatan={p.jabatan?.toUpperCase() || ""}
-          small
-        />
-      ))}
+      {bidang.length > 0 && (
+        <section>
+          <h3 className="mb-8 text-center text-xl font-semibold">
+            Koordinator Bidang
+          </h3>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
+            {bidang.map((b, i) => (
+              <OrgBox
+                key={i}
+                nama={b.nama}
+                jabatan={b.bidang ? `KOORDINATOR ${b.bidang}` : "KOORDINATOR"}
+                variant="small"
+              />
+            ))}
+          </div>
+        </section>
+      )}
 
     </div>
-  </section>
-)}
+  )
+}
+
+/* ================= ORG BOX ================= */
+
+function OrgBox({
+  nama,
+  jabatan,
+  variant = "default",
+}: {
+  nama: string
+  jabatan: string
+  variant?: "default" | "primary" | "small"
+}) {
+  return (
+    <div
+      className={`
+        mx-auto w-full max-w-xs rounded-xl border bg-white text-center shadow-sm
+        ${variant === "primary" ? "px-8 py-5 text-lg font-semibold" : ""}
+        ${variant === "small" ? "px-4 py-3 text-sm" : "px-6 py-4"}
+      `}
+    >
+      <div className="font-semibold">{nama}</div>
+      <div className="mt-1 text-xs uppercase tracking-wide text-muted-foreground">
+        {jabatan}
+      </div>
+    </div>
+  )
+}
