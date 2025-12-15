@@ -96,7 +96,7 @@ export const aboutType = defineType({
           fields: [
             defineField({
               name: "nama",
-              title: "Nama",
+              title: "Nama Lengkap",
               type: "string",
               validation: (Rule) => Rule.required(),
             }),
@@ -111,7 +111,9 @@ export const aboutType = defineType({
                   { title: "Ketua", value: "ketua" },
                   { title: "Wakil Ketua", value: "wakil_ketua" },
                   { title: "Sekretaris", value: "sekretaris" },
+                  { title: "Wakil Sekretaris", value: "wakil_sekretaris" },
                   { title: "Bendahara", value: "bendahara" },
+                  { title: "Wakil Bendahara", value: "wakil_bendahara" },
                   { title: "Koordinator", value: "koordinator" },
                 ],
               },
@@ -135,9 +137,23 @@ export const aboutType = defineType({
 
             defineField({
               name: "bidang",
-              title: "Bidang (Opsional)",
+              title: "Nama Bidang",
               type: "string",
-              description: "Isi jika jabatan Koordinator",
+              description: "Wajib diisi jika Jabatan = Koordinator / Level = Bidang",
+              hidden: ({ parent }) =>
+                parent?.jabatan !== "koordinator" &&
+                parent?.level !== "bidang",
+              validation: (Rule) =>
+                Rule.custom((value, context) => {
+                  const p = context.parent
+                  if (
+                    (p?.jabatan === "koordinator" || p?.level === "bidang") &&
+                    !value
+                  ) {
+                    return "Nama bidang wajib diisi untuk Koordinator"
+                  }
+                  return true
+                }),
             }),
           ],
         },

@@ -12,20 +12,24 @@ type Pengurus = {
 export function OrgChart({
   penasehat,
   ketua,
-  wakil,
+  wakilKetua,
   sekretaris,
+  wakilSekretaris,
   bendahara,
+  wakilBendahara,
   bidang,
 }: {
   penasehat: Pengurus[]
   ketua?: Pengurus
-  wakil?: Pengurus
+  wakilKetua?: Pengurus
   sekretaris?: Pengurus
+  wakilSekretaris?: Pengurus
   bendahara?: Pengurus
+  wakilBendahara?: Pengurus
   bidang: Pengurus[]
 }) {
   return (
-    <div className="mx-auto max-w-6xl space-y-20">
+    <div className="mx-auto max-w-6xl space-y-14">
 
       {/* ================= PENASEHAT ================= */}
       {penasehat.length > 0 && (
@@ -46,7 +50,7 @@ export function OrgChart({
 
       {/* ================= KETUA ================= */}
       {ketua && (
-        <section className="text-center">
+        <section className="flex justify-center">
           <OrgBox
             nama={ketua.nama}
             jabatan="KETUA"
@@ -55,28 +59,57 @@ export function OrgChart({
         </section>
       )}
 
-      {/* ================= PENGURUS INTI ================= */}
-      <section className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {wakil && (
-          <OrgBox
-            nama={wakil.nama}
-            jabatan="WAKIL KETUA"
-          />
+      {/* ================= WAKIL + INTI ================= */}
+      <section className="space-y-10">
+
+        {wakilKetua && (
+          <div className="flex justify-center">
+            <OrgBox
+              nama={wakilKetua.nama}
+              jabatan="WAKIL KETUA"
+            />
+          </div>
         )}
 
-        {sekretaris && (
-          <OrgBox
-            nama={sekretaris.nama}
-            jabatan="SEKRETARIS"
-          />
-        )}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
 
-        {bendahara && (
-          <OrgBox
-            nama={bendahara.nama}
-            jabatan="BENDAHARA"
-          />
-        )}
+          {/* SEKRETARIAT */}
+          <div className="space-y-6 text-center">
+            {sekretaris && (
+              <OrgBox
+                nama={sekretaris.nama}
+                jabatan="SEKRETARIS"
+              />
+            )}
+
+            {wakilSekretaris && (
+              <OrgBox
+                nama={wakilSekretaris.nama}
+                jabatan="WAKIL SEKRETARIS"
+                variant="small"
+              />
+            )}
+          </div>
+
+          {/* KEUANGAN */}
+          <div className="space-y-6 text-center">
+            {bendahara && (
+              <OrgBox
+                nama={bendahara.nama}
+                jabatan="BENDAHARA"
+              />
+            )}
+
+            {wakilBendahara && (
+              <OrgBox
+                nama={wakilBendahara.nama}
+                jabatan="WAKIL BENDAHARA"
+                variant="small"
+              />
+            )}
+          </div>
+
+        </div>
       </section>
 
       {/* ================= BIDANG ================= */}
@@ -86,12 +119,16 @@ export function OrgChart({
             Koordinator Bidang
           </h3>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 gap-4">
             {bidang.map((b, i) => (
               <OrgBox
                 key={i}
                 nama={b.nama}
-                jabatan={b.bidang ? `KOORDINATOR ${b.bidang}` : "KOORDINATOR"}
+                jabatan={
+                  b.bidang
+                    ? `KOORDINATOR ${b.bidang.toUpperCase()}`
+                    : "KOORDINATOR"
+                }
                 variant="small"
               />
             ))}
@@ -118,6 +155,7 @@ function OrgBox({
     <div
       className={`
         mx-auto w-full max-w-xs rounded-xl border bg-white text-center shadow-sm
+        transition-shadow hover:shadow-md
         ${variant === "primary" ? "px-8 py-5 text-lg font-semibold" : ""}
         ${variant === "small" ? "px-4 py-3 text-sm" : "px-6 py-4"}
       `}

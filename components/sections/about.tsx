@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { client } from "@/sanity/lib/client"
 import imageUrlBuilder from "@sanity/image-url"
 import { PortableTextRenderer } from "@/components/PortableTextRenderer"
+import { OrgChart } from "@/components/OrgChart"
 
 const builder = imageUrlBuilder(client)
 const urlFor = (source: any) => builder.image(source)
@@ -186,122 +187,16 @@ export default function AboutSection() {
           <OrgChart
             penasehat={byLevel("penasehat")}
             ketua={byJabatan("ketua")}
-            wakil={byJabatan("wakil_ketua")}
+            wakilKetua={byJabatan("wakil_ketua")}
             sekretaris={byJabatan("sekretaris")}
+            wakilSekretaris={byJabatan("wakil_sekretaris")}
             bendahara={byJabatan("bendahara")}
+            wakilBendahara={byJabatan("wakil_bendahara")}
             bidang={byLevel("bidang")}
           />
         </section>
       )}
 
     </section>
-  )
-}
-
-/* ================= ORG CHART ================= */
-
-function OrgChart({
-  penasehat,
-  ketua,
-  wakil,
-  sekretaris,
-  bendahara,
-  bidang,
-}: {
-  penasehat: Pengurus[]
-  ketua?: Pengurus
-  wakil?: Pengurus
-  sekretaris?: Pengurus
-  bendahara?: Pengurus
-  bidang: Pengurus[]
-}) {
-  return (
-    <div className="relative mx-auto max-w-6xl h-[900px]">
-
-      {/* SVG LINES */}
-      <svg className="absolute inset-0 w-full h-full" viewBox="0 0 1000 900">
-        {penasehat.length > 0 && (
-          <line x1="500" y1="60" x2="500" y2="120" stroke="#CBD5E1" strokeWidth="2" />
-        )}
-
-        <line x1="500" y1="200" x2="500" y2="260" stroke="#CBD5E1" strokeWidth="2" />
-        <line x1="200" y1="260" x2="800" y2="260" stroke="#CBD5E1" strokeWidth="2" />
-        <line x1="200" y1="260" x2="200" y2="340" stroke="#CBD5E1" strokeWidth="2" />
-        <line x1="500" y1="260" x2="500" y2="340" stroke="#CBD5E1" strokeWidth="2" />
-        <line x1="800" y1="260" x2="800" y2="340" stroke="#CBD5E1" strokeWidth="2" />
-
-        {bidang.length > 0 && (
-          <line x1="500" y1="420" x2="500" y2="480" stroke="#CBD5E1" strokeWidth="2" />
-        )}
-      </svg>
-
-      {/* PENASEHAT */}
-      {penasehat.map((p, i) => (
-        <OrgBox
-          key={i}
-          x="50%"
-          y={`${20 + i * 70}px`}
-          nama={p.nama}
-          jabatan="PENASEHAT"
-          primary
-        />
-      ))}
-
-      {/* INTI */}
-      {ketua && <OrgBox x="50%" y="120px" nama={ketua.nama} jabatan="KETUA" primary />}
-      {wakil && <OrgBox x="20%" y="340px" nama={wakil.nama} jabatan="WAKIL KETUA" />}
-      {sekretaris && <OrgBox x="50%" y="340px" nama={sekretaris.nama} jabatan="SEKRETARIS" />}
-      {bendahara && <OrgBox x="80%" y="340px" nama={bendahara.nama} jabatan="BENDAHARA" />}
-
-      {/* BIDANG */}
-      {bidang.length > 0 && (
-        <div className="absolute left-1/2 top-[520px] -translate-x-1/2 grid grid-cols-2 md:grid-cols-3 gap-6 max-w-4xl w-full">
-          {bidang.map((b, i) => (
-            <OrgBox
-              key={i}
-              nama={b.nama}
-              jabatan={b.bidang ? `KOOR. ${b.bidang}` : "KOORDINATOR"}
-              small
-              staticBox
-            />
-          ))}
-        </div>
-      )}
-    </div>
-  )
-}
-
-function OrgBox({
-  x,
-  y,
-  nama,
-  jabatan,
-  primary,
-  small,
-  staticBox,
-}: {
-  x?: string
-  y?: string
-  nama: string
-  jabatan: string
-  primary?: boolean
-  small?: boolean
-  staticBox?: boolean
-}) {
-  return (
-    <div
-      className={`
-        ${staticBox ? "" : "absolute -translate-x-1/2"}
-        rounded-xl border bg-white text-center shadow-sm
-        ${primary ? "px-8 py-5 text-lg font-semibold" : ""}
-        ${small ? "px-4 py-3 text-sm" : "px-6 py-4"}
-      `}
-      style={staticBox ? {} : { left: x, top: y }}
-    >
-      <div className="font-semibold">{nama}</div>
-      <div className="mt-1 text-xs uppercase tracking-wide text-muted-foreground">
-        {jabatan}
-      </div>
-    </div>
   )
 }
