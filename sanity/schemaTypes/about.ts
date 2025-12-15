@@ -61,7 +61,7 @@ export const aboutType = defineType({
     }),
 
     /* ===============================
-       VISI MISI NILAI
+       VISI
     =============================== */
     defineField({
       name: "visi",
@@ -69,6 +69,9 @@ export const aboutType = defineType({
       type: "text",
     }),
 
+    /* ===============================
+       MISI
+    =============================== */
     defineField({
       name: "misi",
       title: "Misi",
@@ -76,6 +79,9 @@ export const aboutType = defineType({
       of: [{ type: "string" }],
     }),
 
+    /* ===============================
+       NILAI
+    =============================== */
     defineField({
       name: "nilai",
       title: "Nilai",
@@ -84,7 +90,27 @@ export const aboutType = defineType({
     }),
 
     /* ===============================
-       STRUKTUR ORGANISASI (FINAL)
+       TUJUAN STRATEGIS (FINAL)
+    =============================== */
+    defineField({
+      name: "tujuanStrategis",
+      title: "Tujuan Strategis",
+      type: "array",
+      of: [{ type: "string" }],
+    }),
+
+    /* ===============================
+       STRATEGI (FINAL)
+    =============================== */
+    defineField({
+      name: "strategi",
+      title: "Strategi",
+      type: "array",
+      of: [{ type: "string" }],
+    }),
+
+    /* ===============================
+       STRUKTUR ORGANISASI
     =============================== */
     defineField({
       name: "pengurus",
@@ -139,21 +165,9 @@ export const aboutType = defineType({
               name: "bidang",
               title: "Nama Bidang",
               type: "string",
-              description: "Wajib diisi jika Jabatan = Koordinator / Level = Bidang",
               hidden: ({ parent }) =>
                 parent?.jabatan !== "koordinator" &&
                 parent?.level !== "bidang",
-              validation: (Rule) =>
-                Rule.custom((value, context) => {
-                  const p = context.parent
-                  if (
-                    (p?.jabatan === "koordinator" || p?.level === "bidang") &&
-                    !value
-                  ) {
-                    return "Nama bidang wajib diisi untuk Koordinator"
-                  }
-                  return true
-                }),
             }),
           ],
         },

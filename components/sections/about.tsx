@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { client } from "@/sanity/lib/client"
 import imageUrlBuilder from "@sanity/image-url"
 import { PortableTextRenderer } from "@/components/PortableTextRenderer"
-import { OrgChart } from "@/components/OrgChart"
+import { OrgChart } from "@/components/sections/OrgChart"
 
 const builder = imageUrlBuilder(client)
 const urlFor = (source: any) => builder.image(source)
@@ -15,6 +15,43 @@ type Pengurus = {
   jabatan: string
   level: "penasehat" | "inti" | "bidang"
   bidang?: string
+}
+
+/* ================= UI STYLE (PPRNP IDENTITY) ================= */
+const cardPPRNP = `
+  rounded-2xl bg-white p-8
+  border border-blue-100
+  shadow-[0_10px_30px_rgba(0,30,80,0.08)]
+  hover:shadow-[0_20px_40px_rgba(0,30,80,0.12)]
+  transition-all duration-300
+  relative overflow-hidden
+  before:absolute before:top-0 before:left-0
+  before:h-[4px] before:w-full
+  before:bg-gradient-to-r
+  before:from-blue-700 before:via-blue-500 before:to-yellow-400
+`
+
+/* ================= HELPERS ================= */
+const normalizeToString = (item: any): string => {
+  if (typeof item === "string") return item
+  if (item?.judul) return item.judul
+  if (item?.deskripsi) return item.deskripsi
+  return ""
+}
+
+/* ================= SECTION TITLE ================= */
+function SectionTitle({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="text-center mb-10">
+      <h2 className="text-3xl font-bold">{children}</h2>
+      <div
+        className="
+          mx-auto mt-3 h-[3px] w-24 rounded-full
+          bg-gradient-to-r from-blue-700 via-blue-500 to-yellow-400
+        "
+      />
+    </div>
+  )
 }
 
 /* ================= COMPONENT ================= */
@@ -37,6 +74,8 @@ export default function AboutSection() {
         visi,
         misi,
         nilai,
+        tujuanStrategis,
+        strategi,
 
         pengurus[]{
           nama,
@@ -65,114 +104,139 @@ export default function AboutSection() {
     ? data.pengurus
     : []
 
-  /* ================= HELPERS ================= */
   const byJabatan = (jabatan: string) =>
     pengurus.find((p) => p.jabatan === jabatan)
 
   const byLevel = (level: Pengurus["level"]) =>
     pengurus.filter((p) => p.level === level)
 
-  /* ================= RENDER ================= */
   return (
     <section className="mx-auto max-w-7xl px-4 pb-32">
 
-      {/* ================= HERO ================= */}
-      <header className="mb-20 text-center">
-        <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight">
-          {data.title}
-        </h1>
-        <p className="mt-4 max-w-3xl mx-auto text-lg text-muted-foreground leading-relaxed">
-          Sejarah, peran, dan arah strategis PPRNP sebagai wadah intelektual
-          purnabakti riset dan teknologi nasional.
-        </p>
-      </header>
-
       {/* ================= PUSPIPTEK ================= */}
       {data.penjelasanPusiptekContent && (
-        <section className="mb-20">
-          <h2 className="text-3xl font-bold text-center mb-8">
-            {data.penjelasanPusiptekTitle}
-          </h2>
+        <section className="mb-28">
+          <SectionTitle>{data.penjelasanPusiptekTitle}</SectionTitle>
 
           {data.penjelasanPusiptekImage && (
             <img
               src={urlFor(data.penjelasanPusiptekImage)
                 .width(1000)
-                .quality(85)
+                .quality(90)
                 .url()}
               alt="PUSPIPTEK"
-              className="mx-auto mb-8 rounded-xl max-w-4xl w-full"
+              className="mx-auto mb-10 rounded-2xl max-w-4xl w-full"
             />
           )}
 
-          <div className="prose prose-slate max-w-4xl mx-auto">
-            <PortableTextRenderer blocks={data.penjelasanPusiptekContent} />
+          <div className="max-w-4xl mx-auto">
+            <div className={cardPPRNP}>
+              <div className="prose prose-slate max-w-none">
+                <PortableTextRenderer
+                  blocks={data.penjelasanPusiptekContent}
+                />
+              </div>
+            </div>
           </div>
         </section>
       )}
 
       {/* ================= PPRNP ================= */}
       {data.tentangPPRNPContent && (
-        <section className="mb-20">
-          <h2 className="text-3xl font-bold text-center mb-8">
-            {data.tentangPPRNPTitle}
-          </h2>
+        <section className="mb-28">
+          <SectionTitle>{data.tentangPPRNPTitle}</SectionTitle>
 
           {data.tentangPPRNPImage && (
             <img
               src={urlFor(data.tentangPPRNPImage)
                 .width(1000)
-                .quality(85)
+                .quality(90)
                 .url()}
               alt="PPRNP"
-              className="mx-auto mb-8 rounded-xl max-w-4xl w-full"
+              className="mx-auto mb-10 rounded-2xl max-w-4xl w-full"
             />
           )}
 
-          <div className="prose prose-slate max-w-4xl mx-auto">
-            <PortableTextRenderer blocks={data.tentangPPRNPContent} />
+          <div className="max-w-4xl mx-auto">
+            <div className={cardPPRNP}>
+              <div className="prose prose-slate max-w-none">
+                <PortableTextRenderer
+                  blocks={data.tentangPPRNPContent}
+                />
+              </div>
+            </div>
           </div>
         </section>
       )}
 
-      {/* ================= VISI MISI NILAI ================= */}
-      {(data.visi || data.misi || data.nilai) && (
-        <section className="mb-24">
-          <h2 className="text-3xl font-bold text-center mb-12">
-            Visi, Misi & Nilai
-          </h2>
+      {/* ================= VISI ================= */}
+      {data.visi && (
+        <section className="mb-24 max-w-4xl mx-auto">
+          <SectionTitle>Visi</SectionTitle>
+          <div className={cardPPRNP}>
+            <p className="text-slate-700 leading-relaxed">{data.visi}</p>
+          </div>
+        </section>
+      )}
 
-          <div className="max-w-4xl mx-auto space-y-10">
-            {data.visi && (
-              <div className="rounded-2xl border bg-card p-8">
-                <h3 className="text-xl font-semibold mb-3">Visi</h3>
-                <p className="text-muted-foreground leading-relaxed">
-                  {data.visi}
-                </p>
-              </div>
-            )}
+      {/* ================= MISI ================= */}
+      {Array.isArray(data.misi) && data.misi.length > 0 && (
+        <section className="mb-24 max-w-4xl mx-auto">
+          <SectionTitle>Misi</SectionTitle>
+          <div className={cardPPRNP}>
+            <ul className="list-disc pl-6 space-y-2 text-slate-700">
+              {data.misi.map((m: string, i: number) => (
+                <li key={i}>{m}</li>
+              ))}
+            </ul>
+          </div>
+        </section>
+      )}
 
-            {Array.isArray(data.misi) && data.misi.length > 0 && (
-              <div className="rounded-2xl border bg-card p-8">
-                <h3 className="text-xl font-semibold mb-4">Misi</h3>
-                <ul className="list-disc pl-6 space-y-2 text-muted-foreground">
-                  {data.misi.map((m: string, i: number) => (
-                    <li key={i}>{m}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
+      {/* ================= NILAI ================= */}
+      {Array.isArray(data.nilai) && data.nilai.length > 0 && (
+        <section className="mb-24 max-w-4xl mx-auto">
+          <SectionTitle>Nilai</SectionTitle>
+          <div className={cardPPRNP}>
+            <ul className="list-disc pl-6 space-y-2 text-slate-700">
+              {data.nilai.map((n: string, i: number) => (
+                <li key={i}>{n}</li>
+              ))}
+            </ul>
+          </div>
+        </section>
+      )}
 
-            {Array.isArray(data.nilai) && data.nilai.length > 0 && (
-              <div className="rounded-2xl border bg-card p-8">
-                <h3 className="text-xl font-semibold mb-4">Nilai</h3>
-                <ul className="list-disc pl-6 space-y-2 text-muted-foreground">
-                  {data.nilai.map((n: string, i: number) => (
-                    <li key={i}>{n}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
+      {/* ================= TUJUAN STRATEGIS ================= */}
+      {Array.isArray(data.tujuanStrategis) && data.tujuanStrategis.length > 0 && (
+        <section className="mb-24 max-w-4xl mx-auto">
+          <SectionTitle>Tujuan Strategis</SectionTitle>
+          <div className={cardPPRNP}>
+            <ul className="list-disc pl-6 space-y-2 text-slate-700">
+              {data.tujuanStrategis
+                .map(normalizeToString)
+                .filter(Boolean)
+                .map((t: string, i: number) => (
+                  <li key={i}>{t}</li>
+                ))}
+            </ul>
+          </div>
+        </section>
+      )}
+
+      {/* ================= STRATEGI ================= */}
+      {Array.isArray(data.strategi) && data.strategi.length > 0 && (
+        <section className="mb-32 max-w-4xl mx-auto">
+          <SectionTitle>Strategi</SectionTitle>
+          <div className={cardPPRNP}>
+            <ul className="list-disc pl-6 space-y-2 text-slate-700">
+              {data.strategi
+                .map(normalizeToString)
+                .filter(Boolean)
+                .map((s: string, i: number) => (
+                  <li key={i}>{s}</li>
+                ))}
+            </ul>
           </div>
         </section>
       )}
@@ -180,9 +244,7 @@ export default function AboutSection() {
       {/* ================= ORG CHART ================= */}
       {pengurus.length > 0 && (
         <section className="mb-40">
-          <h2 className="text-3xl font-bold text-center mb-20">
-            Struktur Pengurus PPRNP
-          </h2>
+          <SectionTitle>Struktur Pengurus PPRNP</SectionTitle>
 
           <OrgChart
             penasehat={byLevel("penasehat")}
