@@ -1,10 +1,11 @@
 import { createClient } from "next-sanity"
 import { apiVersion, dataset, projectId } from "@/sanity/env"
 
-export const client = createClient({
+export const serverClient = createClient({
   projectId,
   dataset,
   apiVersion,
-  useCdn: true,
+  useCdn: false,
+  token: process.env.SANITY_API_READ_TOKEN,
   perspective: "published",
 })
