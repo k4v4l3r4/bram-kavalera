@@ -73,7 +73,9 @@ export default function ProgramsSection() {
   if (!data) return null
 
   return (
-    <section id="programs" className="pt-16 pb-20 md:pt-20 md:pb-24 bg-background relative">
+    <section
+  id="programs"
+  className="pt-8 pb-20 md:pt-12 md:pb-24 bg-background relative">
       <div className="container mx-auto px-4 md:px-6 relative z-10">
 
         {/* HEADER */}

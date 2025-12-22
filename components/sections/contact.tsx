@@ -27,7 +27,7 @@ export default function ContactSection() {
   if (!data) return null
 
   return (
-    <section id="contact" className="py-16 md:py-20 bg-muted/30">
+    <section id="contact" className="pt-10 pb-16 md:pt-12 md:pb-20 bg-muted/30">
       <div className="container mx-auto px-4 md:px-6">
         <div className="grid lg:grid-cols-2 gap-12">
           {/* Info Kontak */}

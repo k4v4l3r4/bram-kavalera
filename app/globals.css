@@ -106,7 +106,7 @@
   --color-ring: var(--ring);
 }
 
-/* ================= BASE FIX (PENTING) ================= */
+/* ================= BASE FIX & SPACING ================= */
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -123,10 +123,28 @@
 
   html {
     scroll-behavior: smooth;
-    scroll-padding-top: 160px; /* 🔥 FIX HEADER FIXED */
+    scroll-padding-top: 100px; /* Dioptimasi agar tidak terlalu jauh melompat */
+  }
+
+  /* 🔥 GLOBAL SPACING STANDARDS 🔥 */
+  section {
+    @apply py-16 md:py-24 px-4 md:px-8 max-w-7xl mx-auto w-full relative;
+  }
+
+  h1, h2, h3, h4 {
+    @apply font-bold tracking-tight text-foreground mb-6 mt-2;
+    line-height: 1.2;
+  }
+
+  p {
+    @apply leading-relaxed mb-4 text-muted-foreground;
+  }
+
+  /* Memperbaiki jarak antar grid agar seragam */
+  .grid {
+    @apply gap-6 md:gap-8 lg:gap-10;
   }
 }
-/* ===================================================== */
 
 /* ================= BACKGROUND DOT PATTERN ================= */
 .bg-grid-pattern {
@@ -144,7 +162,7 @@
   opacity: 0.05;
 }
 
-/* ================= CUSTOM SCROLLBAR ================= */
+/* ================= CUSTOM UTILITIES ================= */
 @layer utilities {
   .no-scrollbar::-webkit-scrollbar {
     display: none;
@@ -152,5 +170,15 @@
   .no-scrollbar {
     -ms-overflow-style: none;
     scrollbar-width: none;
+  }
+
+  /* Utility untuk membungkus halaman utama agar konsisten */
+  .main-layout-wrapper {
+    @apply flex flex-col gap-y-12 md:gap-y-20;
+  }
+
+  /* Utility untuk container konten yang lebih rapat di dalam section */
+  .content-narrow {
+    @apply max-w-4xl mx-auto;
   }
 }

@@ -10,7 +10,7 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: "PPRNP - Pioner Penghuni Rumah Negara Puspiptek",
-  description: "Pusat informasi dan komunitas warga Puspiptek.",
+  description: "MEDIA INFORMASI , KOMUNIKASI DAN SINERGI",
 }
 
 export default function RootLayout({

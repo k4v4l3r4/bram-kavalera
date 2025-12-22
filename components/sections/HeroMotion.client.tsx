@@ -65,7 +65,7 @@ export default function HeroMotion({ data }: { data: HeroData }) {
   }, [data.images])
 
   return (
-    <section className="relative pt-16 sm:pt-20 lg:pt-28 pb-6 overflow-hidden animate-gradient">
+    <section className="relative pt-10 sm:pt-12 lg:pt-14 pb-16 md:pb-20 overflow-hidden animate-gradient">
       <div className="absolute inset-0 -z-10 bg-gradient-to-b from-primary/10 via-background to-background" />
 
       <div className="container mx-auto px-4 md:px-6">
@@ -77,26 +77,51 @@ export default function HeroMotion({ data }: { data: HeroData }) {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
-            className="space-y-8 text-center lg:text-left max-w-xl mx-auto lg:mx-0"
+            className="space-y-2 text-center lg:text-left max-w-xl mx-auto lg:mx-0"
           >
             <span className="inline-block px-4 py-1 text-xs font-bold text-white bg-blue-600 rounded-full">
               Official Website PPRNP
             </span>
 
-            {["PURNABHAKTI", "BATAN · BPPT", "LIPI · PUSPIPTEK"].map((text, i) => (
-              <motion.h2
+            <motion.h2
+              className="
+                text-5xl md:text-6xl font-extrabold text-blue-700
+                [text-shadow:0_1px_0_rgba(255,255,255,0.6),0_-1px_0_rgba(0,0,0,0.35),0_5px_10px_rgba(0,0,0,0.35)]
+              "
+              initial="hidden"
+              animate="visible"
+              variants={{ visible: { transition: { staggerChildren: 0.06 } } }}
+            >
+              {"PURNABHAKTI".split("").map((char, j) => (
+                <motion.span key={j} variants={letterVariants}>
+                  {char}
+                </motion.span>
+              ))}
+            </motion.h2>
+
+            {["BATAN", "BPPT", "LIPI", "PUSPIPTEK"].map((text, i) => (
+              <motion.div
                 key={i}
-                className="text-5xl md:text-6xl font-extrabold text-blue-700"
+                className="flex items-center gap-1.5 justify-center lg:justify-start"
                 initial="hidden"
                 animate="visible"
-                variants={{ visible: { transition: { staggerChildren: 0.06 } } }}
+                variants={{ visible: { transition: { staggerChildren: 0.04 } } }}
               >
-                {text.split("").map((char, j) => (
-                  <motion.span key={j} variants={letterVariants}>
-                    {char}
-                  </motion.span>
-                ))}
-              </motion.h2>
+                <span className="w-2.5 h-2.5 rounded-full bg-blue-700 shrink-0" />
+                <motion.h3
+                  className="
+                    text-3xl md:text-4xl font-bold text-blue-700
+                    [text-shadow:0_1px_0_rgba(255,255,255,0.6),0_-1px_0_rgba(0,0,0,0.35),0_3px_6px_rgba(0,0,0,0.3)]
+                    leading-none
+                  "
+                >
+                  {text.split("").map((char, j) => (
+                    <motion.span key={j} variants={letterVariants}>
+                      {char}
+                    </motion.span>
+                  ))}
+                </motion.h3>
+              </motion.div>
             ))}
 
             <p className="text-lg text-muted-foreground">
@@ -122,28 +147,30 @@ export default function HeroMotion({ data }: { data: HeroData }) {
             )}
           </motion.div>
 
-          {/* IMAGE SLIDER */}
-          <div className="relative w-full max-w-[520px] h-[360px] md:h-[480px] rounded-2xl overflow-hidden">
-            <AnimatePresence mode="wait">
-              {data.images?.[activeIndex] && (
-                <motion.div
-                  key={activeIndex}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.8 }}
-                  className="absolute inset-0"
-                >
-                  <Image
-                    src={urlFor(data.images[activeIndex]).width(1600).url()}
-                    alt="Hero Image"
-                    fill
-                    priority
-                    className="object-cover"
-                  />
-                </motion.div>
-              )}
-            </AnimatePresence>
+          {/* GAMBAR */}
+          <div className="relative w-full flex justify-center lg:justify-end">
+            <div className="relative w-full max-w-[560px] h-[400px] md:h-[520px] rounded-3xl overflow-hidden shadow-xl">
+              <AnimatePresence mode="wait">
+                {data.images?.[activeIndex] && (
+                  <motion.div
+                    key={activeIndex}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.8 }}
+                    className="absolute inset-0"
+                  >
+                    <Image
+                      src={urlFor(data.images[activeIndex]).width(1600).url()}
+                      alt="Hero Image"
+                      fill
+                      priority
+                      className="object-cover"
+                    />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
           </div>
 
         </div>

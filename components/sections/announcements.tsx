@@ -50,7 +50,11 @@ export default function AnnouncementsSection() {
   if (!data) return null
 
   return (
-    <section id="news" className="py-16 md:py-24 bg-muted/50">
+    <section
+  id="news"
+  className="pt-8 md:pt-12 pb-16 md:pb-24 bg-muted/50"
+>
+
       <div className="container mx-auto px-4 md:px-6">
 
         {/* Header */}

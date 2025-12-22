@@ -64,7 +64,11 @@ export default function HousingInfoSection() {
   if (!data) return null
 
   return (
-    <section id="info" className="py-16 md:py-20 bg-primary/5">
+    <section
+  id="info"
+  className="pt-8 md:pt-12 pb-16 md:pb-20 bg-primary/5"
+>
+
       <div className="container mx-auto px-4 md:px-6">
         <div className="grid lg:grid-cols-2 gap-12">
           {/* BAGIAN KIRI: LIST INFO */}
